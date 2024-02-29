@@ -20,6 +20,7 @@ import { App } from '../App'
 const { PUBLIC_URL } = process.env
 
 const AppRoutes: FC = () => {
+  // const { currentUser } = useAuth()
   return (
     <BrowserRouter basename={PUBLIC_URL}>
       <Routes>
@@ -27,7 +28,7 @@ const AppRoutes: FC = () => {
           <Route path='error/*' element={<ErrorsPage />} />
           <Route path='logout' element={<Logout />} />
           <Route path='/*' element={<PrivateRoutes />} />
-          <Route index element={<Navigate to='/phan-he-su-co-y-khoa' />} />
+          <Route index element={<Navigate to='/quan-ly-ca-benh' />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -5,8 +5,6 @@
 // Desktop mode
 @include media-breakpoint-up(lg) {
 	.app-content {
-		padding-top: $app-content-padding-y;
-        padding-bottom: $app-content-padding-y;
         padding-left: $app-content-padding-x;
         padding-right: $app-content-padding-x;
 	}
@@ -17,7 +15,6 @@
 	.app-content { 
 		max-width: none;
 		padding-top: $app-content-padding-y-mobile;
-        padding-bottom: $app-content-padding-y-mobile;
         padding-left: $app-content-padding-x-mobile;
         padding-right: $app-content-padding-x-mobile;
 	}

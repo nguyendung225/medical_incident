@@ -1,0 +1,122 @@
+.authLayout {
+  display: flex;
+  align-items: center;
+  background-image: url("../../../../public/media/svg/backgound-image-2.jpg");
+
+  .wellcome-site {
+    .logo {
+      margin-bottom: 30px;
+      img {
+        width: 150px;
+        height: 80px;
+      }
+    }
+  }
+
+  .wellcome-header {
+    margin-bottom: 2.83rem;
+    h4 {
+      margin: 0;
+      padding: 0 32px;
+      text-align: center;
+      color: #F5F8FA;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 1.6rem;
+    }
+  }
+
+  .form-width {
+    width: 540px;
+  }
+}
+
+.login-form {
+  padding: 2.22rem 2.22rem 3.39rem 2.22rem;
+  border-radius: 0.56rem;
+  background: linear-gradient(153deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.00) 100%);
+  box-shadow: 0px 32px 64px -24px rgba(51, 102, 255, 0.07);
+  border: 1px solid #ffffff3d;
+
+  .login-header {
+    text-align: center;
+    font-size: 2.22rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 2.66667rem;
+  }
+
+  .forgot-password {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 30px;
+    padding-right: 8px;
+  }
+
+  .login-submit {
+    padding: 8px 12px !important;
+    .indicator-label {
+      padding: 0px 30px;
+      font-size: 16px;
+    }
+  }
+
+  .input-wrapper {
+    position: relative;
+    margin-bottom: 24px;
+
+    .input-field {
+      padding-left: 53px;
+      border-radius: 0.56rem;
+      border: 1px solid #EBECF5;
+      background: #FFF !important;
+      padding-top: 12px;
+      padding-bottom: 8px;
+      font-size: 16px;
+      margin-bottom: 4px;
+
+      &::placeholder {
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        margin: 0;
+      }
+    }
+
+        .icon-username {
+          background-image: url('../../../../public/media/svg/login/Profile.svg') !important;
+          background-position: 19px 12px !important;
+          background-repeat: no-repeat !important;
+        }
+    
+        .icon-password {
+          background-image: url('../../../../public/media/svg/login/Lock.svg') !important;
+          background-position: 19px 12px !important;
+          background-repeat: no-repeat !important;
+        }
+        }
+
+  .switch-wrapper {
+    margin-bottom: 28px;
+
+    .form-check-label {
+      color: #FFF;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      padding-left: 8px;
+    }
+
+    .form-switch {
+      .form-check-input {
+        background-color: #CCDFEE !important;
+        border-color: #4176a4;
+
+        &:checked {
+          background-color: #4176a4 !important;
+        }
+      }
+    }
+  }
+}

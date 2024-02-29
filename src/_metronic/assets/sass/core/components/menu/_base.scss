@@ -35,29 +35,19 @@
 // Menu item
 .menu-item {
     display: block;
-    padding: $menu-item-padding-y $menu-item-padding-x;
-
     // Menu Link
     .menu-link {
         cursor: pointer;
         display: flex;
         align-items: center;
         padding: 0;
-        flex: 0 0 100%;
-        padding: $menu-link-padding-y $menu-link-padding-x;
+        gap: 10px;
         transition: none;
         outline: none !important;
-
         .menu-icon {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: $menu-icon-size;
-            margin-right: $menu-icon-space;
-
             .svg-icon {
                 line-height: 1;
+                display: flex;
             }
         }
 
@@ -74,7 +64,7 @@
             display: flex;
             align-items: center;
             flex-grow: 1;
-            font-size: 14px;
+            flex-shrink: 0;
         }
 
         .menu-badge {

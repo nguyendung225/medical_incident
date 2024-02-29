@@ -3,7 +3,7 @@
 //
 
 // Reboot
-$app-bg-color: #f5f8fa  !default;
+$app-bg-color: #F0F2F5  !default;
 $app-bg-color-dark: #151521 !default;
 $app-blank-bg-color: $white;
 $app-blank-bg-color-dark: $app-bg-color-dark;
@@ -16,7 +16,7 @@ $app-general-root-font-size-tablet: 12px !default;
 $app-general-root-font-size-mobile: 12px !default;
 
 // Container
-$app-container-padding-x: 0px !default;
+$app-container-padding-x: 16px !default;
 $app-container-padding-x-mobile: 20px !default;
 
 // Page
@@ -47,8 +47,8 @@ $app-content-padding-x-mobile: 0 !default;
 
 // Header base
 $app-header-base-transition: none !default;
-$app-header-base-height: 70px !default;
-$app-header-base-height-mobile: 70px !default;
+$app-header-base-height: 48px !default;
+$app-header-base-height-mobile: 48px !default;
 $app-header-base-z-index: null !default;
 $app-header-base-z-index-mobile: null !default;
 $app-header-base-bg-color: null !default;
@@ -69,8 +69,8 @@ $app-header-fixed-z-index: 100 !default;
 $app-header-fixed-z-index-mobile: 100 !default;
 
 // Header minimize
-$app-header-minimize-height: 70px !default;
-$app-header-minimize-height-mobile: 70px !default;
+$app-header-minimize-height: 48px !default;
+$app-header-minimize-height-mobile: 48px !default;
 $app-header-minimize-z-index: 100 !default;
 $app-header-minimize-z-index-mobile: 100 !default;
 $app-header-minimize-backdrop-filter: null !default;
@@ -89,8 +89,8 @@ $app-header-minimize-border-bottom-mobile: null !default;
 $app-header-minimize-border-bottom-mobile-dark: null !default;
 
 // Header sticky
-$app-header-sticky-height: 70px !default;
-$app-header-sticky-height-mobile: 70px !default;
+$app-header-sticky-height: 48px !default;
+$app-header-sticky-height-mobile: 48px !default;
 $app-header-sticky-z-index: 100 !default;
 $app-header-sticky-z-index-mobile: 100 !default;
 $app-header-sticky-backdrop-filter: null !default;
@@ -110,7 +110,7 @@ $app-header-sticky-border-bottom-mobile-dark: null !default;
 
 // Header primary
 $app-header-primary-base-transition: none !default;
-$app-header-primary-base-height: 70px !default;
+$app-header-primary-base-height: 48px !default;
 $app-header-primary-base-z-index: null !default;
 $app-header-primary-base-z-index-mobile: null !default;
 $app-header-primary-base-bg-color: null !default;
@@ -128,7 +128,7 @@ $app-header-primary-base-border-bottom-mobile-dark: null !default;
 
 $app-header-primary-fixed-z-index: 100 !default;
 
-$app-header-primary-minimize-height: 70px !default;
+$app-header-primary-minimize-height: 48px !default;
 $app-header-primary-minimize-z-index: 100 !default;
 $app-header-primary-minimize-bg-color: null !default;
 $app-header-primary-minimize-bg-color-dark: null !default;
@@ -139,7 +139,7 @@ $app-header-primary-minimize-border-top-dark: null !default;
 $app-header-primary-minimize-border-bottom: null !default;
 $app-header-primary-minimize-border-bottom-dark: null !default;
 
-$app-header-primary-sticky-height: 70px !default;
+$app-header-primary-sticky-height: 48px !default;
 $app-header-primary-sticky-z-index: 100 !default;
 $app-header-primary-sticky-bg-color: null !default;
 $app-header-primary-sticky-bg-color-dark: null !default;
@@ -286,9 +286,9 @@ $app-sidebar-base-bg-color: null !default;
 $app-sidebar-base-bg-color-dark: null !default;
 $app-sidebar-base-bg-color-mobile: null !default;
 $app-sidebar-base-bg-color-mobile-dark: null !default;
-$app-sidebar-base-box-shadow: null !default;
+$app-sidebar-base-box-shadow: 0px 2px 8px 0px #00000026 !default;
 $app-sidebar-base-box-shadow-dark: null !default;
-$app-sidebar-base-box-shadow-mobile: null !default;
+$app-sidebar-base-box-shadow-mobile: 0px 2px 8px 0px #00000026 !default;
 $app-sidebar-base-box-shadow-mobile-dark: null !default;
 $app-sidebar-base-border-start: null !default;
 $app-sidebar-base-border-start-dark: null !default;
@@ -308,7 +308,7 @@ $app-sidebar-base-gap-bottom: 0px !default;
 $app-sidebar-base-gap-bottom-mobile: 0px !default;
 
 // Sidebar fixed
-$app-sidebar-fixed-z-index: 105 !default;
+$app-sidebar-fixed-z-index: 51 !default;
 $app-sidebar-fixed-left: 0 !default;
 $app-sidebar-fixed-top: 0 !default;
 $app-sidebar-fixed-bottom: 0 !default;
@@ -339,9 +339,9 @@ $app-sidebar-minimize-bg-color: null !default;
 $app-sidebar-minimize-bg-color-dark: null !default;
 $app-sidebar-minimize-bg-color-mobile: null !default;
 $app-sidebar-minimize-bg-color-mobile-dark: null !default;
-$app-sidebar-minimize-box-shadow: null !default;
+$app-sidebar-minimize-box-shadow: 0px 2px 8px 0px #00000026 !default;
 $app-sidebar-minimize-box-shadow-dark: null !default;
-$app-sidebar-minimize-box-shadow-mobile: null !default;
+$app-sidebar-minimize-box-shadow-mobile: 0px 2px 8px 0px #00000026 !default;
 $app-sidebar-minimize-box-shadow-mobile-dark: null !default;
 $app-sidebar-minimize-hover-box-shadow: null !default;
 $app-sidebar-minimize-hover-box-shadow-dark: null !default;
@@ -669,15 +669,15 @@ $app-aside-minimize-gap-bottom-mobile: 0px !default;
 $app-footer-transition: left $app-general-transition-duration $app-general-transition-timing, right $app-general-transition-duration $app-general-transition-timing;
 $app-footer-height: 70px !default;
 $app-footer-height-mobile: 70px !default;
-$app-footer-z-index: null !default;
+$app-footer-z-index: 2 !default;
 $app-footer-z-index-mobile: null !default;
 $app-footer-bg-color: null !default;
 $app-footer-bg-color-dark: null !default;
 $app-footer-bg-color-mobile: null !default;
 $app-footer-bg-color-mobile-dark: null !default;
-$app-footer-box-shadow: null !default;
+$app-footer-box-shadow: 1px 1px 3px !default;
 $app-footer-box-shadow-dark: null !default;
-$app-footer-box-shadow-mobile: null !default;
+$app-footer-box-shadow-mobile: 1px 1px 3px !default;
 $app-footer-box-shadow-mobile-dark: null !default;
 $app-footer-border-top: null !default;
 $app-footer-border-top-dark: null !default;

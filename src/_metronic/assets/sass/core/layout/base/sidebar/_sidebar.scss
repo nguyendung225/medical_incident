@@ -7,6 +7,26 @@
     transition: $app-sidebar-base-transition;
 }
 
+.app-sidebar-wrapper::-webkit-scrollbar {
+    width: 4px;
+}
+
+.app-sidebar-wrapper::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-sidebar {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100vh - 48px);
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 // Utilities
 .app-sidebar-minimize-d-flex,
 .app-sidebar-sticky-d-flex,
@@ -86,7 +106,7 @@
         [data-kt-app-sidebar-fixed="true"] & {
             position: fixed;
             @include property( z-index, $app-sidebar-fixed-z-index);
-            @include property( top, $app-sidebar-fixed-top);
+            @include property( top, var(--kt-app-header-height));
             @include property( bottom, $app-sidebar-fixed-bottom);
             @include property( left, $app-sidebar-fixed-left);
         }  

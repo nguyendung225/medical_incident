@@ -4,51 +4,48 @@ import TopBarProgress from "react-topbar-progress-indicator";
 import { getCSSVariableValue } from "../../_metronic/assets/ts/_utils";
 import { WithChildren } from "../../_metronic/helpers";
 import { MasterLayout } from "../../_metronic/layout/MasterLayout";
+import { PERMISSIONS, PERMISSION_ABILITY } from "../Constant";
 import { HomePage } from "../pages/Homepage/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
-import { DashboardWrapper } from "../pages/dashboard/DashboardWrapper";
+import KhaiBaoTruongHopBenh from "../modules/quan-ly-truong-hop-benh/khai-bao-truong-hop-benh/KhaiBaoTruongHopBenh";
+
+interface PrivateRouteProps {
+  auth: string;
+  ability: string;
+  component: React.ComponentType<any>;
+  redirect: string;
+}
+
 const PrivateRoutes = () => {
-  const WizardsPage = lazy(() => import("../modules/wizards/WizardsPage"));
-  const AccountPage = lazy(() => import("../modules/accounts/AccountPage"));
+
+  const PrivateRoute: React.FC<PrivateRouteProps> = ({ auth, ability, component: Component, redirect, }) => {
+    //khi có phân quyền sẽ check
+    // return hasAuthority(auth, ability) ? (<Component />) : (<Navigate to={redirect} />);
+    return true ? (<Component />) : (<Navigate to={redirect} />);
+  };
 
   return (
     <Routes>
-      <Route index element={<Navigate to="/dashboard" />} />
+      <Route index element={<Navigate to="/home" />} />
       <Route path="/*" element={<HomePage />} />
       <Route element={<MasterLayout />}>
         {/* Redirect to Dashboard after success login/registartion */}
-        <Route path="auth/*" element={<Navigate to="/phan-he-su-co-y-khoa" />} />
+        <Route path="auth/*" element={<Navigate to="quan-ly-ca-benh" />} />
         {/* Pages */}
-        <Route path="dashboard" element={<DashboardWrapper />} />
         <Route path="menu-test" element={<MenuTestPage />} />
-        <Route path="/phan-he-su-co-y-khoa" element={<> Sự cố y khoa</>} />
-        {/* Lazy Modules */}
-        <Route path="crafted/pages/profile/*" element={<SuspensedView></SuspensedView>} />
-        <Route path="crafted/pages/profile/*" element={<SuspensedView></SuspensedView>} />
-        <Route
-          path="crafted/pages/wizards/*"
-          element={
-            <SuspensedView>
-              <WizardsPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path="crafted/account/*"
-          element={
-            <SuspensedView>
-              <AccountPage />
-            </SuspensedView>
-          }
-        />
-        {/* Page Not Found */}
+        <Route path="quan-ly-ca-benh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/quan-ly-ca-benh" />} />
+        <Route path="bao-cao-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/quan-ly-ca-benh" />} />
+        <Route path="bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/quan-ly-ca-benh" />} />
+        <Route path="phan-tich-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/quan-ly-ca-benh" />} />
+        <Route path="bien-ban-hop" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/quan-ly-ca-benh" />} />
+        <Route path="bao-cao" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/quan-ly-ca-benh" />} />
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>
     </Routes>
   );
 };
 
-const SuspensedView: FC<WithChildren> = ({ children }) => {
+export const SuspensedView: FC<WithChildren> = ({ children }) => {
   const baseColor = getCSSVariableValue("--kt-primary");
   TopBarProgress.config({
     barColors: {

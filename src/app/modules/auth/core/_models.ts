@@ -1,11 +1,11 @@
 export interface AuthModel {
   access_token: string
   token_type?: string
+  refresh_token?: string
   id_token: string
-  // refresh_token?: string
   expires_in: number
   scope?: string
-  // jti?: string
+  jti?: string
 }
 
 export interface UserAddressModel {
@@ -69,6 +69,7 @@ export interface UserModel {
   communication?: UserCommunicationModel
   address?: UserAddressModel
   socialNetworks?: UserSocialNetworksModel
+  user?: any
 }
 
 export interface ResponseModel {
@@ -84,9 +85,5 @@ export interface UserModelLogin extends UserModel  {
   authorities: string[],
   email: string,
   gender: string,
-  username:string
-}
-
-export interface Token {
-  
+  username:string,
 }

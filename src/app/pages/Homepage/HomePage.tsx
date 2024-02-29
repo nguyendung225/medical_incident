@@ -1,173 +1,141 @@
-import { useNavigate } from 'react-router-dom'
-import { HeaderUserMenu, ThemeModeSwitcher } from '../../../_metronic/partials'
-import { toAbsoluteUrl } from '../../../_metronic/helpers'
-import clsx from 'clsx'
-import { Languages } from '../../../_metronic/partials/layout/header-menus/Languages'
-import './homepage.scss'
+import { toAbsoluteUrl } from "../../../_metronic/helpers";
+import "./homepage.scss";
+import { Col, Image, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { setSubMenu, useAuth } from "../../modules/auth";
+import { hasAuthority } from "../../modules/utils/FunctionUtils";
+import { MODULE, PERMISSIONS } from "../../Constant";
+import { TYPE } from "../../modules/utils/Constant";
+import useMultiLanguage from "../../hook/useMultiLanguage";
 
-const userAvatarClass = 'symbol-35px symbol-md-40px'
-export function HomePage() {
-  const itemClass = 'ms-1 ms-lg-3'
-  const navigate = useNavigate()
-  const handleButtonClick= (to: string) => {
-    navigate(to)
-  };
+interface LinkBtnProps {
+  linkTo: string;
+  iconPath: string;
+  text: string;
+  modulePermission: string;
+}
+
+const countAuthorities = () => {
+  const authorities = [
+    hasAuthority(PERMISSIONS.MODULE, MODULE.HO_SO, TYPE.MODULE),
+    hasAuthority(PERMISSIONS.MODULE, MODULE.CHAM_CONG, TYPE.MODULE),
+    hasAuthority(PERMISSIONS.MODULE, MODULE.TUYEN_DUNG, TYPE.MODULE),
+    hasAuthority(PERMISSIONS.MODULE, MODULE.TAI_LIEU, TYPE.MODULE),
+    hasAuthority(PERMISSIONS.MODULE, MODULE.DAO_TAO, TYPE.MODULE),
+    hasAuthority(PERMISSIONS.MODULE, MODULE.PHONG_HOP, TYPE.MODULE),
+    hasAuthority(PERMISSIONS.MODULE, MODULE.CONG_VIEC, TYPE.MODULE),
+    hasAuthority(PERMISSIONS.MODULE, MODULE.HE_THONG, TYPE.MODULE)
+  ];
+
+  const count = authorities.filter(authority => authority === true).length;
+  return count;
+}
+
+const LinkButton = (props: LinkBtnProps) => {
+  const { linkTo = "", iconPath, text } = props;
+
+  let colSize = 12;
+  switch (countAuthorities()) {
+    case 8:
+      colSize = 3;
+      break;
+    case 7:
+      colSize = 3;
+      break;
+    case 6:
+      colSize = 4;
+      break;
+    case 5:
+      colSize = 3;
+      break;
+    case 4:
+      colSize = 6;
+      break;
+    case 3:
+      colSize = 6;
+      break;
+    case 2:
+      colSize = 6;
+      break;
+    case 1:
+      colSize = 12;
+      break;
+    default:
+      colSize = 12;
+      break;
+  }
 
   return (
-    <div className='main'>
-      <div className='header d-flex justify-content-xl-between'>
-        <img src='media/logos/logo_OCT.png'></img>
-        <div className='app-navbar flex-shrink-0'>
-          <div className='toggle-language'>
-            <Languages />
-          </div>
-          <div className={clsx('app-navbar-item', itemClass)}>
-            <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
-          </div>
-
-          <div className={clsx('app-navbar-item', itemClass)}>
-            <div
-              className={clsx('cursor-pointer symbol', userAvatarClass)}
-              data-kt-menu-trigger="{default: 'click'}"
-              data-kt-menu-attach='parent'
-              data-kt-menu-placement='bottom-end'
+    <>
+      {/* khi có phân quyền sẽ check */}
+      {/* {hasAuthority(PERMISSIONS.MODULE, modulePermission, TYPE.MODULE) && ( */}
+      <Col xs={12} sm={6} md={colSize} xl={colSize} className="flex flex-center">
+        <Link to={linkTo} onClick={() => setSubMenu(linkTo)}>
+          <div className="link-button-container">
+            <button
+              type="button"
+              className="button-link"
             >
-              <img src={toAbsoluteUrl('/media/avatars/300-1.jpg')} alt='' />
-            </div>
-            <HeaderUserMenu />
+              <div className="cirle-animation cirle-animation-1"></div>
+              <div className="cirle-animation cirle-animation-2"></div>
+              <Image src={toAbsoluteUrl(iconPath)} alt="image" />
+            </button>
+            <span className="button-text">{text}</span>
+          </div>
+        </Link>
+      </Col>
+      {/* )} */}
+    </>
+  )
+}
+
+export function HomePage() {
+  const { lang } = useMultiLanguage();
+  const { logout } = useAuth();
+  document.title = `${lang('SOFTWARE')}`;
+
+  return (
+    <div className="main">
+      <div className="header">
+        <div className="logo">
+          {/* <Image src={toAbsoluteUrl("./media/logos/xHRM.svg")} /> */}
+        </div>
+        <div className="user">
+          <div className="user-info">
+            <span>{lang("GENERAL.HELLO")}</span>
+            <h5>Nguyễn Xuân Bách</h5>
+          </div>
+          <div className="user-avatar">
+            <img src={toAbsoluteUrl("./media/avatars/300-1.jpg")} alt="avatar" />
+          </div>
+          <div className="user-logout">
+            <button type="button" onClick={logout}>{lang("LOGOUT")}</button>
           </div>
         </div>
       </div>
-      <div className='container'>
-        <div className='button-group'>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/phan-he-tiep-nhan")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Tiếp nhận</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/ds-tiep-don")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Ngoại trú</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/phan-he-noi-tru/tiep-don")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Nội trú</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Cấp cứu</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/test")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Xét nghiệm</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/cdha-tdcn")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>CĐHA và TDCN</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/phau-thuat-thu-thuat")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Phẫu thuật thủ thuật</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/fee-and-insurance")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Viện phí và Bảo hiểm</span>
-          </div>
-          {/* <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Quản lý nhân sự</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Quản lý tài sản</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Dược</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Yêu cầu bảo hiểm</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Kế toán - Tài chính</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>EMR</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Báo cáo thống kê</span>
-          </div>
-          <div className='item-button'>
-            <button
-              className='btn btn-light-primary fw-bolder btn-homepage'
-              onClick={() => handleButtonClick("/dashboard")}>
-              <img src='media/images/button.png'></img>
-            </button>
-            <span className='title-button'>Quản trị hệ thống</span>
-          </div> */}
+      <div className="z-100 main-content">
+        <div className="body-container">
+          <Row>
+            <Col xs={12}>
+              <h2 className="title-software">{"PHẦN MỀM QUẢN LÝ SCYK"}</h2>
+            </Col>
+          </Row>
+          <Row className="flex flex-start">
+            <LinkButton
+              linkTo={"/quan-ly-ca-benh"}
+              iconPath="/media/icons/homepage/profile.svg"
+              text={"Báo cáo SCYK"}
+              modulePermission={MODULE.HO_SO}
+            />
+          </Row>
+          <Row className="flex flex-start">
+            <LinkButton
+              linkTo={"/dashboard/1"}
+              iconPath="/media/icons/homepage/profile.svg"
+              text={"Trang chủ"}
+              modulePermission={MODULE.HO_SO}
+            />
+          </Row>
         </div>
       </div>
     </div>

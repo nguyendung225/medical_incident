@@ -13,9 +13,9 @@ export function login(email: string, password: string) {
   return axios.post<AuthModel>(LOGIN_URL, new URLSearchParams({
     username: email, //gave the values directly for testing
     password: password,
-    client_id: 'BiKapNhHkELasIwT2bqgDAs607Ea',
+    client_id: 'core_client',
     grant_type: 'password',
-    client_secret: 'QLmqhtdRpBeohJ3hg6MSJSfnTw0a'
+    client_secret: 'secret'
   }))
 }
 

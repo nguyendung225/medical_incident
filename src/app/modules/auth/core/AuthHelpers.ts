@@ -1,41 +1,27 @@
-import { localStorageItem } from './../../utils/LocalStorage';
 import { AuthModel, ResponseModel } from './_models'
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { KEY_LOCALSTORAGE, RESPONSE_STATUS_CODE } from './_consts';
+import { headerConstant } from '../../../../_metronic/layout/components/header/header-menus/constant';
+import { checkMenuByPermissions } from '../../utils/FunctionUtils';
+import { localStorageItem } from '../../utils/LocalStorage';
 
-function isTokenExpired() {
-  const token = localStorageItem.get(KEY_LOCALSTORAGE.AUTH);
-  const expirationTime = localStorageItem.get(KEY_LOCALSTORAGE.TOKEN_EXPIRATION);
-
-  if (token && expirationTime) {
-    const expirationTimestamp = parseInt(expirationTime);
-    const currentTime = Date.now();
-
-    if (expirationTimestamp < currentTime) {
-      return false; 
-    } else {
-      return true; 
-    }
-  } else {
-    return false; 
-  }
-}
+const AUTH_LOCAL_STORAGE_KEY = KEY_LOCALSTORAGE.AUTH_LOCAL_STORAGE_KEY
 
 const getAuth = (): AuthModel | undefined => {
   if (!localStorage) {
     return
   }
 
-  const lsValue: string | null = isTokenExpired() ? localStorageItem.get(KEY_LOCALSTORAGE.AUTH) : null
-  
+  const lsValue: string | null = localStorage.getItem(AUTH_LOCAL_STORAGE_KEY)
   if (!lsValue) {
     return
   }
 
   try {
-    const auth: AuthModel = lsValue as unknown as AuthModel
+    const auth: AuthModel = JSON.parse(lsValue) as AuthModel
     if (auth) {
+      // You can easily check auth_token expiration also
       return auth
     }
   } catch (error) {
@@ -47,23 +33,39 @@ const setAuth = (auth: AuthModel) => {
   if (!localStorage) {
     return
   }
-
   try {
-    let expiration = new Date().getTime() + auth.expires_in * 1000;
-    localStorageItem.set(KEY_LOCALSTORAGE.AUTH, auth)
-    localStorageItem.set(KEY_LOCALSTORAGE.TOKEN_EXPIRATION, expiration)
+    const lsValue = JSON.stringify(auth)
+    localStorage.setItem(AUTH_LOCAL_STORAGE_KEY, lsValue)
   } catch (error) {
     console.error('AUTH LOCAL STORAGE SAVE ERROR', error)
   }
+}
+const setSubMenu = (to: string = '') => {
+  const checkedMenu = checkMenuByPermissions();
+  debugger
+  if (to) {
+    const selectedMenu = checkedMenu.find((menu) => menu.to === to);
+    selectedMenu && localStorage.setItem(headerConstant.LIST_SUB_MENU, JSON.stringify(selectedMenu?.subMenu));
+    return;
+  }
+
+  //sau phân quyền
+  // if (localStorageItem.get(headerConstant.AUTHORITIES)) {
+  const pathname = new URL(window.location.href).pathname;
+  const selectSubMenu = checkedMenu?.filter(menu => menu?.to === (pathname ? pathname : headerConstant.DEFAULT_MODULE)) || [];
+  localStorage.setItem(headerConstant.LIST_SUB_MENU, JSON.stringify(selectSubMenu?.length > 0 ? selectSubMenu[0].subMenu : []));
+  // }
 }
 
 const removeAuth = () => {
   if (!localStorage) {
     return
   }
-
   try {
-    localStorageItem.remove(KEY_LOCALSTORAGE.AUTH)
+    localStorage.removeItem(AUTH_LOCAL_STORAGE_KEY)
+    localStorage.removeItem(headerConstant.LIST_MENU)
+    localStorage.removeItem(headerConstant.LIST_SUB_MENU)
+    localStorage.removeItem(headerConstant.AUTHORITIES)
   } catch (error) {
     console.error('AUTH LOCAL STORAGE REMOVE ERROR', error)
   }
@@ -97,12 +99,22 @@ const handleResponse = (responseConfig: AxiosResponse<ResponseModel>) => {
   return responseConfig
 }
 
+const logoutAuth = () => {
+  localStorageItem.remove(KEY_LOCALSTORAGE.AUTH)
+  localStorageItem.remove(KEY_LOCALSTORAGE.ACCESS_TOKEN_DECODE)
+  localStorageItem.remove(KEY_LOCALSTORAGE.TOKEN_EXPIRATION)
+  localStorageItem.remove(KEY_LOCALSTORAGE.DEPARTMENT)
+  localStorageItem.remove(KEY_LOCALSTORAGE.ROOM)
+  window.location.href = `${process.env.REACT_APP_SSO_LOGOUT_URL}?redirect_uri=${process.env.REACT_APP_SSO_AUTHORIZE_ENDPOINT}%3Fresponse_type%3D${process.env.REACT_APP_SSO_RESPONSE_TYPE}%26scope%3D${process.env.REACT_APP_SSO_SCOPE}%26redirect_uri%3D${process.env.REACT_APP_SSO_REDIRECT_URI_MEDICAL}%26client_id%3D${process.env.REACT_APP_SSO_CLIENT_SECRET_MEDICAL}`;
+}
+
 const handleError = (error: AxiosError<ResponseModel>): Promise<AxiosError<ResponseModel>> => {
   const { isAxiosError, response } = error
 
   if (isAxiosError) {
-    switch (response?.data.code) {
+    switch (response?.status) {
       case RESPONSE_STATUS_CODE.UNAUTHORIZED:
+        logoutAuth()
         break
       case RESPONSE_STATUS_CODE.BAD_REQUEST:
       case RESPONSE_STATUS_CODE.FORBIDDEN:
@@ -111,7 +123,7 @@ const handleError = (error: AxiosError<ResponseModel>): Promise<AxiosError<Respo
       case RESPONSE_STATUS_CODE.CONFLICT:
       case RESPONSE_STATUS_CODE.INTERNAL_SERVER_ERROR:
       case RESPONSE_STATUS_CODE.BAD_GATEWAY:
-        // toast.error(response.data.message)
+        toast.error(response.data.message)
         break
       default:
         break
@@ -130,4 +142,4 @@ export function setupAxios(axios: any) {
   axios.interceptors.response.use(handleResponse, handleError)
 }
 
-export { getAuth, setAuth, removeAuth }
+export { getAuth, setAuth, removeAuth, setSubMenu, logoutAuth, AUTH_LOCAL_STORAGE_KEY }

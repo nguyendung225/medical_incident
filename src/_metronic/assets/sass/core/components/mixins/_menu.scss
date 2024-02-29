@@ -142,7 +142,6 @@
 
 		.menu-title {
 			color: $title-color;
-			font-size: 14px;
 		}
 	}
 
@@ -214,7 +213,7 @@
 
 	#{$sel}.menu-link.active {
 		transition: $transition-link;
-		
+
 		@include menu-link-theme($title-color, $icon-color, $bullet-color, $arrow-color, $bg-color);
 	}
 }

@@ -1,4 +1,13 @@
-@import "variable";
+@font-face {
+  font-family: "SF Pro Display";
+  src: url('../../../_metronic/assets/font/sf-pro-display-cdnfonts/SFPRODISPLAYREGULAR.OTF') format('opentype');
+  font-weight: normal;
+}
+
+* {
+  font-family: "SF Pro Display", sans-serif;
+}
+
 .heading-1 {
   font-style: normal;
   font-weight: 700;
@@ -39,7 +48,7 @@
 .supertitle {
   font-style: normal;
   font-weight: 400;
-  font-size: $default-font-size;
+  font-size: 14px;
   line-height: 120%;
   /* identical to box height, or 17px */
 
@@ -64,7 +73,7 @@
 .body-normal-1 {
   font-style: normal;
   font-weight: 400;
-  font-size: $default-font-size;
+  font-size: 14px;
   line-height: 145%;
 }
 
@@ -85,7 +94,7 @@
 .body-bold-1 {
   font-style: normal;
   font-weight: 700;
-  font-size: $default-font-size;
+  font-size: 14px;
   line-height: 145%;
 }
 
@@ -108,4 +117,12 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+}
+
+.white {
+  color: white !important;
+}
+
+.fw-600 {
+  font-weight: 600 !important;
 }

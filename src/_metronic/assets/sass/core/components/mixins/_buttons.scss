@@ -65,7 +65,7 @@
         }
 
         @if ( $bg-color-active != null ) {
-            // background-color: $bg-color-active !important;
+            background-color: $bg-color-active !important;
         }
     }
 }

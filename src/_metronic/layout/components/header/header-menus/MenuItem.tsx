@@ -1,11 +1,8 @@
-import {FC, useContext} from 'react'
+import {FC} from 'react'
 import {useLocation} from 'react-router'
 import {Link} from 'react-router-dom'
 import clsx from 'clsx'
 import {checkIsActive, KTSVG} from '../../../../helpers'
-import { menu } from '../../../../../app/modules/appContext/AppContextModel'
-import { localStorageItem } from '../../../../../app/modules/utils/LocalStorage'
-import { AppContext } from '../../../../../app/modules/appContext/AppContext'
 
 type Props = {
   to: string
@@ -14,28 +11,17 @@ type Props = {
   fontIcon?: string
   hasArrow?: boolean
   hasBullet?: boolean
-  menu?: menu
+  onClick?: () => void
+  iconClass?: string
 }
 
-const MenuItem: FC<Props> = ({to, title, icon, fontIcon, hasArrow = false, hasBullet = false, menu}) => {
-  const {pathname} = useLocation();
-  const { setEventKey } = useContext(AppContext);
-
-  const handleClickMenuItem = (id: string | undefined, key: string | undefined) => {
-    let data = localStorageItem.get(key) ? localStorageItem.get(key) : [];
-    if (!data.includes(id)) {
-      data.push(id);
-      data.sort((a: string, b: string) => a > b ? 1 : -1);
-      localStorageItem.set(key, data)
-    }
-    setEventKey(id)
-  }
+const MenuItem: FC<Props> = ({to, title, icon, fontIcon, hasArrow = false, hasBullet = false, onClick, iconClass}) => {
+  const {pathname} = useLocation()
 
   return (
-    <div className='menu-item me-lg-1' onClick={() => handleClickMenuItem(menu?.id, menu?.key)}>
+    <div className='menu-item' onClick={onClick}>
       <Link
-        onDragStart={(e) => { e.preventDefault() }}
-        className={clsx('menu-link py-4', {
+        className={clsx('menu-link', {
           'active menu-here': checkIsActive(pathname, to),
         })}
         to={to}
@@ -48,7 +34,7 @@ const MenuItem: FC<Props> = ({to, title, icon, fontIcon, hasArrow = false, hasBu
 
         {icon && (
           <span className='menu-icon'>
-            <KTSVG path={icon} className='svg-icon-2' />
+            <KTSVG path={icon} className={`svg-icon-2 ${iconClass}`} />
           </span>
         )}
 
@@ -58,9 +44,9 @@ const MenuItem: FC<Props> = ({to, title, icon, fontIcon, hasArrow = false, hasBu
           </span>
         )}
 
-        <span className='menu-title text-white'>{title}</span>
+        <span className='menu-title'>{title}</span>
 
-        {hasArrow && <span className='menu-arrow text-white'></span>}
+        {hasArrow && <span className='menu-arrow'></span>}
       </Link>
     </div>
   )

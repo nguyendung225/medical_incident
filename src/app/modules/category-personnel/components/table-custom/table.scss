@@ -1,0 +1,29 @@
+.dropstart .dropdown-toggle::before {
+  display: none;
+}
+.dropdown-menu.show {
+  display: flex;
+  align-items: center;
+}
+.dropdown-menu {
+  //   height: 100%;
+  position: absolute;
+  inset: 0px auto auto 0px;
+  transform: translate3d(-18.6px, 0px, 0px) !important;
+  padding: 10px 0;
+}
+.dropdown-item:hover {
+  background-color: white;
+}
+.team-name-cell {
+  cursor: pointer;
+}
+.team-name-td:hover {
+  background-color: #f1f3f5;
+}
+// .btn-action {
+//   background-color: var(--kt-primary) !important;
+// }
+.actived {
+  color: #40c057 !important;
+}

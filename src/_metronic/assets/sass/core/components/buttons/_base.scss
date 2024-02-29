@@ -13,7 +13,7 @@
 
 	// Reset focus shadow
 	&:not(.btn-shadow):not(.shadow):not(.shadow-sm):not(.shadow-lg):not(.shadow-xs) {
-		box-shadow: none;
+		box-shadow: none !important;
 	}
 
 	// Remove border

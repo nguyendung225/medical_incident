@@ -13,13 +13,15 @@ const RESPONSE_STATUS_CODE = {
 }
 
 const KEY_LOCALSTORAGE = {
-  AUTH: "auth-patient",
-  ACCESS_TOKEN_DECODE: "access-token-decode-patient",
-  TOKEN_EXPIRATION: "token-expiration-patient",
+  AUTH: "auth",
+  ACCESS_TOKEN_DECODE: "access-token-decode",
+  TOKEN_EXPIRATION: "token-expiration",
   DEPARTMENT: "department",
-  ROOM: "room"
+  ROOM: "room",
+  AUTH_LOCAL_STORAGE_KEY :'kt-auth-react-v',
+  LIST_SUB_MENU: 'listSubMenu',
 }
 
-const AUTHORIZE_REQUEST = `${process.env.REACT_APP_SSO_AUTHORIZE_ENDPOINT}?response_type=${process.env.REACT_APP_SSO_RESPONSE_TYPE}&scope=${process.env.REACT_APP_SSO_SCOPE}&client_id=${process.env.REACT_APP_SSO_CLIENT_ID_SHELL}&redirect_uri=${process.env.REACT_APP_SSO_REDIRECT_URI_SHELL}`;
+const AUTHORIZE_REQUEST = `${process.env.REACT_APP_SSO_AUTHORIZE_ENDPOINT}?response_type=${process.env.REACT_APP_SSO_RESPONSE_TYPE}&scope=${process.env.REACT_APP_SSO_SCOPE}&client_id=${process.env.REACT_APP_SSO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_SSO_REDIRECT_URI}`;
 
 export { RESPONSE_STATUS_CODE, KEY_LOCALSTORAGE, AUTHORIZE_REQUEST }

@@ -9,6 +9,78 @@
     align-items: stretch;
 }
 
+.header-brand{
+    // width: var(--kt-app-sidebar-width-actual);
+    width: fit-content;
+    color: var(--kt-white);
+    align-self: stretch;
+    font-size: 18px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+}
+
+.header-brand-link, .header-brand-link:hover{
+    color: var(--kt-white);
+}
+
+.header-list-nav-container {
+    position: relative;
+
+    .arrow-right,
+    .arrow-left {
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px;
+        border-radius: 9999px;
+        position: absolute;
+        font-weight: 500;
+        background-color: #343A40;
+    }
+
+    .arrow-right:hover,
+    .arrow-left:hover {
+        background-color: #464545;
+    }
+    
+    .arrow-right {
+        bottom: 50%;
+        right: -20px;
+        justify-self: flex-end;
+        transform: rotate(180deg) translateY(-50%);
+    }
+    
+    .arrow-left {
+        top: 50%;
+        left: -20px;
+        transform: translateY(-50%);
+    }
+
+    .hidden {
+        display: none;
+    }
+}
+
+.header-list-nav {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+
+    .menu-item {
+        flex-grow: 1;
+        flex-shrink: 0;
+    }
+    
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 // Desktop mode
 @include media-breakpoint-up(lg) {
     // Base
@@ -94,11 +166,12 @@
         // Sidebar
         [data-kt-app-header-fixed="true"][data-kt-app-sidebar-fixed="true"][data-kt-app-sidebar-push-header="true"] &,
         [data-kt-app-header-fixed="true"][data-kt-app-sidebar-sticky="on"][data-kt-app-sidebar-push-header="true"] & {
-            left: calc(
-                var(--kt-app-sidebar-width) + 
-                var(--kt-app-sidebar-gap-start, 0px) + 
-                var(--kt-app-sidebar-gap-end, 0px)
-            );
+            // left: calc(
+            //     var(--kt-app-sidebar-width) + 
+            //     var(--kt-app-sidebar-gap-start, 0px) + 
+            //     var(--kt-app-sidebar-gap-end, 0px)
+            // );
+            left: 0;
         }
 
         body:not([data-kt-app-header-fixed="true"])[data-kt-app-sidebar-fixed="true"][data-kt-app-sidebar-push-header="true"] &,
@@ -172,7 +245,7 @@
     .app-header {
         height: var(--kt-app-header-height);
         align-items: stretch;
-        
+
         .app-header-mobile-drawer {
             display: none;    
         }

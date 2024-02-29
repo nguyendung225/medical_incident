@@ -1,0 +1,51 @@
+@import "../../styles/variable";
+
+.nursing-report {
+    padding: 10px;
+
+    .table-custom {
+        th {
+            padding: 6px !important;
+            font-size: 12px;
+        }
+
+        td {
+            padding: 0 0.75rem 0.25rem 0.75rem !important;
+            height: 30px;
+        }
+    }
+
+    .department-report {
+        height: calc(100vh - 200px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .nav-item {
+        padding: 0 16px;
+    }
+
+    .table-bao-cao {
+        width: 100%;
+
+        .table-responsive {
+            max-height: 320px !important;
+        }
+
+        .customs-input {
+            height: 30px;
+        }
+    }
+
+    .btn-action {
+        margin-top: 2px;
+        height: 21px;
+        min-width: 40px !important;
+        padding: 2px 8px !important;
+        font-size: 11px;
+    }
+
+    .customs-input {
+        height: 30px;
+    }
+}

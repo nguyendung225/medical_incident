@@ -9,8 +9,8 @@ $app-blank-bg-color: $white;
 $app-blank-bg-color-dark: $app-bg-color-dark;
 
 // Header base
-$app-header-base-height: 50px;
-$app-header-base-height-mobile: 60px;
+$app-header-base-height: 48px;
+$app-header-base-height-mobile: 48px;
 $app-header-base-bg-color: $body-bg;
 $app-header-base-bg-color-dark: #1e1e2d;
 $app-header-base-bg-color-mobile: $app-header-base-bg-color;
@@ -33,7 +33,7 @@ $app-header-dark-scrollbar-color: #3b3b64;
 $app-header-dark-scrollbar-color-hover: lighten($app-header-dark-scrollbar-color, 3%);
 
 // Sidebar base
-$app-sidebar-base-width: 265px;
+$app-sidebar-base-width: 180px;
 $app-sidebar-base-width-mobile: 250px;
 
 $app-sidebar-base-toggle-btn-box-shadow: 0px 0px 10px rgba(113, 121, 136, 0.1);
@@ -42,10 +42,10 @@ $app-sidebar-base-toggle-btn-bg-color: $body-bg;
 $app-sidebar-base-toggle-btn-bg-color-dark: $app-header-base-menu-link-bg-color-active-dark;
 
 // Sidebar minimize
-$app-sidebar-minimize-width: 75px;
+$app-sidebar-minimize-width: 46px;
 
 // Sidebar light
-$app-sidebar-light-bg-color: #369DC3;
+$app-sidebar-light-bg-color: #1A5E83;
 $app-sidebar-light-bg-color-dark: #1e1e2d;
 
 $app-sidebar-light-box-shadow: 0 0 28px 0 rgba(82,63,105,.05);
@@ -60,7 +60,7 @@ $app-sidebar-light-scrollbar-color-hover: $gray-200;
 $app-sidebar-light-scrollbar-color-hover-dark: $gray-200-dark;
 $app-sidebar-light-menu-heading-color: #B5B5C3;
 $app-sidebar-light-menu-heading-color-dark: $gray-500-dark;
-$app-sidebar-light-menu-link-bg-color-active: #F4F6FA;
+$app-sidebar-light-menu-link-bg-color-active: #E6F6FF;
 $app-sidebar-light-menu-link-bg-color-active-dark: #2A2A3C;
 $app-sidebar-light-header-menu-link-bg-color-active: #EAEEF2;
 $app-sidebar-light-header-menu-link-bg-color-active-dark: $gray-100-dark;
@@ -89,7 +89,7 @@ $app-toolbar-base-border-top-mobile: $app-toolbar-base-border-top;
 $app-toolbar-base-border-top-mobile-dark: $app-toolbar-base-border-top-mobile;
 
 // Footer
-$app-footer-height: 40px;
+$app-footer-height: 60px;
 $app-footer-height-mobile: auto;
 $app-footer-bg-color: $body-bg;
 $app-footer-bg-color-dark: #1e1e2d;

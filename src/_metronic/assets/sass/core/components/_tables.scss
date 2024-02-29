@@ -36,6 +36,7 @@
 		color: inherit;
 		height: inherit;
 		min-height: inherit;
+		vertical-align: middle;
 
 		&:first-child {
 			padding-left: 0;
@@ -49,7 +50,7 @@
 	tfoot,
 	tbody {
 		tr:last-child {
-			border-bottom: 0;
+			border-bottom: 0 !important;
 
 			th, td {
 				border-bottom: 0 !important;
@@ -96,7 +97,7 @@
 	&.table-row-dashed {
 		tr {
 			border-bottom-width: 1px;
-			border-bottom-style: solid;
+			border-bottom-style: dashed;
 			border-bottom-color: var(--kt-border-color);
 		}
 

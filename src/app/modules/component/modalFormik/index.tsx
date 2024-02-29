@@ -40,7 +40,7 @@ const ModalFormikCustom: FC<ModalFormikProps> = ({ children, ...props }) => {
         >
             <FormikContext.Provider value={formikStateAndHelpers}>
                 <Form>
-                    <Modal.Header closeButton className='header-modal'>
+                    <Modal.Header closeButton>
                         <Modal.Title className='text-pri '>
                             {title}
                         </Modal.Title>

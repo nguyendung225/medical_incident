@@ -1,12 +1,11 @@
 import { ID, Response } from '../../../../../../_metronic/helpers'
-
 export type User = {
   id?: ID
   name?: string
   avatar?: string
   email?: string
   position?: string
-  role?: string| any[]
+  role?: string | any[]
   last_login?: string
   two_steps?: boolean
   joined_day?: string

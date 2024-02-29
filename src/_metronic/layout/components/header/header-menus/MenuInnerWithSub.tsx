@@ -1,20 +1,21 @@
-import clsx from 'clsx'
-import { FC, useEffect, useRef } from 'react'
-import { KTSVG, WithChildren } from '../../../../helpers'
+import { FC, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router';
+import clsx from 'clsx';
+import { checkIsActive, KTSVG, WithChildren } from '../../../../helpers';
 
 type Props = {
-  to: string
-  title: string
-  icon?: string
-  fontIcon?: string
-  menuTrigger?: 'click' | `{default:'click', lg: 'hover'}`
-  menuPlacement?: 'right-start' | 'bottom-start' | 'left-start'
-  hasArrow?: boolean
-  hasBullet?: boolean
-  isMega?: boolean
+  to: string;
+  title?: string;
+  icon?: string;
+  fontIcon?: string;
+  menuTrigger?: 'click' | `{default:'click', lg: 'hover'}`;
+  menuPlacement?: 'right-start' | 'bottom-start' | 'left-start';
+  hasArrow?: boolean;
+  hasBullet?: boolean;
+  isMega?: boolean;
   freeSize?: boolean;
-  isParentActive?: boolean;
-}
+  iconClass?: string;
+};
 
 const MenuInnerWithSub: FC<Props & WithChildren> = ({
   children,
@@ -28,22 +29,23 @@ const MenuInnerWithSub: FC<Props & WithChildren> = ({
   hasBullet = false,
   isMega = false,
   freeSize = false,
-  isParentActive
+  iconClass
 }) => {
   const menuItemRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (menuItemRef.current && menuTrigger && menuPlacement) {
-      menuItemRef.current.setAttribute('data-kt-menu-trigger', menuTrigger)
-      menuItemRef.current.setAttribute('data-kt-menu-placement', menuPlacement)
+      menuItemRef.current.setAttribute('data-kt-menu-trigger', menuTrigger);
+      menuItemRef.current.setAttribute('data-kt-menu-placement', menuPlacement);
     }
-  }, [menuTrigger, menuPlacement])
+  }, [menuTrigger, menuPlacement]);
 
   return (
-    <div ref={menuItemRef} className='menu-item menu-lg-down-accordion me-lg-1'>
+    <div ref={menuItemRef} className='menu-item menu-lg-down-accordion'>
       <span
-        className={clsx('menu-link py-4', {
-          'active menu-here': isParentActive,
+        className={clsx('menu-link p-0', {
+          active: checkIsActive(pathname, to),
         })}
       >
         {hasBullet && (
@@ -54,17 +56,20 @@ const MenuInnerWithSub: FC<Props & WithChildren> = ({
 
         {icon && (
           <span className='menu-icon'>
-            <KTSVG path={icon} className='svg-icon-2' />
+            <KTSVG path={icon} className={`svg-icon-2 ${iconClass}`}/>
           </span>
         )}
 
         {fontIcon && (
           <span className='menu-icon'>
-            <i className={clsx('bi fs-1', fontIcon)}></i>
+            <i className={clsx('bi fs-2', fontIcon)}></i>
           </span>
         )}
-
-        <span className='menu-title'>{title}</span>
+        {
+          title && (
+            <span className='menu-title'>{title}</span>
+          )
+        }
 
         {hasArrow && <span className='menu-arrow'></span>}
       </span>
@@ -78,8 +83,7 @@ const MenuInnerWithSub: FC<Props & WithChildren> = ({
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export { MenuInnerWithSub }
-
+export { MenuInnerWithSub };

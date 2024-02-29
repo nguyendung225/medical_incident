@@ -14,16 +14,16 @@
                         $icon-color: var(--kt-primary), 
                         $bullet-color: var(--kt-primary), 
                         $arrow-color: var(--kt-primary), 
-                        $bg-color: var(--kt-app-sidebar-light-header-menu-link-bg-color-active),
+                        $bg-color: null,
                         $all-links: false
                     );
 
                     @include menu-link-active-state( 
-                        $title-color: var(--kt-primary), 
+                        $title-color: var(--kt-warning), 
                         $icon-color: var(--kt-primary), 
                         $bullet-color: var(--kt-primary), 
                         $arrow-color: var(--kt-primary), 
-                        $bg-color: var(--kt-app-sidebar-light-header-menu-link-bg-color-active),
+                        $bg-color: null,
                         $all-links: false
                     );
                 }

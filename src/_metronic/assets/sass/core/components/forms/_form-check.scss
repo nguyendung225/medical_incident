@@ -2,6 +2,12 @@
 // Check/radio
 //
 
+.form-check{
+	display: flex;
+	align-items: center;
+	gap: 7px;
+}
+
 .form-check-input {
 	background-color: var(--kt-form-check-input-bg);
 	border: var(--kt-form-check-input-border);

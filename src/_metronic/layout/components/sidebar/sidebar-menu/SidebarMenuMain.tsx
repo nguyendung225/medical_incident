@@ -1,37 +1,36 @@
 /* eslint-disable react/jsx-no-target-blank */
-import React from "react";
+import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { KTSVG } from "../../../../helpers";
-import { SidebarMenuItemWithSub } from "./SidebarMenuItemWithSub";
+import { TSubMenu } from "../../../../../app/pages/Homepage/listMenu";
+import { headerConstant } from "../../header/header-menus/constant";
 import { SidebarMenuItem } from "./SidebarMenuItem";
-import { useAuth } from "../../../../../app/modules/auth";
-import { UserModelLogin } from "../../../../../app/modules/auth/core/_models";
+
 const SidebarMenuMain = () => {
   const intl = useIntl();
-  const { currentUser } = useAuth();
+  const listMenuSelect = localStorage.getItem(headerConstant?.LIST_SUB_MENU);
+
+  const [listMenuItem, setListMenuItem] = useState<TSubMenu[]>([]);
+  useEffect(() => {
+    if(!listMenuSelect) return;
+    setListMenuItem(JSON.parse(listMenuSelect));
+  },[listMenuSelect])
+
   return (
     <>
-      <SidebarMenuItem
-        to="/dasboard"
-        title={intl.formatMessage({ id: "GENERAL.OVERVIEW" })}
-        hasBullet={false}
-        icon="/media/icons/duotune/communication/com005.svg"
-      />
-      <SidebarMenuItem
-        to="/profile"
-        title={intl.formatMessage({ id: "GENERAL.PROFILE" })}
-        hasBullet={false}
-        icon="/media/icons/duotune/communication/com005.svg"
-      />
-
-      <SidebarMenuItem
-        to="/contract"
-        title={intl.formatMessage({ id: "GENERAL.CONTRACT" })}
-        hasBullet={false}
-        icon="/media/icons/duotune/files/fil012.svg"
-      />
+      {
+        listMenuItem?.map((menuItem: TSubMenu, index: number) => (
+          <SidebarMenuItem
+            key={index}
+            to={menuItem.to}
+            title={intl.formatMessage({ id: menuItem?.title })}
+            hasBullet={menuItem.hasBullet}
+            icon={menuItem.icon}
+          />
+        ))
+      }
     </>
   );
 };
 
 export { SidebarMenuMain };
+

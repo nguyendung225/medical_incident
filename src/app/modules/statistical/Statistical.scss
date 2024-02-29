@@ -1,0 +1,211 @@
+@import "../styles/variable";
+
+.wrapper {
+  padding: 10px;
+
+  .statistical {
+    .item-statistical {
+      background: #ffffff;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid $color-border-table;
+      border-radius: 5px;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+      min-height: 250px;
+    }
+  }
+
+  .chart-title {
+    color: #343A40;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .action-btn {
+    font-size: 16px;
+    justify-content: center;
+    padding: 4px 8px !important;
+    width: 45px;
+    height: 36px;
+    background-color: var(--kt-white);
+    color: #4176a4 !important;
+    border: 1px solid #4176a4 !important;
+    border-radius: 4px;
+  }
+
+  .split-layout-wrapper {
+    padding: 16px;
+    background-color: var(--kt-white);
+    border-radius: 2px;
+
+    .chart-tabs {
+      .nav-tabs {
+        gap: 10px;
+
+        .nav-item {
+          width: 100%;
+
+          .nav-link {
+            padding: 8px 12px;
+            background-color: #E9ECEF;
+            color: var(--kt-primary);
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 24px;
+
+            &.active {
+              color: var(--kt-white);
+              background-color: #17A2B8;
+            }
+          }
+        }
+      }
+    }
+
+    .charts {
+      padding: 16px 33px 18px 40px;
+      border-radius: 15px;
+      border: 1px solid #DFDFDF;
+
+      .chart-content {
+        padding-bottom: 40px;
+      }
+    }
+  }
+
+  .grid-layout-wrapper {
+    padding: 16px 8px;
+    background-color: var(--kt-white);
+    border-radius: 2px;
+
+    .chart-item {
+      border: 1px solid #DFDFDF;
+      padding: 10px 10px 24px 10px;
+      min-height: 350px;
+    }
+  }
+
+  .split-layout-wrapper,
+  .grid-layout-wrapper {
+    .autocomplete-custom {
+
+      &>div,
+      &:hover>div {
+        border: 1px solid var(--kt-primary);
+      }
+
+      & * {
+        color: var(--kt-primary) !important;
+      }
+    }
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .change-layout {
+    border: 2px solid #DFDFDF;
+    border-radius: 6px;
+
+    .split-icon {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    .grid-icon {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    .split-icon,
+    .grid-icon {
+      padding: 6px 8px;
+      cursor: pointer;
+
+      .svg-icon {
+        color: #6C757D !important;
+      }
+
+      &.active {
+        background-color: #17A2B8;
+
+        .svg-icon {
+          color: var(--kt-white) !important;
+        }
+      }
+    }
+  }
+}
+
+.chart-pie {
+  .apexcharts-legend {
+    height: fit-content;
+    border: 1px solid #DFDFDF;
+    border-radius: 4px;
+    padding: 12px 24px !important;
+  }
+}
+
+.chart-content {
+  .apexchartsdonut {
+    width: 100% !important;
+
+    svg {
+      width: 100%;
+
+      foreignObject {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.statistical-chart{
+  .dropdown-menu.show {
+    flex-direction: column;
+    align-items: start;
+    top: 100% !important;
+    left: -160% !important;
+    width: 100%;
+    padding: 8px 0;
+    width: max-content;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  
+    li {
+      cursor: pointer;
+      width: 100%;
+      padding: 8px;
+  
+      .dropdown-item {
+        color: #111111 !important;
+      }
+  
+      &:hover {
+        background-color: $color-light-cyan-active !important;
+        
+        .dropdown-item {
+          color: var(--kt-primary) !important;
+          background-color: $color-light-cyan-active !important;
+          font-weight: 600;
+        }
+      }
+  
+    }
+  }
+}
+
+.btn.btn-secondary:hover:not(.btn-active),
+.btn.btn-secondary.show,
+.btn.btn-secondary:focus:not(.btn-active) {
+  background-color: white !important;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}

@@ -28,6 +28,7 @@
     // States
     .app-footer {
         height: var(--kt-app-footer-height);
+        z-index: $app-footer-z-index;
 
         [data-kt-app-footer-fixed="true"] & {        
             @include property( z-index, $app-footer-fixed-z-index);   

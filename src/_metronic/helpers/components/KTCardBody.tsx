@@ -5,7 +5,7 @@ import {WithChildren} from '../react18MigrationHelpers'
 type Props = {
   className?: string
   scroll?: boolean
-  height?: number|string
+  height?: number | string
 }
 
 const KTCardBody: FC<Props & WithChildren> = (props) => {

@@ -11,26 +11,9 @@ export const handleChangeURLParams = (
 ) => {
   paramList.map((param: ParamType) => {
     params.set(param.name, String(param.value))
+    return param
   })
   navigate(`${pathname}?${params.toString()}`)
-}
-
-export const urlParamsConfig = (url: string, searchObject: object) => {
-  let hasSearchObject = false;
-
-  for (const [key, value] of Object.entries(searchObject)) {
-    if (value) {
-      if (!hasSearchObject) {
-        url += "?";
-        hasSearchObject = true;
-      } else {
-        url += "&";
-      }
-      url += `${key}=${value}`;
-    }
-  }
-
-  return url;
 }
 
 export const paramsConfig = (searchObject: object) => {

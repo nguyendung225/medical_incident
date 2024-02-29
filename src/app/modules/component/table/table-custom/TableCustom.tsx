@@ -106,7 +106,7 @@ function TableCustom<T extends object>(props: tableProps<T>) {
         },
         useRowSelect,
         (hooks) => {
-            if (selectionMode === SELECTION_MODE.MULTI) {
+            if (selectionMode === SELECTION_MODE.MULTIPLE) {
                 hooks.allColumns.push((columns) => [
                     {
                         id: "selection",
@@ -257,7 +257,7 @@ function TableCustom<T extends object>(props: tableProps<T>) {
                                         })}
                                         {...row.getRowProps()}
                                         onClick={() => {
-                                            if (selectionMode === SELECTION_MODE.MULTI) {
+                                            if (selectionMode === SELECTION_MODE.MULTIPLE) {
                                                 toggleRowSelection(row);
                                             }
                                             if (selectionMode === SELECTION_MODE.SINGLE) {

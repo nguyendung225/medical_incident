@@ -1,37 +1,43 @@
 import clsx from 'clsx'
-import { KTSVG } from '../../../helpers'
-import { HeaderUserMenu } from '../../../partials'
-import { useLayout } from '../../core'
+import {KTSVG, toAbsoluteUrl} from '../../../helpers'
+import {HeaderNotificationsMenu, HeaderUserMenu, Search, ThemeModeSwitcher} from '../../../partials'
+import {useLayout} from '../../core'
+
+const btnClass =
+  'btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px'
+const btnIconClass = 'svg-icon-1'
 
 const Navbar = () => {
-  const { config } = useLayout()
-
+  const {config} = useLayout()
   return (
     <div className='app-navbar flex-shrink-0'>
-      <div className={clsx('app-navbar-item', 'mx-1 ms-lg-3')}>
+      {/* <div className={clsx('app-navbar-item', itemClass)}>
+        <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
+      </div> */}
+
+      <div className={clsx('app-navbar-item')}>
+        {/* <div className="notification cursor-pointer p-4">
+          <KTSVG path={'/media/icons/notification.svg'} className={`svg-icon-2`} />
+        </div> */}
         <div className="notification cursor-pointer p-4 mx-3">
           <button type="button" className="btn p-0 position-relative">
-            <KTSVG path={'./media/icons/notification.svg'} className={`flex mx-0 p-1`} />
-            <span className="badge-pill-style position-absolute badge rounded-pill bg-danger">
+            <KTSVG path={'/media/icons/notification.svg'} className={`flex mx-0 p-1`} />
+            <span className="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
               11
             </span>
           </button>
         </div>
         <div
-          className={clsx('cursor-pointer d-flex align-items-center', 'symbol-35px symbol-md-40px')}
+          className={clsx('cursor-pointer')}
           data-kt-menu-trigger="{default: 'click'}"
           data-kt-menu-attach='parent'
           data-kt-menu-placement='bottom-end'
         >
-          <div className='spaces px-8 h-20'>
-            <i className="bi bi-person-circle fs-1"></i>
-          </div>
+          <img src={toAbsoluteUrl('/media/avatars/blank.png')} alt='' width={24} height={24} className='avatar rounded-circle'/>
         </div>
-        <div className='cursor-pointer'>
-          <p className='m-0 text-white fw-bold'>Nguyễn Văn A</p>
-          <div className='flex flex-middle'>
-            {/* <p className='m-0 text-white fw-bold'>{room?.name ? room?.name : "Khoa Chẩn đoán hình ảnh"}</p> */}
-          </div>
+        <div className='header-user-info color-white'>
+          <div className="name">Nguyễn Xuân Bách</div>
+          <div className="department">Khoa chuẩn đoán hình ảnh</div>
         </div>
         <HeaderUserMenu />
       </div>
@@ -42,7 +48,7 @@ const Navbar = () => {
             className='btn btn-icon btn-active-color-primary w-35px h-35px'
             id='kt_app_header_menu_toggle'
           >
-            <KTSVG path='/media/icons/duotune/text/txt001.svg' className="svg-icon-1" />
+            <KTSVG path='/media/icons/duotune/text/txt001.svg' className={btnIconClass} />
           </div>
         </div>
       )}
@@ -50,4 +56,4 @@ const Navbar = () => {
   )
 }
 
-export { Navbar }
+export {Navbar}

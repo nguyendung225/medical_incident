@@ -7,19 +7,19 @@
     .menu {
         .menu-item {
             @include menu-link-default-state( 
-                $title-color: var(--kt-gray-700), 
-                $icon-color: var(--kt-gray-500), 
+                $title-color: var(--kt-white), 
+                $icon-color: null, 
                 $bullet-color: var(--kt-gray-500), 
                 $arrow-color: var(--kt-gray-500),
                 $bg-color: null,
             );
             
             @include menu-link-hover-state( 
-                $title-color: var(--kt-primary), 
-                $icon-color: var(--kt-primary), 
+                $title-color: var(--kt-warning), 
+                $icon-color: var(--kt-warning), 
                 $bullet-color: var(--kt-primary), 
                 $arrow-color: var(--kt-primary), 
-                $bg-color: var(--kt-menu-link-bg-color-active)
+                $bg-color: null
             );
             
             @include menu-link-show-state( 
@@ -35,15 +35,15 @@
                 $icon-color: var(--kt-primary),
                 $bullet-color: var(--kt-primary), 
                 $arrow-color: var(--kt-primary),
-                $bg-color: var(--kt-menu-link-bg-color-active)
+                $bg-color: null
             );
 
             @include menu-link-active-state( 
-                $title-color: var(--kt-primary), 
-                $icon-color: var(--kt-primary), 
-                $bullet-color: var(--kt-primary), 
-                $arrow-color: var(--kt-primary), 
-                $bg-color: var(--kt-menu-link-bg-color-active)
+                $title-color: var(--kt-warning), 
+                $icon-color: var(--kt-warning), 
+                $bullet-color: var(--kt-warning), 
+                $arrow-color: var(--kt-warning), 
+                $bg-color: null
             );                
         }
     }
@@ -87,7 +87,7 @@
                     $icon-color: var(--kt-primary), 
                     $bullet-color: var(--kt-primary), 
                     $arrow-color: var(--kt-primary), 
-                    $bg-color: var(--kt-app-header-base-menu-link-bg-color-active)
+                    $bg-color: null
                 );
             }
         }

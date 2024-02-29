@@ -1,24 +1,60 @@
 import clsx from 'clsx'
-import {useEffect} from 'react'
-import {ILayout, useLayout} from '../../core'
-import {SidebarMenu} from './sidebar-menu/SidebarMenu'
-import {SidebarFooter} from './SidebarFooter'
-import {SidebarLogo} from './SidebarLogo'
+import { useContext, useEffect } from 'react'
+import { ILayout, useLayout } from '../../core'
+import { SidebarMenu } from './sidebar-menu/SidebarMenu'
+import { KTSVG } from '../../../helpers'
+import { SidebarLogo } from './SidebarLogo'
+import { SidebarContext } from './SidebarContext'
 
 const Sidebar = () => {
-  const {config} = useLayout()
+  const {config} = useLayout();
+  let { setIsToggleOn } = useContext(SidebarContext)
 
   useEffect(() => {
     updateDOM(config)
+    handleToggleClick()
   }, [config])
 
   if (!config.app?.sidebar?.display) {
     return null
   }
 
+  const appSidebarDefaultMinimizeDesktopEnabled =
+    config?.app?.sidebar?.default?.minimize?.desktop?.enabled
+  const appSidebarDefaultCollapseDesktopEnabled =
+    config?.app?.sidebar?.default?.collapse?.desktop?.enabled
+  const toggleType = appSidebarDefaultCollapseDesktopEnabled
+    ? 'collapse'
+    : appSidebarDefaultMinimizeDesktopEnabled
+    ? 'minimize'
+    : ''
+  const toggleState = appSidebarDefaultMinimizeDesktopEnabled ? 'active' : ''
+  const appSidebarDefaultMinimizeDefault = config.app?.sidebar?.default?.minimize?.desktop?.default;
+
+  const handleToggleClick = () => {
+    const isMinimized = document.body.getAttribute('data-kt-app-sidebar-minimize') === 'on';
+    setIsToggleOn && setIsToggleOn(!isMinimized);
+  };
+
   return (
-    <div id='kt_app_sidebar' className={clsx('app-sidebar', config.app?.sidebar?.default?.class)}>
-      <SidebarLogo />
+    <div id='kt_app_sidebar' className={clsx('app-sidebar' , config.app?.sidebar?.default?.class)}>
+      {/* <SidebarLogo /> */}
+      {(appSidebarDefaultMinimizeDesktopEnabled || appSidebarDefaultCollapseDesktopEnabled) && (
+        <div
+          id='kt_app_sidebar_toggle'
+          className={clsx(
+            'app-sidebar-toggle btn-icon btn-shadow btn-color-muted btn-active-color-primary body-bg position-absolute top-50 start-100 rotate',
+            {active: appSidebarDefaultMinimizeDefault}
+          )}
+          data-kt-toggle='true'
+          data-kt-toggle-state={toggleState}
+          data-kt-toggle-target='body'
+          data-kt-toggle-name={`app-sidebar-${toggleType}`}
+          onClick={handleToggleClick}
+        >
+          <KTSVG path='/media/icons/arrow-left.svg' className="rotate-180 text-white" svgClassName={`position-absolute translate-middle`}/>
+        </div>
+      )}
       <SidebarMenu />
       {/* <SidebarFooter /> */}
     </div>
@@ -126,4 +162,5 @@ const updateDOM = (config: ILayout) => {
   }, 0)
 }
 
-export {Sidebar}
+export { Sidebar }
+

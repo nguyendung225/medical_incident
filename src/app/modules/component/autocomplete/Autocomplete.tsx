@@ -4,11 +4,11 @@ import React, { FC, useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Select, { GetOptionLabel, mergeStyles } from "react-select";
 import { toast } from "react-toastify";
-import { AutoCompletePropsV2 } from "../../models/autocomplete";
 import { KEY } from "../../utils/Constant";
 import { autocompleteStyle, multiValueRemove } from "../StyleComponent";
+import { AutoCompleteProps } from "../../models/autocomplete";
 
-const AutocompleteV2: FC<AutoCompletePropsV2> = (props: AutoCompletePropsV2) => {
+const AutocompleteV2: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
     const { options, onChange, searchFunction, name } = props;
     const [field, meta] = useField(name as string | FieldHookConfig<any>);
     const [optionList, setOptionList] = useState<any[]>([]);

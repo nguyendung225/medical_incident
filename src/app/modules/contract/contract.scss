@@ -1,0 +1,91 @@
+@import "../styles/_variable.scss";
+
+.contract-info {
+  background: $color-white !important;
+  padding: 24px 24px 40px 24px;
+  border-radius: 10px;
+}
+
+.contract-annex {
+  background: $color-white !important;
+}
+
+.form-select:disabled {
+  background-color: $color-white;
+}
+
+.annex-dialog {
+  overflow: scroll;
+}
+
+.addNewContract {
+  .name {
+    .searchTextField {
+      height: 36px !important;
+    }
+  }
+
+  .main-title {
+    color: $color-white;
+    font-size: 1.3rem;
+    font-weight: 500;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .sub-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .form-container {
+    padding: 0 2rem;
+  }
+  .layout-v2 {
+    overflow-y: auto;
+    height: calc(100vh - 170px);
+  }
+
+  .btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+
+    .button-primary-outline.ouline-gray {
+      color: $color-gunmetal-gray !important;
+      border-color: $color-gunmetal-gray !important;
+      opacity: 0.8;
+    }
+  }
+}
+
+.grid-cols-5 {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+
+
+.select-tree {
+  overflow-y: auto;
+  height: calc(100vh - 280px);
+}
+
+.table-custom{
+  .table-responsive{
+    max-height: calc(100vh - 300px) !important;
+  }
+}
+
+.form-container.add-contract{
+  height: 95%;
+  overflow: auto;
+}

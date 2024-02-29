@@ -1,0 +1,29 @@
+.tab-content-container {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    position: relative;
+
+    .tab-content {
+        padding: 10px;
+        border: 1px solid blue;
+        border-radius: 4px;
+    }
+
+    .block-content {
+        padding-top: 10px;
+    }
+
+    .tab-main-content {
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    .tab-sub-content {
+        font-weight: 600;
+        font-size: 14;
+        margin-bottom: 0;
+    }
+}

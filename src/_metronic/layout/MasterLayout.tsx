@@ -1,21 +1,20 @@
-import {useEffect} from 'react'
-import {Outlet, useLocation} from 'react-router-dom'
-import {HeaderWrapper} from './components/header'
-import {RightToolbar} from '../partials/layout/RightToolbar'
-import {ScrollTop} from './components/scroll-top'
-import {Content} from './components/content'
-import {FooterWrapper} from './components/footer'
-import {Sidebar} from './components/sidebar'
+import { useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
+import { reInitMenu } from '../helpers'
 import {
-  DrawerMessenger,
   ActivityDrawer,
+  DrawerMessenger,
   InviteUsers,
-  UpgradePlan,
   ThemeModeProvider,
+  UpgradePlan,
 } from '../partials'
-import {PageDataProvider} from './core'
-import {reInitMenu} from '../helpers'
-import {ToolbarWrapper} from './components/toolbar'
+import { Content } from './components/content'
+import { FooterWrapper } from './components/footer'
+import { HeaderWrapper } from './components/header'
+import { ScrollTop } from './components/scroll-top'
+import { Sidebar } from './components/sidebar'
+import { PageDataProvider } from './core'
+import SidebarProvider from './components/sidebar/SidebarContext'
 
 const MasterLayout = () => {
   const location = useLocation()
@@ -30,14 +29,17 @@ const MasterLayout = () => {
           <div className='app-page flex-column flex-column-fluid' id='kt_app_page'>
             <HeaderWrapper />
             <div className='app-wrapper flex-column flex-row-fluid' id='kt_app_wrapper'>
-              <div className='app-main flex-column flex-row-fluid' id='kt_app_main'>
-                <div className='d-flex flex-column flex-column-fluid p-0'>
-                  <ToolbarWrapper />
+              <SidebarProvider>
+                <Sidebar />
+              </SidebarProvider>
+              <div className='app-main flex-column flex-row-fluid justify-content-between' id='kt_app_main'>
+                <div className='d-flex flex-column flex-column-fluid'>
+                  {/* <ToolbarWrapper /> */}
                   <Content>
                     <Outlet />
                   </Content>
                 </div>
-                {/* <FooterWrapper /> */}
+                <FooterWrapper />
               </div>
             </div>
           </div>
@@ -59,4 +61,5 @@ const MasterLayout = () => {
   )
 }
 
-export {MasterLayout}
+export { MasterLayout }
+

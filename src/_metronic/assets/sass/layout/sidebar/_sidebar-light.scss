@@ -32,8 +32,8 @@
                 );
 
                 @include menu-link-hover-state(
-                    $title-color: var(--kt-gray-900),
-                    $icon-color: var(--kt-gray-700),
+                    $title-color: var(--kt-primary),
+                    $icon-color: var(--kt-primary),
                     $bullet-color: var(--kt-gray-700),
                     $arrow-color: var(--kt-gray-700),
                     $bg-color: null
@@ -64,7 +64,10 @@
                 );
             };
             .menu-link:hover{
-                background-color: #2B6DBA;
+                background-color: $app-sidebar-light-menu-link-bg-color-active;
+            }
+            .menu-link.active{
+                border-right: 3px solid #17A2B8;
             }
         }
     }

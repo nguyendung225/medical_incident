@@ -1,0 +1,25 @@
+.pagination-custom {
+  padding: 12px 8px;
+  display: flex;
+  background-color: #fff;
+  align-items: center;
+  justify-content: space-between;
+  color: #888;
+  font-weight: 500;
+
+  .number-row {
+    width: 65px;
+  }
+
+  .number-row-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

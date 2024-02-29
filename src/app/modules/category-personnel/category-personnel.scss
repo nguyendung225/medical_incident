@@ -1,0 +1,12 @@
+@import '../../modules/styles/variable';
+
+.bg-pri {
+  background-color: $color-bright-cyan !important;
+  color: white;
+  &:hover {
+    background-color: $color-light-cyan-active;
+  }
+}
+.text-pri {
+  color: $color-bright-cyan !important;
+}

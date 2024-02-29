@@ -1,0 +1,21 @@
+@import "../../styles/variable";
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: flex !important;
+    justify-content: space-between;
+    border: 1px solid $color-silver;
+    display: inline-block;
+    border-radius: 0.475rem;
+    padding: 7px 12px;
+    width: 100%;
+}
+
+.file-preview {
+    margin-left: 4px;
+    padding-left: 4px;
+    border-left: #ddd 1px solid;
+}

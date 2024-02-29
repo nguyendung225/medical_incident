@@ -23,15 +23,15 @@ const Languages: FC = () => {
   const currentLanguage = languages.find((x) => x.lang === lang)
   return (
     <div
-      className='menu-item px-5'
+      className='menu-item px-5 mb-1'
       data-kt-menu-trigger='hover'
       data-kt-menu-placement='left-start'
       data-kt-menu-flip='bottom'
     >
       <a href='#' className='menu-link px-5'>
-        <span className='menu-title position-relative'>
+        <span className='menu-title position-relative py-2'>
           {intl.formatMessage({id: 'LANGUAGE'})}
-          <span className='fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0'>
+          <span className='fs-8 rounded px-3 py-2 position-absolute translate-middle-y top-50 end-0'>
             {currentLanguage?.name}{' '}
             <img
               className='w-15px h-15px rounded-1 ms-2'
@@ -53,7 +53,7 @@ const Languages: FC = () => {
           >
             <a
               href='#'
-              className={clsx('menu-link d-flex px-5', {active: l.lang === currentLanguage?.lang})}
+              className={clsx('menu-link d-flex px-5 py-2 mb-1', {active: l.lang === currentLanguage?.lang})}
             >
               <span className='symbol symbol-20px me-4'>
                 <img className='rounded-1' src={l.flag} alt='metronic' />
