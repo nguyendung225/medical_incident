@@ -52,7 +52,7 @@ const ModalPhieuIn = ({show, handleCloseDialog, children, title, size, stylePrin
             Hủy
           </Button>
 
-          <Button className='btn-fill' onClick={handlePrint}>In phiếu</Button>
+          <Button className='button-primary' onClick={handlePrint}>In phiếu</Button>
         </Modal.Footer>
       </Modal>
     </div>

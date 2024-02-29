@@ -17,27 +17,35 @@
     14: 14px,
     15: 15px,
     16: 16px,
+    17: 17px,
     18: 18px,
     20: 20px,
     22: 22px,
     23: 23px,
     24: 24px,
+    25: 25px,
     26: 26px,
     28: 28px,
     29: 29px,
     30: 30px,
+    31: 31px,
     32: 32px,
     34: 34px,
+    35: 35px,
     36: 36px,
     40: 40px,
     44: 44px,
     48: 48px,
     53: 53px,
     60: 60px,
+    58: 58px,
+    62: 62px,
+    63: 63px,
     65: 65px,
     70: 70px,
     80: 80px,
     90: 90px,
+    92: 92px,
     95: 95px,
     100: 100px,
     105: 105px,
@@ -45,7 +53,17 @@
     120: 120px,
     140: 140px,
     150: 150px,
+    155: 155px,
+    200: 200px,
     220: 220px,
+    228: 228px,
+    242: 242px,
+    245: 245px,
+    250: 250px,
+    255: 255px,
+    263: 263px,
+    265: 265px,
+    300: 300px,
     280: 280px,
     310: 310px,
     320: 320px,
@@ -54,6 +72,16 @@
     600: 600px,
     774: 774px,
     900: 900px,
+    425: 425px,
+    455: 455px,
+    465: 465px,
+    470: 470px,
+    480: 480px,
+    510: 510px,
+    599: 599px,
+    620: 620px,
+    800: 800px,
+    912: 912px,
   );
 
   @each $name,
@@ -152,6 +180,46 @@
 
     &.gap-#{$name} {
       gap: $value !important;
+    }
+
+    &.bottom-#{$name} {
+      bottom: $value !important;
+    }
+
+    &.line-height-#{$name} {
+      line-height: $value !important;
+    }
+
+    &.left-#{$name} {
+      left: $value !important;
+    }
+
+    &.top-#{$name} {
+      top: $value !important;
+    }
+    
+    &.min-h-#{$name} {
+      min-height: $value !important;
+    }
+    
+    &.fs-#{$name} {
+        font-size: $value !important;
+    }
+
+    &.h-calc-vh-#{$name} {
+      height: calc(100vh - $value) !important;
+    }
+
+    &.h-calc-#{$name} {
+      height: calc(100% - $value) !important;
+    }
+
+    &.flex-#{$name} {
+      flex: $name !important;
+    }
+
+    &.radius-#{$name} {
+      border-radius: $value !important;
     }
   }
 

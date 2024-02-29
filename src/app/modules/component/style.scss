@@ -177,6 +177,54 @@
     }
   }
 }
+.verticalTabs {
+  height: 100%;
+  padding: 8px 8px 0;
+  .titleTab {
+    padding: 12px;
+    border-radius: 8px;
+    background-color: white;
+
+    .nav-item {
+      border-radius: 4px;
+      .nav-link.active {
+        color: white;
+        background: var(--color-linear-teal);
+      }
+      &:hover {
+        cursor: pointer;
+        background: #b2dbd7;
+        transition: all 0,5 linear;
+      }
+    }
+
+  }
+
+  .contentTab {
+    background-color: white;
+    border-radius: 8px;
+    height: 100%;
+    padding: 12px;
+  }
+
+  .collapseTitle {
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    &:hover {
+      background: #b2dbd7;
+      transition: all 0,5 linear;
+    }
+  }
+
+  .selectCollapse {
+    margin-bottom: 8px;
+  }
+
+  .collapseWrapper {
+    margin-left: 30px;
+  }
+}
 
 .treeSelect {
   .truncate-text {

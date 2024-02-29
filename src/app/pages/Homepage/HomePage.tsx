@@ -122,17 +122,9 @@ export function HomePage() {
           </Row>
           <Row className="flex flex-start">
             <LinkButton
-              linkTo={"/quan-ly-ca-benh"}
+              linkTo={"/ds-bao-cao-scyk"}
               iconPath="/media/icons/homepage/profile.svg"
               text={"Báo cáo SCYK"}
-              modulePermission={MODULE.HO_SO}
-            />
-          </Row>
-          <Row className="flex flex-start">
-            <LinkButton
-              linkTo={"/dashboard/1"}
-              iconPath="/media/icons/homepage/profile.svg"
-              text={"Trang chủ"}
               modulePermission={MODULE.HO_SO}
             />
           </Row>

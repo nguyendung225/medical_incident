@@ -42,7 +42,7 @@ const setAuth = (auth: AuthModel) => {
 }
 const setSubMenu = (to: string = '') => {
   const checkedMenu = checkMenuByPermissions();
-  debugger
+
   if (to) {
     const selectedMenu = checkedMenu.find((menu) => menu.to === to);
     selectedMenu && localStorage.setItem(headerConstant.LIST_SUB_MENU, JSON.stringify(selectedMenu?.subMenu));

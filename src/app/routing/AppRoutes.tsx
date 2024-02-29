@@ -9,7 +9,7 @@ import { FC } from 'react'
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
 import { PrivateRoutes } from './PrivateRoutes'
 import { ErrorsPage } from '../modules/errors/ErrorsPage'
-import { Logout } from '../modules/auth'
+import { Logout, AuthPage, useAuth } from '../modules/auth'
 import { App } from '../App'
 
 /**
@@ -28,7 +28,7 @@ const AppRoutes: FC = () => {
           <Route path='error/*' element={<ErrorsPage />} />
           <Route path='logout' element={<Logout />} />
           <Route path='/*' element={<PrivateRoutes />} />
-          <Route index element={<Navigate to='/quan-ly-ca-benh' />} />
+          <Route index element={<Navigate to='/ds-bao-cao-scyk' />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -5,7 +5,11 @@ import { downLoadFileById, fileUpload } from "../../utils/FileServices";
 import { toast } from "react-toastify";
 import { actualFileType } from "./constant";
 import clsx from "clsx";
-import { IFile } from "../../profile/models/DialogModels";
+
+export interface IFile {
+  id: string;
+  name: string;
+}
 
 type IProps = {
   label: string;
