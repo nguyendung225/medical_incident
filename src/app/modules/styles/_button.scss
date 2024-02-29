@@ -1,0 +1,178 @@
+.button-primary {
+  color: white;
+  background-color: #519DD9 !important;
+  &:hover {
+    background: #2B6DBA !important;
+  }
+  &:focus {
+    background: #0D47A1;
+    box-shadow: 0px 0px 0px 4px #D3EAF3;
+  }
+  &:disabled {
+    background: #F4F4F4;
+    border-radius: 8px;
+    color: #CFCFCF;
+  }
+}
+
+.button-low-primary {
+  border: 1px solid #519DD9 !important;
+  color: #519DD9;
+  &:hover {
+    border: 1px solid #2B6DBA !important;
+    color: #2B6DBA !important;
+    background-color: white;
+  }
+  &:focus {
+    border: 1px solid #0D47A1 !important;
+    color: #0D47A1 !important;
+    box-shadow: 0px 0px 0px 4px #D3EAF3 !important;
+  }
+  &:disabled {
+    border: 1px solid #CFCFCF;
+    color: #CFCFCF;
+  }
+}
+
+.button-secondary {
+border: 1px solid #CFCFCF !important;
+}
+
+.btn-green {
+  background: var(--color-linear-green) !important;
+  color: $color-white !important;
+  font-size: 12px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    --kt-primary-active: var(--color-linear-green);
+    color: var(--kt-primary-inverse);
+    border-color: var(--kt-primary-active);
+    background-color: var(--kt-primary-active);
+    opacity: 0.8;
+  }
+}
+
+.btn-navy {
+  background: var(--color-linear-green) !important;
+  color: $color-white !important;
+  padding: 4px 8px !important;
+  border: 1px solid $color-teal-navy-blue !important;
+  font-size: 12px;
+
+  &.btn-small{
+    padding: 4px !important;
+    height: 30px;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    --kt-primary-active: var(--color-linear-green);
+    color: var(--kt-primary-inverse);
+    border-color: var(--kt-primary-active);
+    background-color: var(--kt-primary-active);
+    opacity: 0.8;
+  }
+
+  &.white {
+    background: white !important;
+    color: $color-teal-navy-blue !important;
+    border: 1px solid $color-teal-navy-blue !important;
+
+    &:hover {
+      background: var(--color-linear-green) !important;
+      color: $color-white !important;
+    }
+  }
+  &:disabled {
+    background: $color-disabled-bg !important;
+    color: $color-disabled-text !important;
+    border: 1px solid $color-disabled-text !important;
+    pointer-events: none !important;
+  }
+}
+
+.btn-navy-outlined {
+  background: $color-white !important;
+  color: #2789af !important;
+  border: 1px solid #2789af !important;
+  padding: 4px 8px !important;
+  font-size: 12px;
+
+
+  &:hover,
+  &:active,
+  &:focus {
+    --kt-primary-active: var(--color-linear-green);
+    color: $color-hover !important;
+    border: none;
+    background: $color-bg-hover !important;
+  }
+
+  &.white {
+    background: white !important;
+    color: $color-teal-navy-blue !important;
+    border: 1px solid $color-teal-navy-blue !important;
+
+    &:hover {
+      background: var(--color-linear-green) !important;
+      color: $color-white !important;
+      padding: 4px 8px !important;
+    }
+  }
+  &:disabled {
+    background: $color-disabled-bg !important;
+    color: $color-disabled-text !important;
+    border: 1px solid $color-disabled-text !important;
+    pointer-events: none !important;
+  }
+}
+
+.btn-white {
+  background-color: $color-white;
+  color: $color-dark-blur-1;
+  border: 1px solid $color-dark-blur-2;
+}
+
+.btn-primary {
+  padding: 4.5px 15px !important;
+}
+
+.btn-secondary {
+  background: $color-dark-blur-1 !important;
+  color: $color-white !important;
+  padding: 4px 8px !important;
+  border: 1px solid $color-dark-blur-1 !important;
+  font-size: 12px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    --kt-primary-active: $color-dark-blur-1;
+    color: var(--kt-primary-inverse);
+    border-color: var(--kt-primary-active);
+    background-color: var(--kt-primary-active);
+    opacity: 0.8;
+  }
+
+  &.white {
+    background: white !important;
+    color: $color-teal-navy-blue !important;
+    border: 1px solid $color-teal-navy-blue !important;
+
+    &:hover {
+      background: var(--color-linear-green) !important;
+      color: $color-white !important;
+      padding: 6px 10px !important;
+    }
+  }
+
+  &:disabled {
+    background: $color-disabled-bg !important;
+    color: $color-disabled-text !important;
+    border: 1px solid $color-disabled-text !important;
+    pointer-events: none !important;
+  }
+}

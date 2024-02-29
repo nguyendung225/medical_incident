@@ -1,0 +1,242 @@
+@import "../../styles/variable";
+
+.dropstart .dropdown-toggle::before {
+    display: none;
+}
+
+.dropdown-menu.show {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu {
+    //   height: 100%;
+    position: absolute;
+    inset: 0px auto auto 0px;
+    transform: translate3d(-18.6px, 0px, 0px) !important;
+    padding: 10px 0;
+}
+
+.dropdown-item:hover {
+    background-color: white;
+}
+
+.team-name-cell {
+    cursor: pointer;
+}
+
+.team-name-td:hover {
+    background-color: #f1f3f5;
+}
+
+.actived {
+    color: #40c057 !important;
+}
+
+.check-box-row {
+    width: 16px;
+    height: 16px;
+    margin: 16px;
+}
+
+.table-toolbar {
+    background-color: #fff;
+    padding: 10px 20px;
+
+    span {
+        font-size: $default-font-size;
+        color: #707070;
+    }
+}
+
+.toolbar-icon {
+    padding: 6px;
+    border: 1px solid $color-teal-active-hover;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete-box {
+    display: flex;
+    border-left: 2px solid #cfcfcf;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination {
+    background: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.pagination-container {
+    padding: 3.5px 16px;
+
+    .pagination {
+        background: unset;
+        padding: 4px 0px !important;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-radius: 6px;
+
+        .active>.page-link {
+            background-color: $color-text-cyan !important;
+            border: 1px solid $color-text-cyan !important;
+            color: #fff;
+        }
+
+        .page-item.active .page-link {
+            color: #fff;
+        }
+
+        .page-item .page-link {
+            height: 29px !important;
+            min-width: 32px !important;
+            padding: 0;
+        }
+
+    }
+
+    .form-select {
+        padding: 6.2px;
+        border-radius: 6px;
+    }
+}
+
+
+.page-link {
+    font-size: $default-font-size !important;
+}
+
+.pagination-info {
+    border: 1px solid #cfcfcf;
+    padding: 6px 14px;
+    border-radius: 3px;
+    font-weight: 600;
+    color: #707070;
+}
+
+.pagination-goto {
+    color: $color-teal-active-hover;
+    padding: 6px;
+    border-radius: 3px;
+    display: flex;
+
+    label {
+        border-right: 1px solid #cfcfcf;
+        padding: 0 8px;
+    }
+
+    input {
+        padding-left: 6px;
+        width: 32px;
+        border: none;
+        outline: none;
+    }
+
+    align-items: center;
+    border: 1px solid $color-teal-active-hover;
+}
+
+.header-filter-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+th {
+    padding: 0px !important;
+}
+
+.selected-row {
+    background: #e6fffb;
+}
+
+.hover-table-row {
+    &:hover td {
+        background-color: $color-gray-1;
+    }
+}
+
+.filter-open {
+    background: var(--color-linear-teal);
+    color: white !important;
+}
+
+.action-cell {
+    color: $color-teal-active-hover !important;
+    cursor: pointer;
+}
+
+.border-y-none {
+    border-bottom: none !important;
+    border-top: none !important;
+}
+
+.header-sticky {
+    z-index: 10;
+    position: sticky;
+    top: 0;
+}
+
+.table-collapse {
+    .table-children {
+        tr {
+            td {
+                border: 1px solid #eee;
+                border-bottom: none;
+            }
+
+            td:first-child {
+                border-left: none;
+            }
+
+            td:last-child {
+                border-right: none;
+            }
+
+            &.clickable-row {
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .accordion-button {
+        padding: 12px;
+    }
+}
+
+.combined-table-container {
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+    }
+
+    &:hover {
+        &::-webkit-scrollbar-thumb {
+            background-color: #aaa;
+        }
+
+        &::-webkit-scrollbar {
+            height: 8px;
+        }
+    }
+} 

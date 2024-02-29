@@ -1,0 +1,29 @@
+.custom-menu-container {
+    position: relative;
+    cursor: pointer;
+
+    .menu-popup {
+        top: 32px;
+        position: absolute;
+        z-index: 9999;
+        background-color: white;
+        min-width: max-content;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        border-radius: 3px;
+        max-height: 400px;
+        overflow: auto;
+
+        .menu-item {
+            border-bottom: 1px solid #ddd;
+
+            &:last-child {
+                border: none;
+            }
+
+            &:hover {
+                background-color: #17a2b8;
+                color: #fff;
+            }
+        }
+    }
+}

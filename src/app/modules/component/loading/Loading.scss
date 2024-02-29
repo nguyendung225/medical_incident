@@ -1,0 +1,116 @@
+@import "../../styles/variable";
+
+#fullscreen-loader {
+  position: fixed;
+  z-index: 1000000000;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  #container {
+    width: 60px;
+    height: 60px;
+  }
+  #shadow {
+    background: $color-navy-blue;
+  }
+  #spinner {
+    fill: transparent;
+    stroke: $color-navy-blue;
+    stroke-width: 8px;
+    stroke-linecap: round;
+    filter: url(#shadow);
+    transform-origin: center;
+    animation-name: animation;
+    animation-duration: 1.2s;
+    animation-timing-function: cubic-bezier(0.2, 0.5, 0.8, 1.1);
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes animation {
+    0% {
+      stroke-dasharray: 1 98;
+      stroke-dashoffset: -105;
+    }
+    50% {
+      stroke-dasharray: 80 10;
+      stroke-dashoffset: -160;
+    }
+    100% {
+      stroke-dasharray: 1 98;
+      stroke-dashoffset: -300;
+    }
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2);
+
+  svg polyline {
+    fill: none;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  svg polyline#back {
+    stroke: rgba(110, 123, 242, 0.4);
+  }
+
+  svg polyline#front {
+    stroke: $color-navy-blue;
+    stroke-dasharray: 12, 36;
+    stroke-dashoffset: 48;
+    animation: dash 1s linear infinite;
+  }
+  @-moz-keyframes dash {
+    62.5% {
+      opacity: 0;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @-webkit-keyframes dash {
+    62.5% {
+      opacity: 0;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @-o-keyframes dash {
+    62.5% {
+      opacity: 0;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes dash {
+    0%{
+      opacity: 0.5;
+    }
+    62.5% {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.5;
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+
+
+
+
+
+
+
