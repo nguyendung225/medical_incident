@@ -10,7 +10,7 @@ const LabelRequired: FC<Props> = ({ label, isRequired, className }) => {
     return (
         <span className={`text-lable-input ${className ? className : ""}`}>
             {label}
-            {isRequired && <span className="color-red"> (*)</span>}
+            {isRequired && <span className="color-red ms-1">{"*"}</span>}
         </span>
     )
 };

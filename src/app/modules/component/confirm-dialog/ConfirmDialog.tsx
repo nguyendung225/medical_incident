@@ -1,21 +1,22 @@
-import { FC } from 'react'
-import { Button, Modal } from 'react-bootstrap'
+import { FC } from "react";
+import { Button, Modal } from "react-bootstrap";
+import "./confirmDialog.scss";
 
 interface Props {
-  show: boolean
-  onCloseClick?: () => void
-  onYesClick?: () => void
-  onCancelClick?: () => void
-  title?: string
-  message?: string
-  yes?: string
-  cancel?: string
-  close?: string
-  className?: string
+  show: boolean;
+  onCloseClick?: () => void;
+  onYesClick?: () => void;
+  onCancelClick?: () => void;
+  title?: string;
+  message?: string;
+  yes?: string;
+  cancel?: string;
+  close?: string;
+  isView?: boolean;
 }
 
 const ConfirmDialog: FC<Props> = (props) => {
-  const { show, onCloseClick, onYesClick, onCancelClick, title, message, yes, cancel, close, className } = props
+  const { show, onCloseClick, onYesClick, onCancelClick, title, message, yes, cancel, close, isView } = props;
 
   return (
     <Modal
@@ -23,31 +24,39 @@ const ConfirmDialog: FC<Props> = (props) => {
       onHide={onCloseClick}
       centered
       animation
-      className={`background__modal dialog-background ${className}`}
+      aria-labelledby="example-custom-modal-styling-title"
+      className="custom-modal confirm-dialog"
     >
-      <Modal.Header className="header-modal" closeButton>
-        <Modal.Title className='text-white text-uppercase'>{title}</Modal.Title>
+      <Modal.Header className="py-4 modal-header">
+        <Modal.Title className="heading-5 modal-title h4">{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body className='p-4'>
-        <h5 className='m-0'>{message}</h5>
+      <Modal.Body className="d-flex text-center">
+        <h4 className="spaces m-0">{message}</h4>
       </Modal.Body>
-      <Modal.Footer className='d-flex justify-content-end p-2 border-top'>
+
+      <Modal.Footer className="flex-center py-4">
+        {!isView && yes && (
+          <Button
+            variant="primary"
+            className="button-primary btn-sm"
+            type="submit"
+            onClick={onYesClick}
+          >
+            {yes}
+          </Button>
+        )}
         {cancel && (
           <Button
-            className="spaces btn-secondary px-16"
+            variant="outline-secondary"
+            className="button-gray-outline btn-sm"
             onClick={onCancelClick}
           >
             {cancel}
           </Button>
         )}
-        {yes && (
-          <Button className="btn-fill min-w-50px btn btn-primary" onClick={onYesClick}>
-            {yes}
-          </Button>
-        )}
         {close && (
           <Button
-            className="btn-outline min-w-80px"
+            className="btn btn-primary btn-sm"
             onClick={onCloseClick}
           >
             {close}
@@ -55,7 +64,7 @@ const ConfirmDialog: FC<Props> = (props) => {
         )}
       </Modal.Footer>
     </Modal>
-  )
-}
+  );
+};
 
-export { ConfirmDialog }
+export default ConfirmDialog;

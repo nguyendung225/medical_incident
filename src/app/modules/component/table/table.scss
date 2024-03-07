@@ -65,7 +65,7 @@
 
 .pagination {
     background: #fff;
-    padding: 10px 20px;
+    padding: 0px 20px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -240,3 +240,20 @@ th {
         }
     }
 } 
+
+    .pagination-container {
+        height: 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 16px 8px 16px;
+        
+        .pagination {
+            padding: 0 !important;
+        }
+        .page-link {
+            span {
+                font-size: 20px;
+            }
+        }
+    }

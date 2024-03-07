@@ -21,14 +21,14 @@ export type TSubMenu = {
 export const allMenu: TMenu[] = [
   {
     title: "Quản lý ca bệnh",
-    to: "/quan-ly-ca-benh",
-    name: "quan-ly-ca-benh",
+    to: "/ds-bao-cao-scyk",
+    name: "ds-bao-cao-scyk",
     permission: PERMISSIONS.MODULE,
     ability: MODULE.HO_SO,
     subMenu: [
       {
         title: "Báo cáo SCYK",
-        to: "/quan-ly-ca-benh",
+        to: "/ds-bao-cao-scyk",
         hasBullet: false,
         icon: "/media/svg/icons/warning-fill.svg",
         permission: PERMISSIONS.EMPLOYEE,

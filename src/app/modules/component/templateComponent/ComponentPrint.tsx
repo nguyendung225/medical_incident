@@ -68,14 +68,14 @@ const ComponentPrint: FC<Props> = (props) => {
                 <Modal.Footer className="flex justify-content-center pt-0 pb-2">
                     {data?.list?.length > 1 &&
                         <>
-                        <Button disabled={page === 0} className="btn-fill min-w-50px" onClick={() => {
+                        <Button disabled={page === 0} className="button-primary min-w-50px" onClick={() => {
 
                             setPage(prev => prev - 1)
                         }}>
                             Phiếu trước
                         </Button>
                         <div>{`${page + 1}/${data?.list?.length || 1}`}</div>
-                        <Button disabled={page === (data?.list?.length || 1) - 1} className="btn-fill min-w-50px" onClick={() => {
+                        <Button disabled={page === (data?.list?.length || 1) - 1} className="button-primary min-w-50px" onClick={() => {
 
                             setPage(prev => prev + 1)
                         }}>
@@ -83,10 +83,10 @@ const ComponentPrint: FC<Props> = (props) => {
                         </Button>
                         </>
                     }
-                    <Button className="btn-fill min-w-50px" onClick={handlePrint}>
+                    <Button className="button-primary min-w-50px" onClick={handlePrint}>
                         {textYes ? textYes : "In phiếu"}
                     </Button>
-                    <Button className="btn-fill" onClick={handleClose}>
+                    <Button className="button-primary" onClick={handleClose}>
                         {textClose ? textClose : "Đóng"}
                     </Button>
                 </Modal.Footer>

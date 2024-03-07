@@ -1,12 +1,12 @@
 //@ts-nocheck
 import moment from "moment";
 import { useIntl } from "react-intl";
-import { SUCCESS_CODE } from "../contract/const/ContractConst";
 import { toast } from "react-toastify";
 import { IItemSearch } from "../profile/models/ProfileModels";
 import { localStorageItem } from "./LocalStorage";
 import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING } from "./Constant";
 import { TMenu, allMenu } from "../../pages/Homepage/listMenu";
+import { RESPONSE_STATUS_CODE } from "./Constant";
 
 export const checkTypeOf = (value: any) => {
   return Object.prototype.toString.call(value).slice(8, -1);
@@ -23,7 +23,7 @@ export function useCustomIntl(messageId: string) {
 export const exportToExcel = async (exportAPI: AxiosPromise<any>) => {
   try {
     const data = await exportAPI();
-    if (data.status === SUCCESS_CODE) {
+    if (data.status === RESPONSE_STATUS_CODE.SUCCESS) {
       const url = window.URL.createObjectURL(new Blob([data.data]));
       const link = document.createElement("a");
       link.href = url;

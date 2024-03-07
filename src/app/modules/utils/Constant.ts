@@ -240,12 +240,6 @@ export const VARIABLE_STRING = {
     REPORT_MONTH: "reportMonth",
 }
 
-export const SELECTION_MODE = {
-    SINGLE: "single",
-    MULTIPLE: "multiple",
-    SINGLE_NO_RADIO_BUTTON: 'singleNoRadioButton',
-}
-
 export const COUNTRY = {
     CODE: {
         VIET_NAM: "VN"

@@ -3,7 +3,7 @@ import { TabMenuProps } from "../CustomTabMenu";
 import { tab, tabs } from "../../appContext/AppContextModel";
 import "../style.scss"
 import React, { useState } from "react";
-import Autocomplete from "../autocomplete/Autocomplete";
+import Autocomplete from "../input-field/Autocomplete";
 
 type TCollapseName = "danhMuc" | "danhSach" | "phieuKho" | "baoCao";
 
