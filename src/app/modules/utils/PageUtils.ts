@@ -50,7 +50,7 @@ export const handleRowsPerPageChange = (
   setRowsPerPage(parseInt(event.target.value))
 }
 
-export const rowsForPage = [1, 2, 3, 5, 10, 15, 20, 50, 100]
+export const ROWS_FOR_PAGE = [1, 2, 3, 5, 10, 15, 20, 50, 100]
 export const MAX_PAGE_SIZE = 1000;
 export const DEFAULT_PAGE_INDEX = 1;
 export const DEFAULT_PAGE_SIZE = 10;

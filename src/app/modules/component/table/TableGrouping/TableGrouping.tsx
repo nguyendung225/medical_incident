@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import useMultiLanguage from "../../../../hook/useMultiLanguage";
-import { handlePagesChange, handleRowsPerPageChange, rowsForPage } from "../../../utils/PageUtils";
+import { handlePagesChange, handleRowsPerPageChange, ROWS_FOR_PAGE } from "../../../utils/PageUtils";
 import { KTSVG } from "../../../../../_metronic/helpers";
 import { DEFAULT_PAGE_INDEX } from "../../../utils/Constant";
 import TableHeader from "./header/TableHeader";
@@ -204,7 +204,7 @@ function TableGrouping(props: IProps) {
             setPage={setPage}
             handlePagesChange={handlePagesChange}
             handleRowsPerPageChange={handleRowsPerPageChange}
-            rowsForPage={rowsForPage}
+            rowsForPage={ROWS_FOR_PAGE}
             rowsPerPage={rowsPerPage || 10}
             setRowsPerPage={setRowsPerPage}
             totalPages={totalPages || 0}

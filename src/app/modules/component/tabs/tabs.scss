@@ -1,0 +1,67 @@
+@import '../../../modules/styles/variable';
+
+.customs-tabs {
+    background-color: #ffffff !important;
+    height: 33px;
+    flex-wrap: nowrap;
+    overflow-y: hidden;
+
+    .nav-link {
+        background-color: #ffffff;
+        border: none;
+        padding: 4px 16px !important;
+        font-size: $default-font-size;
+        width: max-content;
+        font-size: $default-font-size;
+
+        &.active {
+            background: white;
+            color: $color-text-cyan !important;
+            font-weight: 700;
+            position: relative;
+
+            i {
+                color: #ececec;
+
+                &:hover {
+                    color: #AAAABA;
+                }
+            }
+
+            .label {
+                span {
+                    font-size: $default-font-size;
+                    position: relative;
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        width: 120%;
+                        height: 2px;
+                        top: 23px;
+                        background: $color-text-cyan;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+                }
+
+            }
+        }
+
+        &:hover {
+            opacity: 0.8;
+            color: var(--color-primary);
+        }
+    }
+
+    .label {
+        position: relative;
+
+        i {
+            position: absolute;
+            top: -6px;
+            right: -13px;
+            padding: 10px;
+        }
+    }
+}

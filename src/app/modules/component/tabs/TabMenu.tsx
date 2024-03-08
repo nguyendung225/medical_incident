@@ -1,6 +1,7 @@
 import React, { FC,useEffect, useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { tab } from "../../models/tabModels";
+import "./tabs.scss";
 
 type TabMenuProps = {
     danhsachTabs: tab[];
@@ -8,11 +9,11 @@ type TabMenuProps = {
 }
 
 export const TabMenu: FC<TabMenuProps> = (props) => {
-    const { danhsachTabs} = props;
+    const { danhsachTabs } = props;
     const [activeTab, setActiveTab] = useState<string>("0");
     const [tabs, setTabs] = useState<tab[]>([]);
 
-    useEffect(() => {
+    useEffect(() => { 
         setTabs(danhsachTabs);
     }, [danhsachTabs])
 

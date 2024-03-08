@@ -1,5 +1,5 @@
 import moment from "moment";
-import { NUMBER_EXCEPT_THIS_SYMBOLS } from "./Constant";
+import { GENDER, MEDICAL_INCIDENT_REPORT_STATUS, NUMBER_EXCEPT_THIS_SYMBOLS } from "./Constant";
 import { Col, Form, FormCheck, Row } from 'react-bootstrap';
 import CustomTextarea from '../component/custom-textarea/CustomTextarea';
 
@@ -136,3 +136,31 @@ export const renderItemKhamBoPhan = (Data: any) => (
         })}
     </Row>
 );
+
+//--------------------------------------------
+export const convertGenderToString = (genderCode: number) => {
+    switch(genderCode) {
+        case GENDER.MALE: return "Nam";
+        case GENDER.FEMALE: return "Nữ";
+        default: return "Khác";
+    }
+}
+
+export const renderMedicalIncidentReportStatus = (reportStatus: number) => {
+    switch (reportStatus) {
+        case MEDICAL_INCIDENT_REPORT_STATUS.DRAFT:
+            return (<i className="bi bi-circle-fill spaces fs-10"></i>);
+        case MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN:
+            return (<i className="bi bi-circle-fill spaces fs-10 color-steel-blue"></i>);
+        case MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN:
+            return (<i className="bi bi-circle-fill spaces fs-10 color-green"></i>);
+        case MEDICAL_INCIDENT_REPORT_STATUS.DA_XAC_MINH:
+            return (<i className="bi bi-circle-fill spaces fs-10 color-dark-orange"></i>);
+        case MEDICAL_INCIDENT_REPORT_STATUS.DA_PHAN_TICH:
+            return (<i className="bi bi-circle-fill spaces fs-10 color-dark-red"></i>);
+        case MEDICAL_INCIDENT_REPORT_STATUS.TAO_BIEN_BAN:
+            return (<i className="bi bi-circle-fill spaces fs-10 color-gunmetal"></i>);
+        case MEDICAL_INCIDENT_REPORT_STATUS.DA_BAO_CAO:
+            return (<i className="bi bi-circle-fill spaces fs-10 color-primary"></i>);
+    }
+}

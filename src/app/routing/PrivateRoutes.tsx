@@ -7,7 +7,6 @@ import { MasterLayout } from "../../_metronic/layout/MasterLayout";
 import { PERMISSIONS, PERMISSION_ABILITY } from "../Constant";
 import { HomePage } from "../pages/Homepage/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
-import KhaiBaoTruongHopBenh from "../modules/quan-ly-truong-hop-benh/khai-bao-truong-hop-benh/KhaiBaoTruongHopBenh";
 import BaoCaoSCYK from "../modules/bao-cao-su-co-y-khoa/BaoCaoSCYK";
 
 interface PrivateRouteProps {
@@ -43,10 +42,10 @@ const PrivateRoutes = () => {
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
         <Route path="/ds-bao-cao-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoSCYK} redirect="/ds-bao-cao-scyk" />} />
-        <Route path="bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} />
+        {/* <Route path="bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenhTuVong} redirect="/ds-bao-cao-scyk" />} />
         <Route path="phan-tich-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} />
         <Route path="bien-ban-hop" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} />
-        <Route path="bao-cao" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} />
+        <Route path="bao-cao" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} /> */}
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>
     </Routes>
