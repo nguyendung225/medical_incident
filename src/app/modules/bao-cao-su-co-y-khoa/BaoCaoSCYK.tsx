@@ -1,21 +1,48 @@
 import React from "react"
 import { Button } from "react-bootstrap";
-import CustomTabMenu from "../component/CustomTabMenu";
 import InputSearch from "../component/InputSearch";
 import "./BaoCaoSCYK.scss";
-import { dsBenhNhan, dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constanst";
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constanst";
+import { useState } from "react";
 import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
 import { KTSVG } from "../../../_metronic/helpers";
 import TableCustom from "../component/table/table-custom/TableCustom";
-import { TablePagination } from "../component/table/table-custom/TablePagination";
 import { TYPE } from "../utils/Constant";
+import TabMenu from "../component/tabs/TabMenu";
+import { searchByPage } from "./services/BaoCaoSCYKServices";
+import { MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
+import { toast } from "react-toastify";
 
 type Props = {};
 
 const BaoCaoSCYK = (props: Props) => {
+    const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false);
+    const [searchObj, setSearchObj] = useState<SearchObject>({
+        PageNumber: 1,
+        PageSize: 10,
+    })
+    const [dsBaoCaoSCYK, setDsBaoCaoSCYK] = useState<MedicalIncidentInfo[]>([]);
+    const [configTable, setConfigTable] = useState<any>({})
 
-    const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false)
+    const updatePageData = (searchData: any) => {
+        getMedicalIncidentReportList(searchData);
+    }
+
+    const getMedicalIncidentReportList = async (searchData: any) => {
+        try {
+            const { data } = await searchByPage(searchData);
+            setDsBaoCaoSCYK(data.data.data);
+            setConfigTable({
+                pageNumber: data.data.pageNumber,
+                pageSize: data.data.pageNumber,
+                totalElement: data.data.total,
+                totalPages: data.data.totalPages,
+                numberOfElements: data.data.numberOfElements,
+            })
+        } catch (err) {
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
+    }
 
     return (
         <div className="bao-cao-scyk-container">
@@ -47,27 +74,20 @@ const BaoCaoSCYK = (props: Props) => {
                     <TableCustom
                         id="profile2"
                         columns={tableDSSuCoYKhoaColumns}
-                        data={dsBenhNhan}
+                        data={dsBaoCaoSCYK}
                         buttonAdd={false}
                         buttonExportExcel={false}
                         notDelete={false}
                         justFilter={true}
                         fixedColumnsCount={3}
-                        noPagination={true}
-                        updatePageData={() => { }}
-                        type={TYPE.MULTILINE}
-                    />
-                    <TablePagination
-                        handlePagesChange={() => {}}
-                        handleRowsPerPageChange={() => {}} 
-                        rowsPerPage={0} 
-                        rowsForPage={[]} 
-                        page={0} 
-                        setPage={() => {}} 
-                        setRowsPerPage={() => {}} 
-                        totalPages={0} 
-                        totalElements={0} 
-                        numberOfElements={0}
+                        noPagination={false}
+                        updatePageData={updatePageData}
+                        type={TYPE.SINGLE}
+                        page={configTable?.pageNumber}
+                        pageSize={configTable?.pageSize}
+                        totalElements={configTable?.totalElement}
+                        totalPages={configTable?.totalPages}
+                        numberOfElements={configTable?.numberOfElements}
                     />
                 </div>
                 <div className="status-box">
@@ -126,7 +146,7 @@ const BaoCaoSCYK = (props: Props) => {
                     </div>
                 </div>
                 <div className="tt-tabs">
-                    <CustomTabMenu danhsachTabs={dsTabThongTinSCYK} />
+                    <TabMenu danhsachTabs={dsTabThongTinSCYK} />
                 </div>
             </div>
 

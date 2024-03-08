@@ -1,75 +1,4 @@
-export const dsBenhNhan = [
-    {
-        maBenhNhan: "BN001",
-        tenBenhNhan: "Nguyễn Văn Anh",
-        khoaPhong: "Khoa Ngoại",
-        goiTinh: "Nam",
-        ngaySinh: "01/01/1990",
-    },
-    {
-        maBenhNhan: "BN002",
-        tenBenhNhan: "Trần Thị Bình",
-        khoaPhong: "Khoa Mắt",
-        goiTinh: "Nữ",
-        ngaySinh: "15/05/1985",
-    },
-    {
-        maBenhNhan: "BN003",
-        tenBenhNhan: "Lê Văn Cường",
-        khoaPhong: "Khoa Tim Mạch",
-        goiTinh: "Nam",
-        ngaySinh: "20/09/1988",
-    },
-    {
-        maBenhNhan: "BN004",
-        tenBenhNhan: "Phạm Thị Dung",
-        khoaPhong: "Khoa Nhi",
-        goiTinh: "Nữ",
-        ngaySinh: "10/12/2000",
-    },
-    {
-        maBenhNhan: "BN005",
-        tenBenhNhan: "Hoàng Văn Em",
-        khoaPhong: "Khoa Tai Mũi Họng",
-        goiTinh: "Nam",
-        ngaySinh: "05/03/1995",
-    },
-    {
-        maBenhNhan: "BN006",
-        tenBenhNhan: "Võ Thị Phương",
-        khoaPhong: "Khoa Răng Hàm Mặt",
-        goiTinh: "Nữ",
-        ngaySinh: "22/07/1983",
-    },
-    {
-        maBenhNhan: "BN007",
-        tenBenhNhan: "Trần Văn Giang",
-        khoaPhong: "Khoa Da Liễu",
-        goiTinh: "Nam",
-        ngaySinh: "18/11/1982",
-    },
-    {
-        maBenhNhan: "BN008",
-        tenBenhNhan: "Nguyễn Thị Hương",
-        khoaPhong: "Khoa Ung Bướu",
-        goiTinh: "Nữ",
-        ngaySinh: "30/04/1993",
-    },
-    {
-        maBenhNhan: "BN009",
-        tenBenhNhan: "Phan Văn Nam",
-        khoaPhong: "Khoa Thần Kinh",
-        goiTinh: "Nam",
-        ngaySinh: "12/08/1987",
-    },
-    {
-        maBenhNhan: "BN010",
-        tenBenhNhan: "Đỗ Thị Khánh",
-        khoaPhong: "Khoa Nội Tiết",
-        goiTinh: "Nữ",
-        ngaySinh: "08/06/1998",
-    },
-];
+import { convertGenderToString, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 
 export const tableDSSuCoYKhoaColumns = [
     {
@@ -80,9 +9,7 @@ export const tableDSSuCoYKhoaColumns = [
     {
         name: "TT",
         field: "name",
-        render: (row: any) => (
-            <i className="bi bi-circle-fill spaces fs-10"></i>
-        )
+        render: (row: any) => renderMedicalIncidentReportStatus(row?.trangThaiXuLy)
     },
     {
         name: "Tên Bệnh Nhân",
@@ -96,7 +23,7 @@ export const tableDSSuCoYKhoaColumns = [
         render: (row: any) => (
             <div className="d-flex flex-column text-up">
                 <span className="text-uppercase">{row?.tenBenhNhan}</span>
-                <span>{row?.maBenhNhan} - {row?.goiTinh} - {row?.ngaySinh}</span>
+                <span>{row?.maBenhNhan} - {convertGenderToString(row?.gioiTinh)} - {formatDateToString(row?.ngaySinh)}</span>
             </div>
         )
     },
@@ -106,7 +33,7 @@ export const tableDSSuCoYKhoaColumns = [
         headerStyle: {
             minWidth: "60px"
         },
-        render: (row: any) => <span>{row?.khoaPhong}</span>
+        render: (row: any) => <span>{row?.tenKhoaPhong}</span>
     },
     {
         name: "",
@@ -153,6 +80,7 @@ export const OPTION_HINH_THUC_BC = [
         code: "1",
     },
 ];
+
 export const DOI_TUONG_XAY_RA_SC = [
     {
         name: "Người bệnh",

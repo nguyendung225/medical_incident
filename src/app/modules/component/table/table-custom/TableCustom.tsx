@@ -8,7 +8,7 @@ import {
   DEFAULT_PAGE_INDEX,
   handlePagesChange,
   handleRowsPerPageChange,
-  rowsForPage
+  ROWS_FOR_PAGE
 } from "../../../utils/PageUtils";
 import { Form } from "react-bootstrap";
 import { DEFAULT_PAGE_SIZE, TYPE } from "../../../utils/Constant";
@@ -147,8 +147,8 @@ const TableCustom: FC<TableProps> = (props) => {
 
   let [objectSearch, setObjectSearch] = useState<any>({
     ...props?.objectSearch,
-    pageIndex: page,
-    pageSize: rowsPerPage
+    PageNumber: page,
+    PageSize: rowsPerPage
   });
 
   function getNestedValue(obj: any, keyPath: string) {
@@ -358,8 +358,8 @@ const TableCustom: FC<TableProps> = (props) => {
   useEffect(() => {
     let newSearchObject = {
       ...objectSearch,
-      pageIndex: page,
-      pageSize: rowsPerPage
+      PageNumber: page,
+      PageSize: rowsPerPage
     }
     setObjectSearch(newSearchObject);
     updatePageData({ ...newSearchObject, ...searchKeywordObj });
@@ -712,7 +712,7 @@ const TableCustom: FC<TableProps> = (props) => {
           setPage={setPage}
           handlePagesChange={handlePagesChange}
           handleRowsPerPageChange={handleRowsPerPageChange}
-          rowsForPage={rowsForPage}
+          rowsForPage={ROWS_FOR_PAGE}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
           totalPages={totalPages || 0}

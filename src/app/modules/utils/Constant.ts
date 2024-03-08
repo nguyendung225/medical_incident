@@ -303,3 +303,20 @@ export const STATUS_ACTION = {
     DELETE: "DELETE",
     IMPORT: "IMPORT",
 };
+
+// ----------------------------------------------
+export const GENDER = {
+    MALE: 1,
+    FEMALE: 2,
+    ORTHER: 3,
+}
+
+export const MEDICAL_INCIDENT_REPORT_STATUS =  {
+    DRAFT: 1,
+    CHO_TIEP_NHAN: 2,
+    DA_TIEP_NHAN: 3,
+    DA_XAC_MINH: 4,
+    DA_PHAN_TICH: 5,
+    TAO_BIEN_BAN: 6,
+    DA_BAO_CAO: 7
+}
