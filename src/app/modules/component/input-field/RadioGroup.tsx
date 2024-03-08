@@ -5,18 +5,21 @@ import { Radio } from 'antd';
 type TRadioItem = {
     code: string | number;
     name: string;
-}
+    other?: boolean;
+};
 
-type TProps = {
+  type TProps = {
     lable?: string;
     name: string;
     className?: string;
     classLable?: string;
-    value: string | number;
+    labelClassName?: string;
+    value: string | number | null;
     isRequired?: boolean;
     radioItemList: TRadioItem[];
     handleChange: (value: any) => void;
-}
+    otherField?: any;
+  };
 
 function RadioGroup(props: TProps) {
     const onChange = (e: RadioChangeEvent) => {
@@ -34,7 +37,11 @@ function RadioGroup(props: TProps) {
             <>
                 <Radio.Group onChange={onChange} value={props?.value} size="large" name={props?.name}>
                     {props.radioItemList.map((radioItem) => (
-                        <Radio key={radioItem?.code} value={radioItem?.code}>{radioItem?.name}</Radio>
+                        <Radio className={props?.labelClassName} key={radioItem?.code} value={radioItem?.code}>
+                            <div className='d-flex gap-2'> {radioItem?.name}
+                                {(props.otherField && radioItem?.code === props?.value) && props?.otherField}</div>
+                        </Radio>
+                        
                     ))}
                 </Radio.Group>
             </>

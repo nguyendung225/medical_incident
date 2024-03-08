@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import clsx from "clsx";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Select, { GetOptionLabel, mergeStyles } from "react-select";
 import { toast } from "react-toastify";
 import { AutoCompleteProps } from "../../models/autocomplete";
@@ -100,7 +100,8 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
     }
 
     if ((typeof props?.value === TYPE.STRING) || (typeof props?.value === TYPE.NUMBER)) {
-      const value = optionList.find((option: any) => option[props?.valueSearch ? props?.valueSearch : "name"] === props?.value ?? false)
+    //   const value = optionList.find((option: any) => option[props?.valueSearch ? props?.valueSearch : "name"] === props?.value ?? false)
+      const value = optionList.find((option: any) => option["code"] === props?.value ?? false)
       setSelectedValue(value)
       return;
     }
@@ -177,7 +178,19 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
     return removeDiacritics(label).includes(removeDiacritics(input));
   };
 
+  const renderTooltip = (props: any) => (
+    ( (props?.errors && props?.touched)) ? <Tooltip id="button-tooltip">
+        <div className="text-danger">{props?.errors}</div>
+      
+    </Tooltip>:<div></div>
+  );
+
   return (
+    <OverlayTrigger
+    placement="top"
+    delay={{ show: 250, hide: 400 }}
+    overlay={renderTooltip(props)}
+  >
     <div className={props.className}>
       <span className={`
       text-lable-input lable ${props?.lable ? "mb-1" : ""}
@@ -256,9 +269,9 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
               filterOption={customFilterOption}
             />
         }
-        {props.touched && props.errors && <div className="invalid-feedback">{props.errors}</div>}
       </div>
     </div>
+    </OverlayTrigger>
   );
 };
 export default Autocomplete;

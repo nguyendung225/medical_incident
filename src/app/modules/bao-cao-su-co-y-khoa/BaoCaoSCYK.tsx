@@ -2,17 +2,20 @@ import React from "react"
 import { Button } from "react-bootstrap";
 import InputSearch from "../component/InputSearch";
 import "./BaoCaoSCYK.scss";
-import { dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constanst";
+import { InitThongTinSCYK, dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constanst";
 import { useState } from "react";
 import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
 import { KTSVG } from "../../../_metronic/helpers";
 import TableCustom from "../component/table/table-custom/TableCustom";
-import { TYPE } from "../utils/Constant";
+import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import TabMenu from "../component/tabs/TabMenu";
-import { searchByPage } from "./services/BaoCaoSCYKServices";
+import { deleteSCYKById, getSCYKById, searchByPage } from "./services/BaoCaoSCYKServices";
 import { MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
 import { toast } from "react-toastify";
 import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
+
+import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
+import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
 
 type Props = {};
 
@@ -24,7 +27,12 @@ const BaoCaoSCYK = (props: Props) => {
         pageSize: 10,
     })
     const [dsBaoCaoSCYK, setDsBaoCaoSCYK] = useState<MedicalIncidentInfo[]>([]);
+    const [thongTinSCYK, setThongTinSCYK] =
+        useState<MedicalIncidentInfo>(InitThongTinSCYK);
     const [configTable, setConfigTable] = useState<any>({});
+    const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
+    const [openDialogTiepNhan, setOpenDialogTiepNhan] = useState(false)
+    const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined)
 
     const handleSearch = () => {
         updatePageData({
@@ -54,7 +62,59 @@ const BaoCaoSCYK = (props: Props) => {
         } catch (err) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
+    };
+
+    const getThongTinSCYK = async () => {
+        const res = await getSCYKById(dsBaoCaoSCYK[indexRowSelected]?.id as string);
+        setThongTinSCYK(res.data.data)
     }
+
+    const handleOpenUpdateDialog = async () => {
+        try {
+            await getThongTinSCYK()
+            setOpenDialogThemMoiSCYK(true)
+        } catch (error) {
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
+    };
+
+    const handleOpenDeleteDialog = async () => {
+        try {
+            await getThongTinSCYK()
+            setShouldOpenConfirmDeleteDialog(true)
+        } catch (error) {
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
+    };
+
+    const handleOpenTiepNhanDialog = async () => {
+        try {
+            await getThongTinSCYK()
+            setOpenDialogTiepNhan(true)
+        } catch (error) {
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
+    };
+
+
+
+    const handleDeleteSCYK = async () => {
+        
+        try {
+            if (thongTinSCYK.id) {
+                const res = await deleteSCYKById(thongTinSCYK.id)
+                if (res?.data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
+                    toast.success(res.data?.message)
+                    setShouldOpenConfirmDeleteDialog(false)
+                    setThongTinSCYK(InitThongTinSCYK)
+                    updatePageData({});
+                }
+            }
+
+        } catch (error) {
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
+    };
 
     return (
         <div className="bao-cao-scyk-container">
@@ -66,7 +126,13 @@ const BaoCaoSCYK = (props: Props) => {
                             Danh sách báo cáo sự cố y khoa
                         </span>
                     </div>
-                    <Button className="button-primary" onClick={() => setOpenDialogThemMoiSCYK(true)}>
+                    <Button
+                        className="button-primary"
+                        onClick={() => {
+                            setThongTinSCYK(InitThongTinSCYK);
+                            setOpenDialogThemMoiSCYK(true);
+                        }}
+                    >
                         <i className="bi bi-plus m-0"></i>Thêm mới
                     </Button>
                 </div>
@@ -95,8 +161,10 @@ const BaoCaoSCYK = (props: Props) => {
                         columns={tableDSSuCoYKhoaColumns}
                         data={dsBaoCaoSCYK}
                         buttonAdd={false}
+                        setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
                         notDelete={false}
+                        handleDelete={deleteSCYKById}
                         justFilter={true}
                         fixedColumnsCount={3}
                         noPagination={false}
@@ -153,8 +221,27 @@ const BaoCaoSCYK = (props: Props) => {
                         <span className="title">Thông tin sự cố y khoa</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        <Button className="button-primary">
+                        <Button 
+                            className="button-primary"
+                            disabled={isNaN(indexRowSelected)}
+                            onClick={handleOpenTiepNhanDialog}
+                        
+                        >
+                           Tiếp nhận
+                        </Button>
+                        <Button
+                            className="button-primary"
+                            disabled={isNaN(indexRowSelected)}
+                            onClick={handleOpenUpdateDialog}
+                        >
                             Sửa
+                        </Button>
+                        <Button
+                            className="button-primary"
+                            disabled={isNaN(indexRowSelected)}
+                            onClick={handleOpenDeleteDialog}
+                        >
+                            Xóa
                         </Button>
                         <Button className="button-primary">
                             Xuất file
@@ -169,9 +256,31 @@ const BaoCaoSCYK = (props: Props) => {
                 </div>
             </div>
 
-            {
-                openDialogThemMoiSCYK && <DialogThemMoiSCYK handleClose={() => setOpenDialogThemMoiSCYK(false)} />
-            }
+            {openDialogThemMoiSCYK && (
+                <DialogThemMoiSCYK
+                    thongTinSCYK={thongTinSCYK}
+                    updatePageData={updatePageData}
+                    handleClose={() => setOpenDialogThemMoiSCYK(false)}
+                />
+            )}
+
+            {openDialogTiepNhan && (
+                <TiepNhanSCYKDialog
+                    handleClose={() => setOpenDialogTiepNhan(false)}
+                />
+            )}
+
+            {shouldOpenConfirmDeleteDialog && (
+                <ConfirmDialog
+                    show={shouldOpenConfirmDeleteDialog}
+                    title={"Xác nhận xóa"}
+                    message={"Bạn có muốn xóa không ?"}
+                    yes={"Xác nhận"}
+                    onYesClick={handleDeleteSCYK}
+                    cancel={"Hủy"}
+                    onCancelClick={() => setShouldOpenConfirmDeleteDialog(false)}
+                />
+            )}
             {shouldOpenAdvancedSearchDialog && (
                 <AdvancedSearchDialog
                     handleClose={() => setShouldOpenAdvancedSearchDialog(false)}
