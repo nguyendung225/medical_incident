@@ -147,8 +147,8 @@ const TableCustom: FC<TableProps> = (props) => {
 
   let [objectSearch, setObjectSearch] = useState<any>({
     ...props?.objectSearch,
-    PageNumber: page,
-    PageSize: rowsPerPage
+    pageNumber: page,
+    pageSize: rowsPerPage
   });
 
   function getNestedValue(obj: any, keyPath: string) {
@@ -358,8 +358,8 @@ const TableCustom: FC<TableProps> = (props) => {
   useEffect(() => {
     let newSearchObject = {
       ...objectSearch,
-      PageNumber: page,
-      PageSize: rowsPerPage
+      pageNumber: page,
+      pageSize: rowsPerPage
     }
     setObjectSearch(newSearchObject);
     updatePageData({ ...newSearchObject, ...searchKeywordObj });
