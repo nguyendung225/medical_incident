@@ -19,7 +19,7 @@ const TextValidator = ({ ...props }) => {
   return (
     <div className={props?.className}>
       {props?.lable && (
-        <span className={`text-lable-input lable mb-1`}>
+        <span className={`text-lable-input lable mb-1 ${props.classLable}`}>
           {props?.lable}
           {props?.isRequired && <span className="color-red"> *</span>}
         </span>

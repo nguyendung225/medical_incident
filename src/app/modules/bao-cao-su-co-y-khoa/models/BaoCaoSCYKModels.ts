@@ -1,17 +1,22 @@
+export interface autocompleteOption {
+  name: string,
+  code: string,
+}
+
 export interface SearchObject {
-  PageNumber: number;
-  PageSize: number;
-  Keyword?: string;
-  Name?: string;
-  Code?: string;
-  MaBenhNhan?: string;
-  HoVaTen?: string;
-  NgayBaoCaoStart?: string;
-  NgayBaoCaoEnd?: string;
-  TrangThaiXuLy?: number;
-  HinhThuc?: number;
-  PhanLoai?: number;
-  KhoaPhongDieuTri?: string;
+  pageNumber: number;
+  pageSize: number;
+  keyword?: string;
+  name?: string;
+  code?: string;
+  maBenhNhan?: string;
+  hoVaTen?: string;
+  ngayBaoCaoStart?: string;
+  ngayBaoCaoEnd?: string;
+  trangThaiXuLy?: autocompleteOption;
+  hinhThuc?: autocompleteOption;
+  phanLoai?: autocompleteOption;
+  khoaPhongDieuTri?: autocompleteOption;
 }
 
 export interface MedicalIncidentInfo {

@@ -12,17 +12,29 @@ import TabMenu from "../component/tabs/TabMenu";
 import { searchByPage } from "./services/BaoCaoSCYKServices";
 import { MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
 import { toast } from "react-toastify";
+import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
 
 type Props = {};
 
 const BaoCaoSCYK = (props: Props) => {
     const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false);
+    const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
-        PageNumber: 1,
-        PageSize: 10,
+        pageNumber: 1,
+        pageSize: 10,
     })
     const [dsBaoCaoSCYK, setDsBaoCaoSCYK] = useState<MedicalIncidentInfo[]>([]);
-    const [configTable, setConfigTable] = useState<any>({})
+    const [configTable, setConfigTable] = useState<any>({});
+
+    const handleSearch = () => {
+        updatePageData({
+            ...searchObj,
+            trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
+            hinhThuc: searchObj?.phanLoai?.code,
+            phanLoai: searchObj?.phanLoai?.code,
+            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.code,
+        });
+    }
 
     const updatePageData = (searchData: any) => {
         getMedicalIncidentReportList(searchData);
@@ -62,11 +74,18 @@ const BaoCaoSCYK = (props: Props) => {
                     <div className="box-search">
                         <InputSearch
                             placeholder="Tìm theo mã SC, mã BN, họ và tên..."
-                            handleChange={() => { }}
+                            handleChange={(e) => { 
+                                setSearchObj({...searchObj, keyword: e.target.value}) 
+                            }}
                             className="spaces h-32"
+                            value={searchObj?.keyword}
+                            handleSearch={handleSearch}
                         />
                     </div>
-                    <Button className="button-primary">
+                    <Button
+                        className="button-primary"
+                        onClick={() => setShouldOpenAdvancedSearchDialog(true)}
+                    >
                         <i className="bi bi-search m-0"></i>Tìm kiếm nâng cao
                     </Button>
                 </div>
@@ -153,6 +172,14 @@ const BaoCaoSCYK = (props: Props) => {
             {
                 openDialogThemMoiSCYK && <DialogThemMoiSCYK handleClose={() => setOpenDialogThemMoiSCYK(false)} />
             }
+            {shouldOpenAdvancedSearchDialog && (
+                <AdvancedSearchDialog
+                    handleClose={() => setShouldOpenAdvancedSearchDialog(false)}
+                    handleSearch={handleSearch}
+                    searchObj={searchObj}
+                    handleChangeSearchObj={(searchData: SearchObject) => setSearchObj(searchData)}
+                />
+            )}
         </div>
     );
 };
