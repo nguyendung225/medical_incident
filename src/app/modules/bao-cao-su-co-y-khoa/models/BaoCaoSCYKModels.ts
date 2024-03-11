@@ -20,8 +20,9 @@ export interface SearchObject {
 }
 
 export interface MedicalIncidentInfo {
-  benhNhan: null;
-  benhNhanId: string;
+  id?: string
+  benhNhan: any;
+  benhNhanId: string | null;
   code: string;
   danhGiaBanDau: number;
   deXuat: string;
@@ -33,7 +34,7 @@ export interface MedicalIncidentInfo {
   isActive: true;
   khoaPhongDieuTri: null | string;
   loaiDoiTuong: string;
-  loaiNbc: null | string;
+  loaiNbc: null | string | number;
   loaiNbcKhac: string;
   maBenhNhan: string;
   moTa: string;
@@ -57,3 +58,39 @@ export interface MedicalIncidentInfo {
   viTriCuThe: string;
 }
 
+export interface IThongTinSCYK {
+    name: string;
+    phanLoai: number;
+    hinhThuc: number;
+    donViBaoCao: string;
+    ngayXayRa: string;
+    thoiGianXayRa: string;
+    ngayBaoCao: string;
+    benhNhanId: string | null;
+    loaiDoiTuong: string;
+    noiXayRa: string;
+    viTriCuThe: string;
+    moTa: string;
+    deXuat: string;
+    dieuTriBanDau: string;
+    thongBaoChoBacSi: number;
+    ghiNhanHoSo: number;
+    thongBaoNguoiNha: number;
+    thongBaoNguoiBenh: number;
+    phanLoaiBanDau: number;
+    danhGiaBanDau: number;
+    tenNbc: string;
+    soDienThoaiNbc: string;
+    emailNbc: string;
+    loaiNbc: number;
+    loaiNbcKhac: string;
+    tenNck1: string;
+    tenNck2: string;
+    trangThaiXuLy: number;
+    tepDinhKems?: string;
+  }
+
+export interface ITiepNhan {
+    khoaPhongXuLy: string
+    phuongAnXuLyBanDau: string
+}

@@ -1,37 +1,73 @@
 import { Field, Formik } from "formik";
+import moment from "moment";
 import { Button, Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import TextField from "../../component/TextField";
-import LabelRequired from "./../../component/LabelRequired";
-import {
-	DOI_TUONG_XAY_RA_SC,
-	OPTION_HINH_THUC_BC,
-	OPTION_MUC_DO_AH,
-	OPTION_PHAN_LOAI,
-	OPTION_XAC_NHAN,
-	TT_NGUOI_THONG_BAO,
-} from "../const/constanst";
 import Autocomplete from "../../component/input-field/Autocomplete";
+import RadioGroup from "../../component/input-field/RadioGroup";
+import { regex } from "../../constant";
+import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE } from "../../utils/Constant";
+import {
+    DOI_TUONG_XAY_RA_SC,
+    DV_BAO_CAO,
+    GENDER_OPTION,
+    KHOA_PHONG,
+    OPTION_HINH_THUC_BC,
+    OPTION_XAC_NHAN,
+    OTHER_FIELD_LOAI_NBC,
+    TT_NGUOI_THONG_BAO
+} from "../const/constanst";
+import { MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
+import { addSCYK, updateSCYK } from "../services/BaoCaoSCYKServices";
+import LabelRequired from "./../../component/LabelRequired";
 
 type Props = {
 	handleClose: () => void;
+	updatePageData: (objectSearch: any) => void;
+    thongTinSCYK:MedicalIncidentInfo
 };
 
-export default function DialogThemMoiSCYK({ handleClose }: Props) {
+export default function DialogThemMoiSCYK({
+	handleClose,
+    thongTinSCYK,
+	updatePageData,
+}: Props) {
 	const validationSchema = Yup.object().shape({
-		hinhThucBaoCao: Yup.string().required("Bắt buộc chọn"),
-		moTaNganGonSuCo: Yup.string().required("Bắt buộc nhập"),
-		maSuCoYKhoa: Yup.string().required("Bắt buộc nhập"),
-		tenSuCoYKhoa: Yup.string().required("Bắt buộc nhập"),
+		hinhThuc: Yup.string().required("Bắt buộc chọn"),
+		moTa: Yup.string().required("Bắt buộc nhập"),
+		name: Yup.string().required("Bắt buộc nhập"),
 		ngayBaoCao: Yup.string().required("Bắt buộc nhập"),
-		ngayXayRaSuCo: Yup.string().required("Bắt buộc nhập"),
-		thoiGianXayRaSuCo: Yup.string().required("Bắt buộc nhập"),
-		deXuatGiaiPhap: Yup.string().required("Bắt buộc nhập"),
-		dieuTriXuLy: Yup.string().required("Bắt buộc nhập"),
-		thongBaoChoBS: Yup.string().required("Bắt buộc nhập"),
-		donViBaoCao: Yup.object().required("Bắt buộc nhập").nullable(),
-		khoaPhongXayRaSuCo: Yup.object().required("Bắt buộc nhập").nullable(),
+		ngayXayRa: Yup.string().required("Bắt buộc nhập"),
+		thoiGianXayRa: Yup.string().required("Bắt buộc nhập"),
+		deXuat: Yup.string().required("Bắt buộc nhập"),
+		dieuTriBanDau: Yup.string().required("Bắt buộc nhập"),
+		thongBaoChoBacSi: Yup.string().required("Bắt buộc nhập"),
+		donViBaoCao: Yup.string().required("Bắt buộc nhập"),
+		noiXayRa: Yup.string().required("Bắt buộc nhập"),
+        soDienThoaiNbc: Yup.string().matches(regex.phone, 'Số điện thoại không hợp lệ')
 	});
+  
+    const handleSubmit = async (values: MedicalIncidentInfo) => {
+        const thongTinSCYK = { ...values };
+        thongTinSCYK.loaiDoiTuong = thongTinSCYK.loaiDoiTuong?.toString();
+        thongTinSCYK.thoiGianXayRa = moment(thongTinSCYK.thoiGianXayRa, "h:mm a").format("hh:mm:ss");
+
+        try {
+            const { data: { code, message } } = thongTinSCYK?.id
+                ? await updateSCYK(thongTinSCYK, thongTinSCYK.id)
+                : await addSCYK(thongTinSCYK);
+            if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
+                updatePageData({});
+                handleClose();
+                toast.success(message)
+            }
+
+        } catch (error) {
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
+    };
+
 
 	return (
 		<Modal
@@ -48,38 +84,22 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 			</Modal.Header>
 			<Formik
 				validationSchema={validationSchema}
-				initialValues={{
-					moTaNganGonSuCo: "",
-					maSuCoYKhoa: "",
-					tenSuCoYKhoa: "",
-					ngayXayRaSuCo: "",
-					ngayBaoCao: "",
-					deXuatGiaiPhap: "",
-					thoiGianXayRaSuCo: "",
-					dieuTriXuLy: "",
-					hinhThucBaoCao: "tuNguyen",
-					thongBaoChoBS: "0",
-					thongBaoChoNguoiNha: "0",
-					thongBaoChoNguoiBenh: "0",
-					phanLoaiSuCo: "0",
-					danhGiaMucDoAnhHuong: "0",
-					ghiNhanHoSo: "0",
-					donViBaoCao: null,
-					khoaPhongXayRaSuCo: "",
-				}}
-				onSubmit={(values) => {
-					console.log(values);
-				}}
+				initialValues={thongTinSCYK}
+				onSubmit={handleSubmit}
 			>
 				{({
-					values,
 					errors,
+					values,
 					touched,
 					handleChange,
-					handleBlur,
 					handleSubmit,
-					isSubmitting,
+					setFieldValue,
 				}) => {
+                    const handleChangeSelect = (name: string, value: any) => {
+                        setFieldValue(name, value?.code);
+                    };
+
+
 					return (
 						<form onSubmit={handleSubmit}>
 							<Modal.Body className="spaces p-10">
@@ -91,28 +111,27 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												className="text-primary spaces fw-700"
 												label="Hình thức báo cáo sự cố"
 											/>
-											{OPTION_HINH_THUC_BC.map((data) => (
-												<label className="d-flex align-items-center gap-2">
-													<Field
-														type="radio"
-														name="hinhThucBaoCao"
-														value={data?.code}
-														checked
-													/>
-													{data?.name}
-												</label>
-											))}
+											<RadioGroup
+												labelClassName="spaces min-w-120"
+												className="d-flex"
+												name="hinhThuc"
+												value={values?.hinhThuc}
+												handleChange={handleChange}
+												radioItemList={
+													OPTION_HINH_THUC_BC
+												}
+											/>
 										</div>
 										<div className="d-flex spaces gap-20 h-29">
 											<div className="d-flex">
 												<LabelRequired
-													isRequired
 													label="Mã sự cố y khoa"
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
+													disabled
 													className="spaces min-w-242"
-													name="maSuCoYKhoa"
+													name="code"
 													type="text"
 												/>
 											</div>
@@ -124,9 +143,9 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="tenSuCoYKhoa"
+													name="name"
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -136,9 +155,17 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													className="spaces min-w-140 fw-500"
 												/>
 												<Autocomplete
+                                                    onChange={(
+                                                        selectedOption
+                                                    ) =>
+                                                        handleChangeSelect(
+                                                            "donViBaoCao",
+                                                            selectedOption
+                                                        )
+                                                    }
 													className="spaces h-25 min-w-242"
 													name="donViBaoCao"
-													options={[]}
+													options={DV_BAO_CAO}
 													value={values?.donViBaoCao}
 													errors={errors?.donViBaoCao}
 													touched={
@@ -158,7 +185,7 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													className="spaces min-w-242"
 													name="ngayBaoCao"
 													type="date"
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -170,9 +197,9 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												<TextField
 													isRequired
 													className="spaces min-w-242"
-													name="ngayXayRaSuCo"
+													name="ngayXayRa"
 													type="date"
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -183,9 +210,9 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="thoiGianXayRaSuCo"
-													type="datetime-local"
-													onChange={handleChange}
+													name="thoiGianXayRa"
+													type="time"
+													handleChange={handleChange}
 												/>
 											</div>
 										</div>
@@ -205,9 +232,10 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="ngayNhapXuat"
 													type="text "
-													onChange={handleChange}
+													name="benhNhan.code"
+                                                    value={values.benhNhan?.code}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -217,9 +245,10 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="tenSuCo"
+                                                    name="benhNhan.name"
+                                                    value={values.benhNhan?.name}
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -229,9 +258,10 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="soBenhAn"
+                                                    name="benhNhan.soBenhAn"
+                                                    value={values.benhNhan?.soBenhAn}
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 										</div>
@@ -243,9 +273,10 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="ngaySinh"
+                                                    name="benhNhan.ngaySinh"
+                                                    value={values.benhNhan?.ngaySinh && moment(values.benhNhan?.ngaySinh).format('YYYY-MM-DD')}
 													type="date"
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -256,7 +287,8 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												<Autocomplete
 													className="spaces h-25 min-w-242"
 													name="gioiTinh"
-													options={[]}
+                                                    value={values?.benhNhan?.gioiTinh}
+													options={GENDER_OPTION}
 												/>
 											</div>
 											<div className="d-flex">
@@ -267,7 +299,7 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												<Autocomplete
 													className="spaces h-25 min-w-242"
 													name="khoaPhong"
-													options={[]}
+													options={KHOA_PHONG}
 												/>
 											</div>
 										</div>
@@ -284,7 +316,7 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												<label className="d-flex align-items-center gap-2 min-w-200px">
 													<Field
 														type="checkbox"
-														name="doiTuongXayRaSC"
+														name="loaiDoiTuong"
 														value={data.code}
 													/>
 													{data.name}
@@ -302,17 +334,19 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<Autocomplete
 													className="spaces h-25"
-													name="khoaPhongXayRaSuCo"
-													options={[]}
-													value={
-														values?.khoaPhongXayRaSuCo
+													name="noiXayRa"
+													onChange={(
+														selectedOption
+													) =>
+														handleChangeSelect(
+															"noiXayRa",
+															selectedOption
+														)
 													}
-													errors={
-														errors?.khoaPhongXayRaSuCo
-													}
-													touched={
-														touched?.khoaPhongXayRaSuCo
-													}
+													options={KHOA_PHONG}
+													value={values?.noiXayRa}
+													errors={errors?.noiXayRa}
+													touched={touched?.noiXayRa}
 												/>
 											</div>
 											<div className="viTriCuThe spaces pb-4 mt-10">
@@ -320,10 +354,11 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													className="text-primary spaces fw-700 h-24 mb-4"
 													label="Vị trí cụ thể"
 												/>
-												<Autocomplete
-													className="spaces h-25"
-													name="khoaPhongXayRaSuCo"
-													options={[]}
+												<TextField
+													className="spaces min-w-242"
+													name="viTriCuThe"
+													type="text "
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="de-xuat-giai-phap spaces pb-4 mt-10">
@@ -334,10 +369,10 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242 h-92"
-													name="deXuatGiaiPhap"
+													name="deXuat"
 													as="textarea"
 													rows={4}
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 										</div>
@@ -350,7 +385,7 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242 h-92"
-													name="moTaNganGonSuCo"
+													name="moTa"
 													as="textarea"
 													rows={4}
 												/>
@@ -363,10 +398,10 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242 h-92"
-													name="dieuTriXuLy"
+													name="dieuTriBanDau"
 													as="textarea"
 													rows={4}
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 										</div>
@@ -382,20 +417,20 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													/>
 												</div>
 												<div className="d-flex spaces gap-32 h-18">
-													{OPTION_XAC_NHAN.map(
-														(data) => (
-															<label className="d-flex align-items-center spaces min-w-120 gap-4">
-																<Field
-																	type="radio"
-																	name="thongBaoChoBS"
-																	value={
-																		data.code
-																	}
-																/>
-																{data.name}
-															</label>
-														)
-													)}
+													<RadioGroup
+														labelClassName="spaces min-w-120"
+														className="d-flex"
+														name="thongBaoChoBacSi"
+														value={
+															values?.thongBaoChoBacSi
+														}
+														handleChange={
+															handleChange
+														}
+														radioItemList={
+															OPTION_XAC_NHAN
+														}
+													/>
 												</div>
 											</div>
 											<div className="spaces mt-10">
@@ -407,20 +442,20 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													/>
 												</div>
 												<div className="d-flex spaces gap-32 h-18">
-													{OPTION_XAC_NHAN.map(
-														(data) => (
-															<label className="d-flex align-items-center spaces min-w-120 gap-4">
-																<Field
-																	type="radio"
-																	name="thongBaoChoNguoiNha"
-																	value={
-																		data.code
-																	}
-																/>
-																{data.name}
-															</label>
-														)
-													)}
+													<RadioGroup
+														labelClassName="spaces min-w-120"
+														className="d-flex"
+														name="thongBaoNguoiNha"
+														value={
+															values?.thongBaoNguoiNha
+														}
+														handleChange={
+															handleChange
+														}
+														radioItemList={
+															OPTION_XAC_NHAN
+														}
+													/>
 												</div>
 											</div>
 											<div className="spaces mt-10">
@@ -432,20 +467,20 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													/>
 												</div>
 												<div className="d-flex spaces gap-32 h-18">
-													{OPTION_PHAN_LOAI.map(
-														(data) => (
-															<label className="d-flex align-items-center spaces min-w-120 gap-4">
-																<Field
-																	type="radio"
-																	name="phanLoaiSuCo"
-																	value={
-																		data.code
-																	}
-																/>
-																{data.name}
-															</label>
-														)
-													)}
+													<RadioGroup
+														labelClassName="spaces min-w-120"
+														className="d-flex"
+														name="phanLoaiBanDau"
+														value={
+															values?.phanLoaiBanDau
+														}
+														handleChange={
+															handleChange
+														}
+														radioItemList={
+															OPTION_XAC_NHAN
+														}
+													/>
 												</div>
 											</div>
 										</div>
@@ -459,20 +494,20 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													/>
 												</div>
 												<div className="d-flex spaces gap-32 h-18">
-													{OPTION_XAC_NHAN.map(
-														(data) => (
-															<label className="d-flex align-items-center spaces min-w-120 gap-4">
-																<Field
-																	type="radio"
-																	name="thongBaoChoNguoiBenh"
-																	value={
-																		data.code
-																	}
-																/>
-																{data.name}
-															</label>
-														)
-													)}
+													<RadioGroup
+														labelClassName="spaces min-w-120"
+														className="d-flex"
+														name="thongBaoNguoiBenh"
+														value={
+															values?.thongBaoNguoiBenh
+														}
+														handleChange={
+															handleChange
+														}
+														radioItemList={
+															OPTION_XAC_NHAN
+														}
+													/>
 												</div>
 											</div>
 											<div className="spaces mt-10">
@@ -484,20 +519,20 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													/>
 												</div>
 												<div className="d-flex spaces gap-32 h-18">
-													{OPTION_XAC_NHAN.map(
-														(data) => (
-															<label className="d-flex align-items-center spaces min-w-120 gap-4">
-																<Field
-																	type="radio"
-																	name="ghiNhanHoSo"
-																	value={
-																		data.code
-																	}
-																/>
-																{data.name}
-															</label>
-														)
-													)}
+													<RadioGroup
+														labelClassName="spaces min-w-120"
+														className="d-flex"
+														name="ghiNhanHoSo"
+														value={
+															values?.ghiNhanHoSo
+														}
+														handleChange={
+															handleChange
+														}
+														radioItemList={
+															OPTION_XAC_NHAN
+														}
+													/>
 												</div>
 											</div>
 											<div className="spaces mt-10">
@@ -509,20 +544,20 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 													/>
 												</div>
 												<div className="d-flex spaces gap-32 h-18">
-													{OPTION_MUC_DO_AH.map(
-														(data) => (
-															<label className="d-flex align-items-center spaces min-w-120 gap-4">
-																<Field
-																	type="radio"
-																	name="danhGiaMucDoAnhHuong"
-																	value={
-																		data.code
-																	}
-																/>
-																{data.name}
-															</label>
-														)
-													)}
+													<RadioGroup
+														labelClassName="spaces min-w-120"
+														className="d-flex"
+														name="danhGiaBanDau"
+														value={
+															values?.danhGiaBanDau
+														}
+														handleChange={
+															handleChange
+														}
+														radioItemList={
+															OPTION_XAC_NHAN
+														}
+													/>
 												</div>
 											</div>
 										</div>
@@ -542,9 +577,9 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="hoTen"
+													name="tenNbc"
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -554,9 +589,9 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="soDienThoai"
+													name="soDienThoaiNbc"
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -566,35 +601,31 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="email"
+													name="emailNbc"
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 										</div>
-										<div className="d-flex spaces gap-10 max-w-800 h-63 my-10  flex-wrap">
-											{TT_NGUOI_THONG_BAO?.map((data) => (
-												<label className="d-flex align-items-center spaces min-w-200 gap-4 ">
-													<Field
-														type="radio"
-														name="vaitro"
-														value={data?.code}
-													/>
-													{data?.name}
-													{data.code ===
-														TT_NGUOI_THONG_BAO[4]
-															.code && (
-														<TextField
-															className="spaces min-w-242"
-															name="tenSuCo"
-															type="text "
-															onChange={
-																handleChange
-															}
-														/>
-													)}
-												</label>
-											))}
+										<div className="spaces max-w-783 h-63 my-10">
+											<RadioGroup
+												className="d-flex"
+												name="loaiNbc"
+												labelClassName="spaces min-w-200"
+												value={values?.loaiNbc}
+												handleChange={handleChange}
+												radioItemList={
+													TT_NGUOI_THONG_BAO
+												}
+                                                otherField={
+                                                    values.loaiNbc === OTHER_FIELD_LOAI_NBC && <TextField
+                                                        className="spaces min-w-242"
+                                                        name="loaiNbcKhac"
+                                                        handleChange={handleChange}
+                                                        type="text"
+                                                    />
+                                                }
+											/>
 										</div>
 										<div className="d-flex spaces gap-20 h-29">
 											<div className="d-flex">
@@ -604,9 +635,9 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="ngChungKien1"
+													name="tenNck1"
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -616,9 +647,9 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 												/>
 												<TextField
 													className="spaces min-w-242"
-													name="ngChungKien2"
+													name="tenNck2"
 													type="text "
-													onChange={handleChange}
+													handleChange={handleChange}
 												/>
 											</div>
 										</div>
@@ -626,10 +657,28 @@ export default function DialogThemMoiSCYK({ handleClose }: Props) {
 								</div>
 							</Modal.Body>
 							<Modal.Footer className="d-flex justify-content-center">
-								<Button className="button-primary" type="submit">
+								<Button
+									className="button-primary"
+									type="submit"
+									onClick={() =>
+										setFieldValue(
+											"trangThaiXuLy",
+											MEDICAL_INCIDENT_REPORT_STATUS.DRAFT
+										)
+									}
+								>
 									Lưu nháp
 								</Button>
-								<Button className="button-primary">
+								<Button
+									className="button-primary"
+									type="submit"
+									onClick={() =>
+										setFieldValue(
+											"trangThaiXuLy",
+											MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN
+										)
+									}
+								>
 									Gửi báo cáo
 								</Button>
 								<Button className="button-primary">Hủy</Button>
