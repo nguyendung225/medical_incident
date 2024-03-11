@@ -1,37 +1,35 @@
-import React from "react"
-import { Button } from "react-bootstrap";
-import InputSearch from "../component/InputSearch";
-import "./BaoCaoSCYK.scss";
-import { InitThongTinSCYK, dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constanst";
 import { useState } from "react";
-import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
-import { KTSVG } from "../../../_metronic/helpers";
-import TableCustom from "../component/table/table-custom/TableCustom";
-import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
-import TabMenu from "../component/tabs/TabMenu";
-import { deleteSCYKById, getSCYKById, searchByPage } from "./services/BaoCaoSCYKServices";
-import { MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
+import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
-
+import { KTSVG } from "../../../_metronic/helpers";
+import AdvancedSearchDialog from "../bao-cao-su-co-y-khoa/components/AdvancedSearchDialog";
+import { SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
+import { deleteSCYKById, getSCYKById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
+import InputSearch from "../component/InputSearch";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
-import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
+import TableCustom from "../component/table/table-custom/TableCustom";
+import TabMenu from "../component/tabs/TabMenu";
+import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
+import { dsTabThongTinSCYK } from './../bao-cao-su-co-y-khoa/const/constanst';
+import "./BienBanXacMinh.scss";
+import { initBienBanXacMinh, tableDSBienBanColumns } from "./const/constants";
+import { IBienBanXacMinh } from "./models/BienBanXacMinhModel";
+import { searchByPage } from "./services/BienBanXacMinhServices";
 
 type Props = {};
 
-const BaoCaoSCYK = (props: Props) => {
-    const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false);
+const BienBanXacMinh = (props: Props) => {
+    const [openThemMoiBienBan, setOpenThemMoiBienBan] = useState(false);
     const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
         pageNumber: 1,
         pageSize: 10,
     })
-    const [dsBaoCaoSCYK, setDsBaoCaoSCYK] = useState<MedicalIncidentInfo[]>([]);
-    const [thongTinSCYK, setThongTinSCYK] =
-        useState<MedicalIncidentInfo>(InitThongTinSCYK);
+    const [dsBienBan, setDsBienBan] = useState<IBienBanXacMinh[]>([]);
+    const [thongTinBienBan, setThongTinBienBan] =
+        useState<IBienBanXacMinh>(initBienBanXacMinh);
     const [configTable, setConfigTable] = useState<any>({});
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
-    const [openDialogTiepNhan, setOpenDialogTiepNhan] = useState(false)
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined)
 
     const handleSearch = () => {
@@ -45,13 +43,13 @@ const BaoCaoSCYK = (props: Props) => {
     }
 
     const updatePageData = (searchData: any) => {
-        getMedicalIncidentReportList(searchData);
+        getDSBienBan(searchData);
     }
 
-    const getMedicalIncidentReportList = async (searchData: any) => {
+    const getDSBienBan = async (searchData: any) => {
         try {
             const { data } = await searchByPage(searchData);
-            setDsBaoCaoSCYK(data.data.data);
+            setDsBienBan(data.data.data);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -64,15 +62,15 @@ const BaoCaoSCYK = (props: Props) => {
         }
     };
 
-    const getThongTinSCYK = async () => {
-        const res = await getSCYKById(dsBaoCaoSCYK[indexRowSelected]?.id as string);
-        setThongTinSCYK(res.data.data)
+    const getThongTinBienBan = async () => {
+        const res = await getSCYKById(dsBienBan[indexRowSelected]?.id as string);
+        setThongTinBienBan(res.data.data)
     }
 
     const handleOpenUpdateDialog = async () => {
         try {
-            await getThongTinSCYK()
-            setOpenDialogThemMoiSCYK(true)
+            await getThongTinBienBan()
+            setOpenThemMoiBienBan(true)
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
@@ -80,33 +78,22 @@ const BaoCaoSCYK = (props: Props) => {
 
     const handleOpenDeleteDialog = async () => {
         try {
-            await getThongTinSCYK()
+            await getThongTinBienBan()
             setShouldOpenConfirmDeleteDialog(true)
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
 
-    const handleOpenTiepNhanDialog = async () => {
-        try {
-            await getThongTinSCYK()
-            setOpenDialogTiepNhan(true)
-        } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
-        }
-    };
-
-
-
     const handleDeleteSCYK = async () => {
-        
+
         try {
-            if (thongTinSCYK.id) {
-                const res = await deleteSCYKById(thongTinSCYK.id)
+            if (thongTinBienBan.id) {
+                const res = await deleteSCYKById(thongTinBienBan.id)
                 if (res?.data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
                     toast.success(res.data?.message)
                     setShouldOpenConfirmDeleteDialog(false)
-                    setThongTinSCYK(InitThongTinSCYK)
+                    setThongTinBienBan(initBienBanXacMinh)
                     updatePageData({});
                 }
             }
@@ -117,20 +104,20 @@ const BaoCaoSCYK = (props: Props) => {
     };
 
     return (
-        <div className="bao-cao-scyk-container">
-            <div className="ds-su-co-y-khoa">
+        <div className="bien-ban-xm-container">
+            <div className="ds-bien-ban-xm">
                 <div className="ds-header">
                     <div className="d-flex align-items-center">
                         <KTSVG path={'/media/svg/icons/List ul.svg'} svgClassName="spaces w-14 h-14 mr-10" />
                         <span className="title">
-                            Danh sách báo cáo sự cố y khoa
+                            Danh sách biên bản xác minh
                         </span>
                     </div>
                     <Button
                         className="button-primary"
                         onClick={() => {
-                            setThongTinSCYK(InitThongTinSCYK);
-                            setOpenDialogThemMoiSCYK(true);
+                            setThongTinBienBan(initBienBanXacMinh);
+                            setOpenThemMoiBienBan(true);
                         }}
                     >
                         <i className="bi bi-plus m-0"></i>Thêm mới
@@ -140,8 +127,8 @@ const BaoCaoSCYK = (props: Props) => {
                     <div className="box-search">
                         <InputSearch
                             placeholder="Tìm theo mã SC, mã BN, họ và tên..."
-                            handleChange={(e) => { 
-                                setSearchObj({...searchObj, keyword: e.target.value}) 
+                            handleChange={(e) => {
+                                setSearchObj({ ...searchObj, keyword: e.target.value })
                             }}
                             className="spaces h-32"
                             value={searchObj?.keyword}
@@ -158,8 +145,8 @@ const BaoCaoSCYK = (props: Props) => {
                 <div>
                     <TableCustom
                         id="profile2"
-                        columns={tableDSSuCoYKhoaColumns}
-                        data={dsBaoCaoSCYK}
+                        columns={tableDSBienBanColumns}
+                        data={dsBienBan}
                         buttonAdd={false}
                         setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
@@ -177,58 +164,14 @@ const BaoCaoSCYK = (props: Props) => {
                         numberOfElements={configTable?.numberOfElements}
                     />
                 </div>
-                <div className="status-box">
-                    <div className="d-flex">
-                        <div className="status-box-item">
-                            <i className="bi bi-circle-fill spaces fs-10"></i>
-                            <span>Mới tạo</span>
-                        </div>
-                        <div className="status-box-item">
-                            <i className="bi bi-circle-fill spaces fs-10 color-steel-blue"></i>
-                            <span>Chờ tiếp nhận</span>
-                        </div>
-                        <div className="status-box-item">
-                            <i className="bi bi-circle-fill spaces fs-10 color-green"></i>
-                            <span>Đã tiếp nhận</span>
-                        </div>
-                    </div>
-                    <div className="d-flex">
-                        <div className="status-box-item">
-                            <i className="bi bi-circle-fill spaces fs-10 color-dark-orange"></i>
-                            <span>Đã xác minh</span>
-                        </div>
-                        <div className="status-box-item">
-                            <i className="bi bi-circle-fill spaces fs-10 color-dark-red"></i>
-                            <span>Đã phân tích</span>
-                        </div>
-                        <div className="status-box-item">
-                            <i className="bi bi-circle-fill spaces fs-10 color-gunmetal"></i>
-                            <span>Tạo biên bản</span>
-                        </div>
-                    </div>
-                    <div className="d-flex">
-                        <div className="status-box-item">
-                            <i className="bi bi-circle-fill spaces fs-10 color-primary"></i>
-                            <span>Đã báo cáo</span>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <div className="tt-su-co-y-khoa">
+            <div className="tt-bien-ban-xm">
                 <div className="tt-header">
                     <div className="title-wrapper">
                         <KTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
-                        <span className="title">Thông tin sự cố y khoa</span>
+                        <span className="title">Thông tin biên bản xác minh</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        <Button 
-                            className="button-primary"
-                            disabled={isNaN(indexRowSelected)}
-                            onClick={handleOpenTiepNhanDialog}
-                        
-                        >
-                           Tiếp nhận
-                        </Button>
                         <Button
                             className="button-primary"
                             disabled={isNaN(indexRowSelected)}
@@ -256,21 +199,6 @@ const BaoCaoSCYK = (props: Props) => {
                 </div>
             </div>
 
-            {openDialogThemMoiSCYK && (
-                <DialogThemMoiSCYK
-                    thongTinSCYK={thongTinSCYK}
-                    updatePageData={updatePageData}
-                    handleClose={() => setOpenDialogThemMoiSCYK(false)}
-                />
-            )}
-
-            {openDialogTiepNhan && (
-                <TiepNhanSCYKDialog
-                    updatePageData={updatePageData}
-                    suCoId={thongTinSCYK?.id || ""}
-                    handleClose={() => setOpenDialogTiepNhan(false)}
-                />
-            )}
 
             {shouldOpenConfirmDeleteDialog && (
                 <ConfirmDialog
@@ -295,4 +223,4 @@ const BaoCaoSCYK = (props: Props) => {
     );
 };
 
-export default BaoCaoSCYK;
+export default BienBanXacMinh;

@@ -164,3 +164,7 @@ export const renderMedicalIncidentReportStatus = (reportStatus: number) => {
             return (<i className="bi bi-circle-fill spaces fs-10 color-primary"></i>);
     }
 }
+
+export const convertLabelByCode = (options: any, code: number) => {
+    return options?.find((option: any) => option.code === code)?.name
+}

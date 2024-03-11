@@ -8,6 +8,7 @@ import { PERMISSIONS, PERMISSION_ABILITY } from "../Constant";
 import { HomePage } from "../pages/Homepage/HomePage";
 import { MenuTestPage } from "../pages/MenuTestPage";
 import BaoCaoSCYK from "../modules/bao-cao-su-co-y-khoa/BaoCaoSCYK";
+import BienBanXacMinh from "../modules/bien-ban-xac-minh/BienBanXacMinh";
 
 interface PrivateRouteProps {
   auth: string;
@@ -42,10 +43,7 @@ const PrivateRoutes = () => {
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
         <Route path="/ds-bao-cao-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoSCYK} redirect="/ds-bao-cao-scyk" />} />
-        {/* <Route path="bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenhTuVong} redirect="/ds-bao-cao-scyk" />} />
-        <Route path="phan-tich-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} />
-        <Route path="bien-ban-hop" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} />
-        <Route path="bao-cao" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={KhaiBaoTruongHopBenh} redirect="/ds-bao-cao-scyk" />} /> */}
+        <Route path="/bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BienBanXacMinh} redirect="/bien-ban-xac-minh" />} />
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>
     </Routes>

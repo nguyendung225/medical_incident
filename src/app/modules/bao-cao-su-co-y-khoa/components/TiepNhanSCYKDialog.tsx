@@ -1,21 +1,41 @@
-import React from 'react'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap';
 import { Formik } from 'formik';
 import LabelRequired from '../../component/LabelRequired';
 import TextField from '../../component/TextField';
 import Autocomplete from '../../component/input-field/Autocomplete';
 import { initTiepNhan, KHOA_PHONG } from '../const/constanst';
 import *as Yup  from 'yup';
+import { ITiepNhan } from '../models/BaoCaoSCYKModels';
+import { tiepNhanSCYK } from '../services/BaoCaoSCYKServices';
+import { RESPONSE_STATUS_CODE } from '../../utils/Constant';
+import { toast } from 'react-toastify';
 type Props = {
     handleClose: () => void
+    suCoId: string
+    updatePageData: (objectSearch: any) => void;
 }
 
-const TiepNhanSCYKDialog = ({ handleClose }: Props) => {
+const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
 
     const validationSchema = Yup.object().shape({
         khoaPhongXuLy: Yup.string().required("Bắt buộc chọn"),
-        phuongAnXuLyBanDau: Yup.string().required("Bắt buộc nhập"),
+        phuongAnXuLy: Yup.string().required("Bắt buộc nhập"),
     });
+
+    const handleSubmit = async (values: ITiepNhan) => {
+        values.suCoId = suCoId
+        try {
+            const { data: { code, message } } = await tiepNhanSCYK(values)
+            if (code === RESPONSE_STATUS_CODE.SUCCESS) {
+                toast.success(message)
+                updatePageData({})
+                handleClose()
+            }
+
+        } catch (error) {
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
+    }
 
     return (
         <Modal show={true} onHide={handleClose} centered>
@@ -25,7 +45,7 @@ const TiepNhanSCYKDialog = ({ handleClose }: Props) => {
             <Formik
                 validationSchema={validationSchema}
                 initialValues={initTiepNhan}
-                onSubmit={() => { }}
+                onSubmit={handleSubmit}
             >
                 {({
                     errors,
@@ -70,12 +90,12 @@ const TiepNhanSCYKDialog = ({ handleClose }: Props) => {
                                 <div className="mo-ta-su-co spaces pb-4">
                                     <LabelRequired
                                         className="text-primary spaces fw-700 h-24 mb-4"
-                                        label="Phương án xử lý ban đầu"
+                                        label="Đề xuất ban đầu của phòng QLCL"
                                         isRequired
                                     />
                                     <TextField
                                         className="spaces min-w-242 h-92"
-                                        name="phuongAnXuLyBanDau"
+                                        name="phuongAnXuLy"
                                         as="textarea"
                                         rows={4}
                                     />
