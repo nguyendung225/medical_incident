@@ -92,5 +92,6 @@ export interface IThongTinSCYK {
 
 export interface ITiepNhan {
     khoaPhongXuLy: string
-    phuongAnXuLyBanDau: string
+    phuongAnXuLy: string
+    suCoId:string
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MedicalIncidentInfo, SearchObject } from "../models/BaoCaoSCYKModels";
+import { ITiepNhan, MedicalIncidentInfo, SearchObject } from "../models/BaoCaoSCYKModels";
 
 const API_PATH = process.env.REACT_APP_API_URL;
 
@@ -31,4 +31,9 @@ export const deleteSCYKById = (id: string) => {
 export const updateSCYK = (data: MedicalIncidentInfo, id: string) => {
     const url = API_PATH + `/api/v1/su-co/${id}`;
     return axios.put(url, data);
+};
+
+export const tiepNhanSCYK = (data: ITiepNhan) => {
+    const url = API_PATH + "/api/v1/tiep-nhan-su-co";
+    return axios.post(url, data);
 };

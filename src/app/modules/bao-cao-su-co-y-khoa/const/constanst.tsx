@@ -192,5 +192,6 @@ export const KHOA_PHONG = [
 
 export const initTiepNhan: ITiepNhan = {
     khoaPhongXuLy: "",
-    phuongAnXuLyBanDau: ""
+    phuongAnXuLy: "",
+    suCoId:""
 }
