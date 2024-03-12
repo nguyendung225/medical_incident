@@ -26,7 +26,7 @@ const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
         values.suCoId = suCoId
         try {
             const { data: { code, message } } = await tiepNhanSCYK(values)
-            if (code === RESPONSE_STATUS_CODE.SUCCESS) {
+            if (code === RESPONSE_STATUS_CODE.CREATED) {
                 toast.success(message)
                 updatePageData({})
                 handleClose()
@@ -101,7 +101,7 @@ const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                     />
                                 </div>
                             </Modal.Body>
-                            <Modal.Footer>
+                            <Modal.Footer className="d-flex justify-content-center">
                                 <Button
                                     className="button-primary"
                                     type='submit'
@@ -109,7 +109,7 @@ const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                     Gửi
                                 </Button>
                                 <Button
-                                    className="button-primary"
+                                    className="button-gray"
                                     onClick={handleClose}
                                 >
                                     Hủy

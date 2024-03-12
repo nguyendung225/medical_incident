@@ -48,7 +48,7 @@ const ConfirmDialog: FC<Props> = (props) => {
         {cancel && (
           <Button
             variant="outline-secondary"
-            className="button-gray-outline btn-sm"
+            className="button-gray"
             onClick={onCancelClick}
           >
             {cancel}
@@ -56,7 +56,7 @@ const ConfirmDialog: FC<Props> = (props) => {
         )}
         {close && (
           <Button
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary"
             onClick={onCloseClick}
           >
             {close}

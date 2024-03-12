@@ -14,6 +14,7 @@ import {
     GENDER_OPTION,
     KHOA_PHONG,
     OPTION_HINH_THUC_BC,
+    OPTION_MUC_DO_AH,
     OPTION_XAC_NHAN,
     OTHER_FIELD_LOAI_NBC,
     TT_NGUOI_THONG_BAO
@@ -21,6 +22,8 @@ import {
 import { MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
 import { addSCYK, updateSCYK } from "../services/BaoCaoSCYKServices";
 import LabelRequired from "./../../component/LabelRequired";
+import { checkInvalidDate } from "../../utils/ValidationSchema";
+import useMultiLanguage from "../../../hook/useMultiLanguage";
 
 type Props = {
 	handleClose: () => void;
@@ -33,12 +36,29 @@ export default function DialogThemMoiSCYK({
     thongTinSCYK,
 	updatePageData,
 }: Props) {
+	const { lang, intl } = useMultiLanguage();
 	const validationSchema = Yup.object().shape({
 		hinhThuc: Yup.string().required("Bắt buộc chọn"),
 		moTa: Yup.string().required("Bắt buộc nhập"),
 		name: Yup.string().required("Bắt buộc nhập"),
-		ngayBaoCao: Yup.string().required("Bắt buộc nhập"),
-		ngayXayRa: Yup.string().required("Bắt buộc nhập"),
+		ngayBaoCao: Yup.date()
+			.concat(checkInvalidDate(intl))
+			.when("ngayXayRa", {
+				is: (tuNgay: Date | null) => tuNgay,
+				then: Yup.date()
+					.min(
+						Yup.ref("ngayXayRa"),
+						lang("VALIDATION.MINDATE") +
+						lang("ngày xảy ra")
+					)
+					.max(new Date(), "Không được lớn hơn ngày hiện tại")
+					.nullable()
+			})
+			.nullable(),
+		ngayXayRa: Yup.date()
+			.concat(checkInvalidDate(intl))
+			.required(lang("VALIDATION.REQUIRE"))
+			.nullable(),
 		thoiGianXayRa: Yup.string().required("Bắt buộc nhập"),
 		deXuat: Yup.string().required("Bắt buộc nhập"),
 		dieuTriBanDau: Yup.string().required("Bắt buộc nhập"),
@@ -51,16 +71,16 @@ export default function DialogThemMoiSCYK({
     const handleSubmit = async (values: MedicalIncidentInfo) => {
         const thongTinSCYK = { ...values };
         thongTinSCYK.loaiDoiTuong = thongTinSCYK.loaiDoiTuong?.toString();
-        thongTinSCYK.thoiGianXayRa = moment(thongTinSCYK.thoiGianXayRa, "h:mm a").format("hh:mm:ss");
+		thongTinSCYK.thoiGianXayRa = thongTinSCYK.thoiGianXayRa;
 
         try {
-            const { data: { code, message } } = thongTinSCYK?.id
+            const { data: { code } } = thongTinSCYK?.id
                 ? await updateSCYK(thongTinSCYK, thongTinSCYK.id)
                 : await addSCYK(thongTinSCYK);
             if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
                 updatePageData({});
                 handleClose();
-                toast.success(message)
+                toast.success("Cập nhật dữ liệu thành công");
             }
 
         } catch (error) {
@@ -79,7 +99,7 @@ export default function DialogThemMoiSCYK({
 		>
 			<Modal.Header closeButton className="py-5 header-modal">
 				<Modal.Title className="title-dialog-color">
-					Thêm mới báo cáo sự cố y khoa
+					{thongTinSCYK?.id ? "Cập nhật báo cáo sự cố y khoa" : "Thêm mới báo cáo sự cố y khoa"}
 				</Modal.Title>
 			</Modal.Header>
 			<Formik
@@ -332,21 +352,11 @@ export default function DialogThemMoiSCYK({
 													className="text-primary spaces fw-700 h-24 mb-4"
 													label="Khoa/Phòng/Vị trí xảy ra sự cố"
 												/>
-												<Autocomplete
-													className="spaces h-25"
+												<TextField
+													className="spaces min-w-242"
 													name="noiXayRa"
-													onChange={(
-														selectedOption
-													) =>
-														handleChangeSelect(
-															"noiXayRa",
-															selectedOption
-														)
-													}
-													options={KHOA_PHONG}
-													value={values?.noiXayRa}
-													errors={errors?.noiXayRa}
-													touched={touched?.noiXayRa}
+													type="text"
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="viTriCuThe spaces pb-4 mt-10">
@@ -555,7 +565,7 @@ export default function DialogThemMoiSCYK({
 															handleChange
 														}
 														radioItemList={
-															OPTION_XAC_NHAN
+															OPTION_MUC_DO_AH
 														}
 													/>
 												</div>
@@ -681,7 +691,12 @@ export default function DialogThemMoiSCYK({
 								>
 									Gửi báo cáo
 								</Button>
-								<Button className="button-primary">Hủy</Button>
+								<Button 
+									className="button-gray" 
+									onClick={handleClose}
+								>
+									Hủy
+								</Button>
 							</Modal.Footer>
 						</form>
 					);

@@ -4,7 +4,7 @@ import { useIntl } from "react-intl";
 import { toast } from "react-toastify";
 import { IItemSearch } from "../profile/models/ProfileModels";
 import { localStorageItem } from "./LocalStorage";
-import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING } from "./Constant";
+import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING, EXTENSIONS } from "./Constant";
 import { TMenu, allMenu } from "../../pages/Homepage/listMenu";
 import { RESPONSE_STATUS_CODE } from "./Constant";
 
@@ -189,3 +189,31 @@ export const romanize = (num: number): string => {
   while (i--) roman = (key[+digits.pop()! + i * 10] || "") + roman;
   return Array(+digits.join("") + 1).join("M") + roman;
 }; 
+
+export const exportToFile = async (props: IPropsExport) => {
+  const { exportAPI, fileName = "Danh sách", setPageLoading, type = TYPE.EXCEL } = props;
+  try {
+    if(setPageLoading){
+      setPageLoading(true);
+    }
+    const data = await exportAPI(); 
+
+    if (data.status === RESPONSE_STATUS_CODE.SUCCESS) {
+      const url = window.URL.createObjectURL(new Blob([data.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${fileName}.${EXTENSIONS[type]}`);
+      document.body.appendChild(link);
+      link.click();
+      toast.success("Export thành công");
+    } else {
+      toast.error("Lỗi hệ thống");
+    }
+  } catch (error) {
+    toast.error("Lỗi hệ thống");
+  } finally {
+    if(setPageLoading){
+      setPageLoading(false);
+    }
+  }
+};

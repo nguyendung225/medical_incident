@@ -2,6 +2,33 @@ import { convertGenderToString, formatDateToString, renderMedicalIncidentReportS
 import { IThongTinSCYK, MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
 import { ITiepNhan } from './../models/BaoCaoSCYKModels';
 
+export const OPTION_MUC_DO_AH = [
+    { name: "Nặng", code: 1 },
+    { name: "Nhẹ ", code: 2 },
+    { name: "Trung Bình", code: 3 },
+];
+
+export const OPTION_HINH_THUC_BC = [
+    {
+        name: "Tự nguyện",
+        code: 1,
+    },
+    {
+        name: "Bắt buộc",
+        code: 2,
+    },
+];
+
+const renderPhanLoaiBaoCao = (phanLoaiCode: number) => {
+    const phanLoaiBaoCao = OPTION_MUC_DO_AH.filter((mucDo) => mucDo.code === phanLoaiCode);
+    return phanLoaiBaoCao && phanLoaiBaoCao[0]?.name;
+}
+
+const renderHinhThucBaoCao = (hinhThucCode: number) => {
+    const hinhThuc = OPTION_HINH_THUC_BC.filter((hinhThuc) => hinhThuc.code === hinhThucCode);
+    return hinhThuc && hinhThuc[0]?.name;
+}
+
 export const tableDSSuCoYKhoaColumns = [
     {
         name: "STT",
@@ -14,36 +41,86 @@ export const tableDSSuCoYKhoaColumns = [
         render: (row: any) => renderMedicalIncidentReportStatus(row?.trangThaiXuLy)
     },
     {
-        name: "Tên Bệnh Nhân",
-        field: "donViCongTac",
+        name: "Phân loại SCYK",
+        field: "phanLoai",
         headerStyle: {
             minWidth: "140px"
+        },
+        render: (row: any) => renderPhanLoaiBaoCao(row?.phanLoaiBanDau)
+    },
+    {
+        name: "Mã sự cố",
+        field: "code",
+        headerStyle: {
+            minWidth: "100px"
+        },
+        render: (row: any) => <span>{row?.code}</span>
+    },
+    {
+        name: "Tên sự cố",
+        field: "name",
+        headerStyle: {
+            minWidth: "100px"
+        },
+        render: (row: any) => <span>{row?.name}</span>
+    },
+    {
+        name: "Hình thức",
+        field: "hinhThuc",
+        headerStyle: {
+            minWidth: "100px"
+        },
+        render: (row: any) => renderHinhThucBaoCao(row?.hinhThuc)
+    },
+    {
+        name: "Ngày báo cáo",
+        field: "ngayBaoCao",
+        headerStyle: {
+            minWidth: "120px"
+        },
+        render: (row: any) => <span>{formatDateToString(row?.ngayBaoCao)}</span>
+    },
+    {
+        name: "Đơn vị báo cáo",
+        field: "donViBaoCao",
+        headerStyle: {
+            minWidth: "140px"
+        },
+        render: (row: any) => <span>{row?.tenDonViBaoCao}</span>
+    },
+    {
+        name: "Họ và tên",
+        field: "",
+        headerStyle: {
+            minWidth: "190px"
         },
         cellStyle: {
             textAlign: "left"
         },
         render: (row: any) => (
-            <div className="d-flex flex-column text-up">
-                <span className="text-uppercase">{row?.tenBenhNhan}</span>
-                <span>{row?.maBenhNhan} - {convertGenderToString(row?.gioiTinh)} - {formatDateToString(row?.ngaySinh)}</span>
-            </div>
+            row?.tenBenhNhan && (
+                <div className="d-flex flex-column text-up">
+                    <span className="text-uppercase">{row?.tenBenhNhan}</span>
+                    <span>{row?.maBenhNhan} - {convertGenderToString(row?.gioiTinh)} - {formatDateToString(row?.ngaySinh)}</span>
+                </div>
+            )
         )
     },
     {
         name: "Khoa Phòng",
-        field: "chucVu",
+        field: "",
         headerStyle: {
-            minWidth: "60px"
+            minWidth: "120px"
         },
         render: (row: any) => <span>{row?.tenKhoaPhong}</span>
-    },
+    }
 ]
 
 export const dsTabThongTinSCYK = [
     {
         eventKey: "0",
         title: "Báo cáo sự cố",
-        component: <></>,
+        // component: <BaoCaoSCYKDetail />,
     },
     {
         eventKey: "1",
@@ -67,33 +144,22 @@ export const dsTabThongTinSCYK = [
     },
 ];
 
-export const OPTION_HINH_THUC_BC = [
-    {
-        name: "Tự nguyện",
-        code: 0,
-    },
-    {
-        name: "Bắt buộc",
-        code: 1,
-    },
-];
-
 export const DOI_TUONG_XAY_RA_SC = [
     {
         name: "Người bệnh",
-        code: "0",
-    },
-    {
-        name: "Nhân viên y tế",
         code: "1",
     },
     {
-        name: "Người nhà/ Khách đến thăm",
+        name: "Nhân viên y tế",
         code: "2",
     },
     {
-        name: "Trang thiết bị/ Cơ sở hạ tầng",
+        name: "Người nhà/ Khách đến thăm",
         code: "3",
+    },
+    {
+        name: "Trang thiết bị/ Cơ sở hạ tầng",
+        code: "4",
     },
 ];
 
@@ -108,24 +174,18 @@ export const OPTION_PHAN_LOAI = [
     { name: "Đã xảy ra", code: 2 },
 ];
 
-export const OPTION_MUC_DO_AH = [
-    { name: "Nặng", code: 1 },
-    { name: "Nhẹ ", code: 2 },
-    { name: "Trung Bình", code: 3 },
-];
-
-export const GENDER_OPTION = [
-	{ name: "Name", code: 1 },
-	{ name: "Nữ ", code: 2 },
-	{ name: "Khác", code: 3 },
-];
-
 export const TT_NGUOI_THONG_BAO = [
 	{ name: "Điều dưỡng (Chức danh)", code: 1 },
 	{ name: "Người bệnh", code: 2 },
 	{ name: "Bác sĩ (Chức danh)", code: 3 },
 	{ name: "Người nhà/Khách thăm", code: 4 },
 	{ name: "Khác(Ghi cụ thể)", code: 5 },
+];
+
+export const GENDER_OPTION = [
+	{ name: "Name", code: 1 },
+	{ name: "Nữ ", code: 2 },
+	{ name: "Khác", code: 3 },
 ];
 
 export const OTHER_FIELD_LOAI_NBC = 5
@@ -156,6 +216,8 @@ export const InitThongTinSCYK: MedicalIncidentInfo = {
     emailNbc: "",
     loaiNbc: 1,
     loaiNbcKhac: "",
+    tenKhoaPhong: "",
+    tenDonViBaoCao: "",
     tenNck1: "",
     tenNck2: "",
     trangThaiXuLy: 1,

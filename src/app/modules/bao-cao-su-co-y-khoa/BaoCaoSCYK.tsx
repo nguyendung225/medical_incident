@@ -1,5 +1,6 @@
-import React from "react"
-import { Button } from "react-bootstrap";
+/* eslint-disable jsx-a11y/iframe-has-title */
+import React, { useEffect } from "react"
+import { Button, Dropdown } from "react-bootstrap";
 import InputSearch from "../component/InputSearch";
 import "./BaoCaoSCYK.scss";
 import { InitThongTinSCYK, dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constanst";
@@ -7,15 +8,16 @@ import { useState } from "react";
 import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
 import { KTSVG } from "../../../_metronic/helpers";
 import TableCustom from "../component/table/table-custom/TableCustom";
-import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
+import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import TabMenu from "../component/tabs/TabMenu";
-import { deleteSCYKById, getSCYKById, searchByPage } from "./services/BaoCaoSCYKServices";
+import { deleteSCYKById, getSCYKById, searchByPage, exportWordFile, exportPdfFile } from "./services/BaoCaoSCYKServices";
 import { MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
 import { toast } from "react-toastify";
 import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
-
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
+import { exportToFile } from "../utils/FunctionUtils";
+import BaoCaoSCYKDetail from "./components/BaoCaoSCYKDetail";
 
 type Props = {};
 
@@ -27,12 +29,12 @@ const BaoCaoSCYK = (props: Props) => {
         pageSize: 10,
     })
     const [dsBaoCaoSCYK, setDsBaoCaoSCYK] = useState<MedicalIncidentInfo[]>([]);
-    const [thongTinSCYK, setThongTinSCYK] =
-        useState<MedicalIncidentInfo>(InitThongTinSCYK);
+    const [thongTinSCYK, setThongTinSCYK] = useState<MedicalIncidentInfo>(InitThongTinSCYK);
     const [configTable, setConfigTable] = useState<any>({});
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
     const [openDialogTiepNhan, setOpenDialogTiepNhan] = useState(false)
-    const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined)
+    const [indexRowSelected, setIndexRowSelected] = useState<any>(null);
+    const [tabList, setTabList] = useState<any>([])
 
     const handleSearch = () => {
         updatePageData({
@@ -44,14 +46,15 @@ const BaoCaoSCYK = (props: Props) => {
         });
     }
 
-    const updatePageData = (searchData: any) => {
-        getMedicalIncidentReportList(searchData);
+    const updatePageData = async (searchData: any) => {
+        await getMedicalIncidentReportList(searchData);
     }
 
     const getMedicalIncidentReportList = async (searchData: any) => {
         try {
             const { data } = await searchByPage(searchData);
-            setDsBaoCaoSCYK(data.data.data);
+            await getThongTinSCYK(data?.data?.data[0]?.id)
+            await setDsBaoCaoSCYK(data?.data?.data);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -64,42 +67,12 @@ const BaoCaoSCYK = (props: Props) => {
         }
     };
 
-    const getThongTinSCYK = async () => {
-        const res = await getSCYKById(dsBaoCaoSCYK[indexRowSelected]?.id as string);
+    const getThongTinSCYK = async (scykId: any) => {
+        const res = await getSCYKById(scykId as string);
         setThongTinSCYK(res.data.data)
     }
 
-    const handleOpenUpdateDialog = async () => {
-        try {
-            await getThongTinSCYK()
-            setOpenDialogThemMoiSCYK(true)
-        } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
-        }
-    };
-
-    const handleOpenDeleteDialog = async () => {
-        try {
-            await getThongTinSCYK()
-            setShouldOpenConfirmDeleteDialog(true)
-        } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
-        }
-    };
-
-    const handleOpenTiepNhanDialog = async () => {
-        try {
-            await getThongTinSCYK()
-            setOpenDialogTiepNhan(true)
-        } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
-        }
-    };
-
-
-
     const handleDeleteSCYK = async () => {
-        
         try {
             if (thongTinSCYK.id) {
                 const res = await deleteSCYKById(thongTinSCYK.id)
@@ -110,11 +83,100 @@ const BaoCaoSCYK = (props: Props) => {
                     updatePageData({});
                 }
             }
-
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
+
+    const handlePrint = () => {
+        let content = document.getElementById("print-contents");
+        let pri = (document.getElementById("ifmcontentstoprint") as any)
+            .contentWindow;
+        pri.document.open();
+
+        pri.document.write((content as HTMLElement).innerHTML);
+
+        pri.document.close();
+        pri.focus();
+        pri.print();
+    };
+
+    const handleExportWord = async () => {
+        try {
+            exportToFile({
+                exportAPI: () => thongTinSCYK?.id && exportWordFile(thongTinSCYK?.id), 
+                fileName: "Báo cáo sự cố y khoa",
+                type: TYPE.WORD,
+                // setPageLoading
+            })
+        } catch (error) {
+            toast.error(<>{error}</>)
+        }
+    }
+
+    const handleExportPdf = () => {
+        try {
+            exportToFile({
+                exportAPI: () => thongTinSCYK?.id && exportPdfFile(thongTinSCYK?.id), 
+                fileName: "Báo cáo sự cố y khoa",
+                type: TYPE.PDF,
+                // setPageLoading
+            })
+        } catch (error) {
+            toast.error(<>{error}</>)
+        }
+    }
+
+    const handleOpenUpdateModal = async () => {
+        !thongTinSCYK?.id && await getThongTinSCYK(dsBaoCaoSCYK[0]?.id);
+        setOpenDialogThemMoiSCYK(true);
+    }
+
+    useEffect(() => {
+        const tabListTemp = [
+            {
+                eventKey: "0",
+                title: "Báo cáo sự cố",
+                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK}/>,
+            },
+        ]
+        switch(thongTinSCYK?.trangThaiXuLy) {
+            case MEDICAL_INCIDENT_REPORT_STATUS.DA_XAC_MINH: {
+                tabListTemp.push({
+                    eventKey: "1",
+                    title: "Biên bản xác minh",
+                    component: <></>
+                })
+                break;
+            }
+            case MEDICAL_INCIDENT_REPORT_STATUS.DA_PHAN_TICH: {
+                tabListTemp.push({
+                    eventKey: "2",
+                    title: "Phân tích SCYK",
+                    component: <></>
+                })
+                break;
+            }
+            case MEDICAL_INCIDENT_REPORT_STATUS.TAO_BIEN_BAN: {
+                tabListTemp.push({
+                    eventKey: "3",
+                    title: "Biên bản họp",
+                    component: <></>
+                })
+                break;
+            }
+        }
+        tabListTemp.push({
+            eventKey: "4",
+            title: "Tài liệu đính kèm",
+            component: <>Tài liệu đính kèm</>
+        },)
+        setTabList(tabListTemp);
+    }, [thongTinSCYK])
+
+    useEffect(() => {
+        (indexRowSelected || indexRowSelected === 0) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
+    }, [indexRowSelected])
 
     return (
         <div className="bao-cao-scyk-container">
@@ -157,16 +219,18 @@ const BaoCaoSCYK = (props: Props) => {
                 </div>
                 <div>
                     <TableCustom
+                        height={"calc(100vh - 340px)"}
                         id="profile2"
                         columns={tableDSSuCoYKhoaColumns}
                         data={dsBaoCaoSCYK}
+                        dataChecked={[thongTinSCYK]}
                         buttonAdd={false}
                         setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
                         notDelete={false}
                         handleDelete={deleteSCYKById}
                         justFilter={true}
-                        fixedColumnsCount={3}
+                        fixedColumnsCount={0}
                         noPagination={false}
                         updatePageData={updatePageData}
                         type={TYPE.SINGLE}
@@ -223,36 +287,54 @@ const BaoCaoSCYK = (props: Props) => {
                     <div className="d-flex spaces gap-10">
                         <Button 
                             className="button-primary"
-                            disabled={isNaN(indexRowSelected)}
-                            onClick={handleOpenTiepNhanDialog}
+                            onClick={() => setOpenDialogTiepNhan(true)}
                         
                         >
                            Tiếp nhận
                         </Button>
                         <Button
                             className="button-primary"
-                            disabled={isNaN(indexRowSelected)}
-                            onClick={handleOpenUpdateDialog}
+                            onClick={handleOpenUpdateModal}
                         >
                             Sửa
                         </Button>
                         <Button
                             className="button-primary"
-                            disabled={isNaN(indexRowSelected)}
-                            onClick={handleOpenDeleteDialog}
+                            onClick={() => setShouldOpenConfirmDeleteDialog(true)}
                         >
                             Xóa
                         </Button>
-                        <Button className="button-primary">
-                            Xuất file
-                        </Button>
-                        <Button className="button-primary">
+                        <Dropdown drop='down'>
+                            <Dropdown.Toggle
+                                className='button-primary'
+                                id='dropdown-autoclose-true'
+                                size='sm'
+                            >
+                                Xuất file
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item
+                                    onClick={handleExportWord}
+                                >
+                                    Xuất file word
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                    onClick={handleExportPdf}
+                                >
+                                    Xuất file pdf
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Button 
+                            className="button-primary"
+                            onClick={handlePrint}
+                        >
                             In phiếu
                         </Button>
                     </div>
                 </div>
                 <div className="tt-tabs">
-                    <TabMenu danhsachTabs={dsTabThongTinSCYK} />
+                    <TabMenu danhsachTabs={tabList} />
                 </div>
             </div>
 
@@ -291,6 +373,14 @@ const BaoCaoSCYK = (props: Props) => {
                     handleChangeSearchObj={(searchData: SearchObject) => setSearchObj(searchData)}
                 />
             )}
+            <iframe
+                id="ifmcontentstoprint"
+                style={{
+                    height: "0px",
+                    width: "0px",
+                    position: "absolute",
+                }}
+            ></iframe>
         </div>
     );
 };

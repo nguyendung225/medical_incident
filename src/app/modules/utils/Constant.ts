@@ -27,7 +27,16 @@ export enum TYPE {
     SINGLE = "single",
     MULTILINE = "multiline",
     MODULE = "module",
-    PASSWORD= "password"
+    PASSWORD= "password",
+    EXCEL = "EXCEL",
+    WORD = "WORD",
+    PDF = "PDF"
+}
+
+export enum EXTENSIONS {
+    EXCEL = "xlsx",
+    WORD = "docx",
+    PDF = "pdf"
 }
 
 export const REGEX = {
