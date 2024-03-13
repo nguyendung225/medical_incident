@@ -1,15 +1,21 @@
-interface NguoiThamDuXacMinh {
-    orgId: string;
+export interface NguoiThamDuXacMinh {
+    orgId?: string | null;
     bienBanXacMinhId: string;
     name: string;
     maChucVu: string;
     donVi: string;
-    isActive: boolean;
+    isActive?: boolean;
 }
 
 export interface IBienBanXacMinh {
     id: string;
-    orgId: string;
+    orgId: string | null;
+    hoiXacMinh?: string
+    ngayXacMinh?: string
+    hoiKetThuc?: string
+    ngayKetThuc?: string
+    thangKetThuc?: string
+    namKetThuc?: string
     ngayGioXacMinh: string;
     noiXacMinh: string;
     tenNguoiChuTri: string;
@@ -21,17 +27,18 @@ export interface IBienBanXacMinh {
     tenNguoiChungKien: string;
     maChucVuNguoiChungKien: string;
     donViNguoiChungKien: string;
-    nguoiThamDuXacMinhs: NguoiThamDuXacMinh[] | null;
+    nguoiThamDuXacMinhs: NguoiThamDuXacMinh[];
     veViec: string;
     ketQua: string;
     yKien: string;
     ngayGioKetThuc: string;
-    soTrang: number;
-    soBan: number;
-    isNguoiChuTruKy: boolean;
-    isNguoiChungKienKy: boolean;
-    isThanhVienDoanKy: boolean;
-    isNguoiLapKy: boolean;
+    soTrang: number | null;
+    soBan: number | null;
+    isNguoiChuTriKy: boolean | null | number;
+    isNguoiChungKienKy: boolean | null | number;
+    isNguoiThamDuKy: boolean | null | number;
+    isThanhVienDoanKy: boolean | null | number;
+    isNguoiLapKy: boolean | null | number;
     trangThai: number;
     isActive: boolean;
     benhNhanId: string;

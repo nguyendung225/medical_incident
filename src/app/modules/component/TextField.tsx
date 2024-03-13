@@ -5,12 +5,10 @@ import { TYPE } from './input-component/utils/const';
 const TextField = ({ ...props }) => {
     const [field, meta] = useField(props?.name);
     const renderTooltip = (props: any) => (
-        ((meta.error && meta.touched) || (props?.errors && props?.touched))
-            ? <Tooltip id="button-tooltip" {...props}>
-                <div className="text-danger">{meta.error ? meta.error : props?.errors}</div>
-            </Tooltip>
-            : <div></div>
-    );
+        ((meta.error && meta.touched)) ? <Tooltip id="button-tooltip">
+            <div className="text-danger">{meta?.error}</div>
+        </Tooltip>:<div></div>
+      );
     return (
         <div className={`text-field-v2 ${props?.className}`}>
             <span>

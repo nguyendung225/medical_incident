@@ -174,6 +174,12 @@ export const OPTION_PHAN_LOAI = [
     { name: "Đã xảy ra", code: 2 },
 ];
 
+export const CHUC_VU_OPTION = [
+    { name: "Chức vụ 1", code: "CV1" },
+    { name: "Chức vụ 2 ", code: "CV2" },
+    { name: "Chúc vụ 3", code: "CV3" },
+];
+
 export const TT_NGUOI_THONG_BAO = [
 	{ name: "Điều dưỡng (Chức danh)", code: 1 },
 	{ name: "Người bệnh", code: 2 },
