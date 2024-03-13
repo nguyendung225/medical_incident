@@ -21,7 +21,6 @@ type TProps = {
 
 function CheckboxGroup(props: TProps) {
     const onChange: GetProp<typeof Checkbox.Group, 'onChange'> = (checkedValues) => {
-        console.log('checked = ', checkedValues);
         props.handleChange(checkedValues)
     };
 

@@ -33,6 +33,20 @@ export const updateSCYK = (data: MedicalIncidentInfo, id: string) => {
     return axios.put(url, data);
 };
 
+export const exportWordFile = (id: string) => {
+    const url = API_PATH + `/api/v1/su-co/export-word/${id}`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
+
+export const exportPdfFile = (id: string) => {
+    const url = API_PATH + `/api/v1/su-co/export-pdf/${id}`;
+    return axios.get(url);
+}
+
 export const tiepNhanSCYK = (data: ITiepNhan) => {
     const url = API_PATH + "/api/v1/tiep-nhan-su-co";
     return axios.post(url, data);

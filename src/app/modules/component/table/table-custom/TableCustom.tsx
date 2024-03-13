@@ -28,7 +28,7 @@ export interface TableProps {
   headerClasses?: string;
   bodyClasses?: string;
   name?: string;
-  height?: number;
+  height?: number | string;
   scrollable?: boolean;
   sorting?: boolean;
   noPagination?: boolean;
@@ -182,7 +182,7 @@ const TableCustom: FC<TableProps> = (props) => {
       }
 
       if (checkedInit) {
-        let selectedRowsIds = selectedRows?.map((row) => row?.[uniquePrefix]);
+        let selectedRowsIds = dataChecked?.map((row) => row?.[uniquePrefix]) || [];
         let _data = data?.map((item) => {
           return selectedRowsIds.includes(item?.[uniquePrefix])
             ? {
@@ -483,7 +483,6 @@ const TableCustom: FC<TableProps> = (props) => {
 
   const handleShowConfirmDialog = () => {
     if (deleteConditional && deleteConditional?.length > 0) {
-      console.log(selectedRows);
       const isDelete = selectedRows.every(row => row.isDelete);
       if (!isDelete) {
         toast.warning(lang("TOAST.DELETE_DENIED"));

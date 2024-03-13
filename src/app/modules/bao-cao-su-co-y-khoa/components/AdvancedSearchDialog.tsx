@@ -45,7 +45,6 @@ const AdvancedSearchDialog = ({
     searchObj,
     handleChangeSearchObj
 }: TProps) => {
-    console.log(searchObj)
     const handleSumbit = () => {
         handleClose();
         handleSearch();

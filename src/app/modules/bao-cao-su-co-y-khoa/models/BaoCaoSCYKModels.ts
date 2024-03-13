@@ -46,7 +46,9 @@ export interface MedicalIncidentInfo {
   phanLoai: number;
   phanLoaiBanDau: number;
   soDienThoaiNbc: string;
+  tenDonViBaoCao: string;
   tenBenhNhan: string;
+  tenKhoaPhong: string;
   tenNbc: string;
   tenNck1: string;
   tenNck2: string;
