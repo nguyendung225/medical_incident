@@ -1,6 +1,6 @@
 import { OPTION_HINH_THUC_BC, OPTION_PHAN_LOAI } from "../../bao-cao-su-co-y-khoa/const/constanst";
 import { convertLabelByCode, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
-import { IBienBanXacMinh } from "../models/BienBanXacMinhModel";
+import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
 
 export const tableDSBienBanColumns = [
     {
@@ -71,9 +71,17 @@ export const tableDSBienBanColumns = [
     },
 ]
 
+export const initNguoiThamDu: NguoiThamDuXacMinh = {
+    orgId: null,
+    bienBanXacMinhId: "",
+    name: "",
+    maChucVu: "",
+    donVi: "",
+}
+
 export const initBienBanXacMinh: IBienBanXacMinh = {
     id: "",
-    orgId: "",
+    orgId: null,
     ngayGioXacMinh: "",
     noiXacMinh: "",
     tenNguoiChuTri: "",
@@ -85,17 +93,20 @@ export const initBienBanXacMinh: IBienBanXacMinh = {
     tenNguoiChungKien: "",
     maChucVuNguoiChungKien: "",
     donViNguoiChungKien: "",
-    nguoiThamDuXacMinhs: null,
+    nguoiThamDuXacMinhs: [
+        initNguoiThamDu
+      ],
     veViec: "",
     ketQua: "",
     yKien: "",
     ngayGioKetThuc: "",
-    soTrang: 0,
-    soBan: 0,
-    isNguoiChuTruKy: false,
-    isNguoiChungKienKy: false,
-    isThanhVienDoanKy: false,
-    isNguoiLapKy: false,
+    soTrang: null,
+    soBan: null,
+    isNguoiChuTriKy: null,
+    isNguoiChungKienKy: null,
+    isNguoiThamDuKy: null,
+    isThanhVienDoanKy: null,
+    isNguoiLapKy: null,
     trangThai: 0,
     isActive: false,
     benhNhanId: "",
@@ -108,4 +119,27 @@ export const initBienBanXacMinh: IBienBanXacMinh = {
     hinhThuc: 0,
     phanLoaiSuCo: 0,
     ngayTao: "",
+    hoiKetThuc: "",
+    hoiXacMinh: "",
+    ngayXacMinh: "",
+    namKetThuc: "",
+    ngayKetThuc: "",
+    thangKetThuc: "",
+
 };
+
+export const SINGIN_OPTION = [
+    {
+        code: 1,
+        name: "Đã kí"
+    },
+    {
+        code: 0,
+        name: "Chưa kí"
+    }
+]
+
+export const STATUS_BIEN_BAN = {
+    LUU_NHAP: 1,
+    DA_XAC_MINH: 2
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
@@ -14,7 +14,9 @@ import { dsTabThongTinSCYK } from './../bao-cao-su-co-y-khoa/const/constanst';
 import "./BienBanXacMinh.scss";
 import { initBienBanXacMinh, tableDSBienBanColumns } from "./const/constants";
 import { IBienBanXacMinh } from "./models/BienBanXacMinhModel";
-import { searchByPage } from "./services/BienBanXacMinhServices";
+import { getBienBanById, searchByPage } from "./services/BienBanXacMinhServices";
+import DialogThemMoiBienBan from "./components/DialogThemMoiBienBan";
+import { convertBooleanToNumber, seperateTime } from "../utils/FormatUtils";
 
 type Props = {};
 
@@ -62,30 +64,36 @@ const BienBanXacMinh = (props: Props) => {
         }
     };
 
-    const getThongTinBienBan = async () => {
-        const res = await getSCYKById(dsBienBan[indexRowSelected]?.id as string);
-        setThongTinBienBan(res.data.data)
+    const formatDataBienBan = (data: IBienBanXacMinh) => {
+        const formatData = { ...data }
+        const timeXacMinh = seperateTime(data?.ngayGioXacMinh)
+        const timeKetThuc = seperateTime(data?.ngayGioKetThuc)
+        formatData.hoiXacMinh = timeXacMinh.time
+        formatData.ngayXacMinh = timeXacMinh.date
+        formatData.hoiKetThuc = timeKetThuc.time
+        formatData.ngayKetThuc = timeKetThuc.day?.toString()
+        formatData.thangKetThuc = timeKetThuc.month?.toString()
+        formatData.namKetThuc = timeKetThuc.year?.toString()
+        formatData.isNguoiChuTriKy = convertBooleanToNumber(formatData.isNguoiChuTriKy)
+        formatData.isNguoiChungKienKy = convertBooleanToNumber(formatData.isNguoiChungKienKy)
+        formatData.isNguoiLapKy = convertBooleanToNumber(formatData.isNguoiLapKy)
+        formatData.isNguoiThamDuKy = convertBooleanToNumber(formatData.isNguoiThamDuKy)
+        formatData.isThanhVienDoanKy = convertBooleanToNumber(formatData.isThanhVienDoanKy)
+
+        return formatData
     }
 
-    const handleOpenUpdateDialog = async () => {
+    const getThongTinBienBan = async () => {
         try {
-            await getThongTinBienBan()
-            setOpenThemMoiBienBan(true)
+            const { data: { data } } = await getBienBanById(dsBienBan[indexRowSelected]?.id as string);
+            setThongTinBienBan(formatDataBienBan(data))
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
-    };
 
-    const handleOpenDeleteDialog = async () => {
-        try {
-            await getThongTinBienBan()
-            setShouldOpenConfirmDeleteDialog(true)
-        } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
-        }
-    };
+    }
 
-    const handleDeleteSCYK = async () => {
+    const handleDeleteBienBan = async () => {
 
         try {
             if (thongTinBienBan.id) {
@@ -102,6 +110,10 @@ const BienBanXacMinh = (props: Props) => {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
+
+    useEffect(() => {
+        !isNaN(indexRowSelected) && getThongTinBienBan()
+    }, [indexRowSelected])
 
     return (
         <div className="bien-ban-xm-container">
@@ -174,17 +186,11 @@ const BienBanXacMinh = (props: Props) => {
                     <div className="d-flex spaces gap-10">
                         <Button
                             className="button-primary"
-                            disabled={isNaN(indexRowSelected)}
-                            onClick={handleOpenUpdateDialog}
+                            onClick={() => {
+                                setOpenThemMoiBienBan(true)
+                            }}
                         >
                             Sửa
-                        </Button>
-                        <Button
-                            className="button-primary"
-                            disabled={isNaN(indexRowSelected)}
-                            onClick={handleOpenDeleteDialog}
-                        >
-                            Xóa
                         </Button>
                         <Button className="button-primary">
                             Xuất file
@@ -195,10 +201,9 @@ const BienBanXacMinh = (props: Props) => {
                     </div>
                 </div>
                 <div className="tt-tabs">
-                    <TabMenu danhsachTabs={dsTabThongTinSCYK} />
+                    <TabMenu danhsachTabs={dsTabThongTinSCYK as any} />
                 </div>
             </div>
-
 
             {shouldOpenConfirmDeleteDialog && (
                 <ConfirmDialog
@@ -206,11 +211,12 @@ const BienBanXacMinh = (props: Props) => {
                     title={"Xác nhận xóa"}
                     message={"Bạn có muốn xóa không ?"}
                     yes={"Xác nhận"}
-                    onYesClick={handleDeleteSCYK}
+                    onYesClick={handleDeleteBienBan}
                     cancel={"Hủy"}
                     onCancelClick={() => setShouldOpenConfirmDeleteDialog(false)}
                 />
             )}
+            
             {shouldOpenAdvancedSearchDialog && (
                 <AdvancedSearchDialog
                     handleClose={() => setShouldOpenAdvancedSearchDialog(false)}
@@ -219,6 +225,13 @@ const BienBanXacMinh = (props: Props) => {
                     handleChangeSearchObj={(searchData: SearchObject) => setSearchObj(searchData)}
                 />
             )}
+
+            {
+                openThemMoiBienBan && <DialogThemMoiBienBan
+                    thongTinBienBan={thongTinBienBan}
+                    updatePageData={updatePageData}
+                    handleClose={() => setOpenThemMoiBienBan(false)} />
+            }
         </div>
     );
 };

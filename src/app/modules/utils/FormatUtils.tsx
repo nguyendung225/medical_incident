@@ -168,3 +168,23 @@ export const renderMedicalIncidentReportStatus = (reportStatus: number) => {
 export const convertLabelByCode = (options: any, code: number) => {
     return options?.find((option: any) => option.code === code)?.name
 }
+
+export function seperateTime(stringDate: string) {
+    const dateTime = new Date(stringDate);
+
+    const year = dateTime.getFullYear();
+    const month = dateTime.getMonth() + 1;
+    const day = dateTime.getDate();
+    const hours = dateTime.getHours();
+    const minutes = dateTime.getMinutes();
+    const seconds = dateTime.getSeconds();
+    return {
+        year: year, month: month, day: day, hours: hours, minutes: minutes, seconds: seconds,
+        date: `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`,
+        time: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    };
+}
+
+export const convertBooleanToNumber = (value: any) => {
+    return value ? 1 : 0
+}

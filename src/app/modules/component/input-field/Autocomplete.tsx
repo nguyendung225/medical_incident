@@ -66,7 +66,7 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
 
   const getData = async (searchObject: any) => {
     const res = await props.searchFunction?.(searchObject);
-    let data = props?.urlData ? convertNameUrl(props?.urlData, res) : res?.data?.data?.content;
+    let data = props?.urlData ? convertNameUrl(props?.urlData, res) : res?.data?.data;
     data = props?.sort ? props?.sort(data) : data
     return data;
   }
