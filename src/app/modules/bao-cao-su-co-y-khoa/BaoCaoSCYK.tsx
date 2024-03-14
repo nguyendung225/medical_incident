@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
-import { exportToFile } from "../utils/FunctionUtils";
+import { exportToFile, handlePrint } from "../utils/FunctionUtils";
 import BaoCaoSCYKDetail from "./components/BaoCaoSCYKDetail";
 import FilterSearchContainer from "./FilterSearchContainer";
 
@@ -90,18 +90,6 @@ const BaoCaoSCYK = (props: Props) => {
         }
     };
 
-    const handlePrint = () => {
-        let content = document.getElementById("print-contents");
-        let pri = (document.getElementById("ifmcontentstoprint") as any)
-            .contentWindow;
-        pri.document.open();
-
-        pri.document.write((content as HTMLElement).innerHTML);
-
-        pri.document.close();
-        pri.focus();
-        pri.print();
-    };
 
     const handleExportWord = async () => {
         try {
@@ -303,7 +291,8 @@ const BaoCaoSCYK = (props: Props) => {
                         </Dropdown>
                         <Button 
                             className="button-primary"
-                            onClick={handlePrint}
+                            onClick={()=>handlePrint("print-contents")}
+
                         >
                             In phiếu
                         </Button>

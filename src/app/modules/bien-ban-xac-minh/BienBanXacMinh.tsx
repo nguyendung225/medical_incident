@@ -16,6 +16,8 @@ import DialogThemMoiBienBan from "./components/DialogThemMoiBienBan";
 import { convertBooleanToNumber, seperateTime } from "../utils/FormatUtils";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/FilterSearchContainer";
 import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
+import BienBanXacMinhDetail from "./components/BienBanXacMinhDetail";
+import { handlePrint } from "../utils/FunctionUtils";
 
 type Props = {};
 
@@ -128,7 +130,7 @@ const BienBanXacMinh = (props: Props) => {
             {
                 eventKey: "1",
                 title: "Biên bản xác minh",
-                component: <>Biên bản xác minh</>
+                component: <BienBanXacMinhDetail thongTinBienBan={thongTinBienBan} />
             },
             {
                 eventKey: "2",
@@ -204,7 +206,9 @@ const BienBanXacMinh = (props: Props) => {
                         <Button className="button-primary">
                             Xuất file
                         </Button>
-                        <Button className="button-primary">
+                        <Button className="button-primary"
+                            onClick={() => handlePrint("bien-ban-xac-minh")}
+                        >
                             In phiếu
                         </Button>
                     </div>
@@ -233,6 +237,15 @@ const BienBanXacMinh = (props: Props) => {
                     handleClose={() => setOpenThemMoiBienBan(false)} 
                 />
             )}
+            <iframe
+                title="print"
+                id="ifmcontentstoprint"
+                style={{
+                    height: "0px",
+                    width: "0px",
+                    position: "absolute",
+                }}
+            ></iframe>
         </div>
     );
 };

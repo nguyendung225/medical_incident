@@ -217,3 +217,16 @@ export const exportToFile = async (props: IPropsExport) => {
     }
   }
 };
+
+export const handlePrint = (id: string) => {
+    let content = document.getElementById(id);
+    let pri = (document.getElementById("ifmcontentstoprint") as any)
+        .contentWindow;
+    pri.document.open();
+
+    pri.document.write((content as HTMLElement).innerHTML);
+
+    pri.document.close();
+    pri.focus();
+    pri.print();
+};
