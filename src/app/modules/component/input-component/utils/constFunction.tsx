@@ -22,7 +22,7 @@ export const listItemChild = (data: any) => {
     if (data?.length > 0) {
         data?.forEach((item: any, index: number) => {
             let value: any = {}
-            item?.structure?.length > 0 && item?.structure?.map((itemStructure: any, index: number) => {
+            item?.structure?.length > 0 && item?.structure?.forEach((itemStructure: any, index: number) => {
                 let itemObjects = getListItemChild(itemStructure)
                 value[itemObjects?.code] = itemObjects
             })
@@ -44,7 +44,7 @@ const getListItemChild = (items: any) => {
     }
 
     if (items?.conceptAnswers?.length > 0) {
-        items?.conceptAnswers?.map((item: any, index: number) => {
+        items?.conceptAnswers?.forEach((item: any, index: number) => {
             let itemObject: iChildren = {
                 id: item?.concept?.conceptId,
                 name: item?.concept?.name,
@@ -64,7 +64,7 @@ const getListItemChild = (items: any) => {
 
 export const convertDto = (data: any) => {
     let listData: any[] = []
-    data?.length > 0 && data.map((item: any, index: number) => {
+    data?.length > 0 && data.forEach((item: any, index: number) => {
         for (const key in item) {
             if (item.hasOwnProperty(key)) {
                 const itemData = item[key];

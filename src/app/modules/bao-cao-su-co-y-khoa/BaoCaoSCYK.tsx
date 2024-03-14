@@ -18,6 +18,7 @@ import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
 import { exportToFile } from "../utils/FunctionUtils";
 import BaoCaoSCYKDetail from "./components/BaoCaoSCYKDetail";
+import FilterSearchContainer from "./FilterSearchContainer";
 
 type Props = {};
 
@@ -33,7 +34,7 @@ const BaoCaoSCYK = (props: Props) => {
     const [configTable, setConfigTable] = useState<any>({});
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
     const [openDialogTiepNhan, setOpenDialogTiepNhan] = useState(false)
-    const [indexRowSelected, setIndexRowSelected] = useState<any>(null);
+    const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
     const [tabList, setTabList] = useState<any>([])
 
     const handleSearch = () => {
@@ -53,8 +54,9 @@ const BaoCaoSCYK = (props: Props) => {
     const getMedicalIncidentReportList = async (searchData: any) => {
         try {
             const { data } = await searchByPage(searchData);
-            await getThongTinSCYK(data?.data?.data[0]?.id)
+            await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.id);
             await setDsBaoCaoSCYK(data?.data?.data);
+            setIndexRowSelected(0);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -128,7 +130,7 @@ const BaoCaoSCYK = (props: Props) => {
     }
 
     const handleOpenUpdateModal = async () => {
-        !thongTinSCYK?.id && await getThongTinSCYK(dsBaoCaoSCYK[0]?.id);
+        !thongTinSCYK?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
         setOpenDialogThemMoiSCYK(true);
     }
 
@@ -175,48 +177,22 @@ const BaoCaoSCYK = (props: Props) => {
     }, [thongTinSCYK])
 
     useEffect(() => {
-        (indexRowSelected || indexRowSelected === 0) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
     }, [indexRowSelected])
 
     return (
         <div className="bao-cao-scyk-container">
             <div className="ds-su-co-y-khoa">
-                <div className="ds-header">
-                    <div className="d-flex align-items-center">
-                        <KTSVG path={'/media/svg/icons/List ul.svg'} svgClassName="spaces w-14 h-14 mr-10" />
-                        <span className="title">
-                            Danh sách báo cáo sự cố y khoa
-                        </span>
-                    </div>
-                    <Button
-                        className="button-primary"
-                        onClick={() => {
-                            setThongTinSCYK(InitThongTinSCYK);
-                            setOpenDialogThemMoiSCYK(true);
-                        }}
-                    >
-                        <i className="bi bi-plus m-0"></i>Thêm mới
-                    </Button>
-                </div>
-                <div className="ds-search-box">
-                    <div className="box-search">
-                        <InputSearch
-                            placeholder="Tìm theo mã SC, mã BN, họ và tên..."
-                            handleChange={(e) => { 
-                                setSearchObj({...searchObj, keyword: e.target.value}) 
-                            }}
-                            className="spaces h-32"
-                            value={searchObj?.keyword}
-                            handleSearch={handleSearch}
-                        />
-                    </div>
-                    <Button
-                        className="button-primary"
-                        onClick={() => setShouldOpenAdvancedSearchDialog(true)}
-                    >
-                        <i className="bi bi-search m-0"></i>Tìm kiếm nâng cao
-                    </Button>
-                </div>
+                <FilterSearchContainer 
+                    title="Danh sách báo cáo sự cố y khoa"
+                    handleChangeSearchObj={setSearchObj}
+                    handleCreate={() => {
+                        setThongTinSCYK(InitThongTinSCYK);
+                        setOpenDialogThemMoiSCYK(true);
+                    }}
+                    searchObj={searchObj}
+                    handleSearch={handleSearch}
+                />
                 <div>
                     <TableCustom
                         height={"calc(100vh - 340px)"}

@@ -51,9 +51,9 @@ const setSubMenu = (to: string = '') => {
 
   //sau phân quyền
   // if (localStorageItem.get(headerConstant.AUTHORITIES)) {
-  const pathname = new URL(window.location.href).pathname;
-  const selectSubMenu = checkedMenu?.filter(menu => menu?.to === (pathname ? pathname : headerConstant.DEFAULT_MODULE)) || [];
-  localStorage.setItem(headerConstant.LIST_SUB_MENU, JSON.stringify(selectSubMenu?.length > 0 ? selectSubMenu[0].subMenu : []));
+  // const pathname = new URL(window.location.href).pathname;
+  // const selectSubMenu = checkedMenu?.filter(menu => menu?.to === (pathname ? pathname : headerConstant.DEFAULT_MODULE)) || [];
+  // localStorage.setItem(headerConstant.LIST_SUB_MENU, JSON.stringify(selectSubMenu?.length > 0 ? selectSubMenu[0].subMenu : []));
   // }
 }
 

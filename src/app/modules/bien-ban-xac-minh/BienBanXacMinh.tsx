@@ -2,27 +2,25 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
-import AdvancedSearchDialog from "../bao-cao-su-co-y-khoa/components/AdvancedSearchDialog";
 import { SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
-import { deleteSCYKById, getSCYKById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import InputSearch from "../component/InputSearch";
+import { deleteSCYKById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
 import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
-import { dsTabThongTinSCYK } from './../bao-cao-su-co-y-khoa/const/constanst';
 import "./BienBanXacMinh.scss";
 import { initBienBanXacMinh, tableDSBienBanColumns } from "./const/constants";
 import { IBienBanXacMinh } from "./models/BienBanXacMinhModel";
 import { getBienBanById, searchByPage } from "./services/BienBanXacMinhServices";
 import DialogThemMoiBienBan from "./components/DialogThemMoiBienBan";
 import { convertBooleanToNumber, seperateTime } from "../utils/FormatUtils";
+import FilterSearchContainer from "../bao-cao-su-co-y-khoa/FilterSearchContainer";
+import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
 
 type Props = {};
 
 const BienBanXacMinh = (props: Props) => {
     const [openThemMoiBienBan, setOpenThemMoiBienBan] = useState(false);
-    const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
         pageNumber: 1,
         pageSize: 10,
@@ -32,7 +30,8 @@ const BienBanXacMinh = (props: Props) => {
         useState<IBienBanXacMinh>(initBienBanXacMinh);
     const [configTable, setConfigTable] = useState<any>({});
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
-    const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined)
+    const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
+    const [tabList, setTabList] = useState<any>([]);
 
     const handleSearch = () => {
         updatePageData({
@@ -51,7 +50,9 @@ const BienBanXacMinh = (props: Props) => {
     const getDSBienBan = async (searchData: any) => {
         try {
             const { data } = await searchByPage(searchData);
-            setDsBienBan(data.data.data);
+            await getThongTinBienBan(data?.data?.data[indexRowSelected || 0]?.id)
+            await setDsBienBan(data?.data?.data);
+            setIndexRowSelected(0);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -83,18 +84,16 @@ const BienBanXacMinh = (props: Props) => {
         return formatData
     }
 
-    const getThongTinBienBan = async () => {
+    const getThongTinBienBan = async (bienBanXacMinhId: string) => {
         try {
-            const { data: { data } } = await getBienBanById(dsBienBan[indexRowSelected]?.id as string);
-            setThongTinBienBan(formatDataBienBan(data))
+            const { data: { data } } = await getBienBanById(bienBanXacMinhId as string);
+            setThongTinBienBan(formatDataBienBan(data));
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
-
     }
 
     const handleDeleteBienBan = async () => {
-
         try {
             if (thongTinBienBan.id) {
                 const res = await deleteSCYKById(thongTinBienBan.id)
@@ -105,67 +104,67 @@ const BienBanXacMinh = (props: Props) => {
                     updatePageData({});
                 }
             }
-
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
 
+    const handleOpenUpdateModal = async () => {
+        !thongTinBienBan?.id && await getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
+        setOpenThemMoiBienBan(true);
+    }
+
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinBienBan()
+        !isNaN(indexRowSelected) && getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
     }, [indexRowSelected])
+
+    useEffect(() => {
+        setTabList([
+            {
+                eventKey: "0",
+                title: "Báo cáo sự cố",
+                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinBienBan?.suCoResp}/>,
+            },
+            {
+                eventKey: "1",
+                title: "Biên bản xác minh",
+                component: <>Biên bản xác minh</>
+            },
+            {
+                eventKey: "2",
+                title: "Tài liệu đính kèm",
+                component: <>Tài liệu đính kèm</>
+            }
+        ])
+    }, [thongTinBienBan])
 
     return (
         <div className="bien-ban-xm-container">
             <div className="ds-bien-ban-xm">
-                <div className="ds-header">
-                    <div className="d-flex align-items-center">
-                        <KTSVG path={'/media/svg/icons/List ul.svg'} svgClassName="spaces w-14 h-14 mr-10" />
-                        <span className="title">
-                            Danh sách biên bản xác minh
-                        </span>
-                    </div>
-                    <Button
-                        className="button-primary"
-                        onClick={() => {
-                            setThongTinBienBan(initBienBanXacMinh);
-                            setOpenThemMoiBienBan(true);
-                        }}
-                    >
-                        <i className="bi bi-plus m-0"></i>Thêm mới
-                    </Button>
-                </div>
-                <div className="ds-search-box">
-                    <div className="box-search">
-                        <InputSearch
-                            placeholder="Tìm theo mã SC, mã BN, họ và tên..."
-                            handleChange={(e) => {
-                                setSearchObj({ ...searchObj, keyword: e.target.value })
-                            }}
-                            className="spaces h-32"
-                            value={searchObj?.keyword}
-                            handleSearch={handleSearch}
-                        />
-                    </div>
-                    <Button
-                        className="button-primary"
-                        onClick={() => setShouldOpenAdvancedSearchDialog(true)}
-                    >
-                        <i className="bi bi-search m-0"></i>Tìm kiếm nâng cao
-                    </Button>
-                </div>
+                <FilterSearchContainer 
+                    title="Danh sách biên bản xác minh"
+                    handleCreate={() => {
+                        setThongTinBienBan(initBienBanXacMinh);
+                        setOpenThemMoiBienBan(true);
+                    }}
+                    searchObj={searchObj}
+                    handleChangeSearchObj={setSearchObj}
+                    handleSearch={handleSearch}
+                />
                 <div>
                     <TableCustom
+                        height={"calc(100vh - 340px)"}
                         id="profile2"
                         columns={tableDSBienBanColumns}
                         data={dsBienBan}
+                        dataChecked={[thongTinBienBan]}
                         buttonAdd={false}
                         setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
                         notDelete={false}
                         handleDelete={deleteSCYKById}
                         justFilter={true}
-                        fixedColumnsCount={3}
+                        fixedColumnsCount={0}
                         noPagination={false}
                         updatePageData={updatePageData}
                         type={TYPE.SINGLE}
@@ -175,6 +174,18 @@ const BienBanXacMinh = (props: Props) => {
                         totalPages={configTable?.totalPages}
                         numberOfElements={configTable?.numberOfElements}
                     />
+                </div>
+                <div className="status-box">
+                    <div className="d-flex">
+                        <div className="status-box-item">
+                            <i className="bi bi-circle-fill spaces fs-10"></i>
+                            <span>Lưu nháp</span>
+                        </div>
+                        <div className="status-box-item">
+                            <i className="bi bi-circle-fill spaces fs-10 color-steel-blue"></i>
+                            <span>Lưu</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="tt-bien-ban-xm">
@@ -186,9 +197,7 @@ const BienBanXacMinh = (props: Props) => {
                     <div className="d-flex spaces gap-10">
                         <Button
                             className="button-primary"
-                            onClick={() => {
-                                setOpenThemMoiBienBan(true)
-                            }}
+                            onClick={handleOpenUpdateModal}
                         >
                             Sửa
                         </Button>
@@ -201,7 +210,7 @@ const BienBanXacMinh = (props: Props) => {
                     </div>
                 </div>
                 <div className="tt-tabs">
-                    <TabMenu danhsachTabs={dsTabThongTinSCYK as any} />
+                    <TabMenu danhsachTabs={tabList} />
                 </div>
             </div>
 
@@ -216,22 +225,14 @@ const BienBanXacMinh = (props: Props) => {
                     onCancelClick={() => setShouldOpenConfirmDeleteDialog(false)}
                 />
             )}
-            
-            {shouldOpenAdvancedSearchDialog && (
-                <AdvancedSearchDialog
-                    handleClose={() => setShouldOpenAdvancedSearchDialog(false)}
-                    handleSearch={handleSearch}
-                    searchObj={searchObj}
-                    handleChangeSearchObj={(searchData: SearchObject) => setSearchObj(searchData)}
-                />
-            )}
 
-            {
-                openThemMoiBienBan && <DialogThemMoiBienBan
+            {openThemMoiBienBan && (
+                <DialogThemMoiBienBan
                     thongTinBienBan={thongTinBienBan}
                     updatePageData={updatePageData}
-                    handleClose={() => setOpenThemMoiBienBan(false)} />
-            }
+                    handleClose={() => setOpenThemMoiBienBan(false)} 
+                />
+            )}
         </div>
     );
 };

@@ -71,7 +71,7 @@ export default function DialogThemMoiSCYK({
     const handleSubmit = async (values: MedicalIncidentInfo) => {
         const thongTinSCYK = { ...values };
         thongTinSCYK.loaiDoiTuong = thongTinSCYK.loaiDoiTuong?.toString();
-		thongTinSCYK.thoiGianXayRa = thongTinSCYK.thoiGianXayRa;
+		thongTinSCYK.thoiGianXayRa = moment(`${thongTinSCYK.ngayXayRa}T${thongTinSCYK.thoiGianXayRa}`).format("HH:mm:ss");
 
         try {
             const { data: { code } } = thongTinSCYK?.id
