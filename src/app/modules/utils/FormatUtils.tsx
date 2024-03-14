@@ -22,7 +22,7 @@ export const checkObject = (value: any) => {
 
 export const formatDateToString = (date: string | Date | undefined) => {
     let newDate = date ? new Date(date) : null;
-    return newDate ? moment(newDate).format("MM/DD/YYYY") : "";
+    return newDate ? moment(newDate).format("DD/MM/YYYY") : "";
 }
 
 export const formatDateAdvanceToString = (date: string | Date | undefined) => {

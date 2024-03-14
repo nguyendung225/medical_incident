@@ -1,3 +1,5 @@
+import { MedicalIncidentInfo } from "../../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
+
 export interface NguoiThamDuXacMinh {
     orgId?: string | null;
     bienBanXacMinhId: string;
@@ -51,5 +53,6 @@ export interface IBienBanXacMinh {
     hinhThuc: number;
     phanLoaiSuCo: number;
     ngayTao: string;
+    suCoResp: MedicalIncidentInfo;
 }
 

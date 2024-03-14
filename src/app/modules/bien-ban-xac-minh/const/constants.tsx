@@ -1,5 +1,5 @@
-import { OPTION_HINH_THUC_BC, OPTION_PHAN_LOAI } from "../../bao-cao-su-co-y-khoa/const/constanst";
-import { convertLabelByCode, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
+import { InitThongTinSCYK, OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constanst";
+import { convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
 
 export const tableDSBienBanColumns = [
@@ -17,9 +17,9 @@ export const tableDSBienBanColumns = [
         name: "Phân loại SCYK",
         field: "phanLoaiSuCo",
         headerStyle: {
-            minWidth: "100px"
+            minWidth: "140px"
         },
-        render: (row: any) => <span>{convertLabelByCode(OPTION_PHAN_LOAI, row?.phanLoaiSuCo)}</span>
+        render: (row: any) => <span>{convertLabelByCode(OPTION_MUC_DO_AH, row?.suCoResp?.phanLoaiBanDau)}</span>
     },
     {
         name: "Mã sự cố",
@@ -27,7 +27,7 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "80px"
         },
-        render: (row: any) => <span>{row?.maSuCo}</span>
+        render: (row: any) => <span>{row?.suCoResp?.code}</span>
     },
     {
         name: "Hình thức báo cáo",
@@ -35,7 +35,7 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "150px"
         },
-        render: (row: any) => <span>{convertLabelByCode(OPTION_HINH_THUC_BC, row?.hinhThuc)}</span>
+        render: (row: any) => <span>{convertLabelByCode(OPTION_HINH_THUC_BC, row?.suCoResp?.hinhThuc)}</span>
     },
     {
         name: "Ngày xác minh",
@@ -43,7 +43,7 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "125px"
         },
-        render: (row: any) => <span>{row?.ngayGioXacMinh}</span>
+        render: (row: any) => <span>{formatDateToString(row?.ngayGioXacMinh)}</span>
     },
     {
         name: "Đơn vị báo cáo",
@@ -51,7 +51,7 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "125px"
         },
-        render: (row: any) => <span>{row?.tenKhoaPhong}</span>
+        render: (row: any) => <span>{row?.suCoResp?.tenDonViBaoCao}</span>
     },
     {
         name: "Họ và tên",
@@ -59,7 +59,14 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "125px"
         },
-        render: (row: any) => <span>{row?.tenKhoaPhong}</span>
+        render: (row: any) => (
+            row?.tenBenhNhan && (
+                <div className="d-flex flex-column text-up">
+                    <span className="text-uppercase">{row?.tenBenhNhan}</span>
+                    {/* <span>{row?.maBenhNhan} - {convertGenderToString(row?.gioiTinh)} - {formatDateToString(row?.ngaySinh)}</span> */}
+                </div>
+            )
+        )
     },
     {
         name: "Khoa/phòng BN điều trị",
@@ -67,7 +74,7 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "200px"
         },
-        render: (row: any) => <span>{row?.tenKhoaPhong}</span>
+        render: (row: any) => <span>{row?.suCoResp?.tenKhoaPhong}</span>
     },
 ]
 
@@ -125,7 +132,7 @@ export const initBienBanXacMinh: IBienBanXacMinh = {
     namKetThuc: "",
     ngayKetThuc: "",
     thangKetThuc: "",
-
+    suCoResp: InitThongTinSCYK,
 };
 
 export const SINGIN_OPTION = [

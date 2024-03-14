@@ -1,5 +1,5 @@
 import { convertGenderToString, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
-import { IThongTinSCYK, MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
+import { MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
 import { ITiepNhan } from './../models/BaoCaoSCYKModels';
 
 export const OPTION_MUC_DO_AH = [
