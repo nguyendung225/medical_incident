@@ -5,7 +5,7 @@ export interface NguoiThamDuXacMinh {
     bienBanXacMinhId: string;
     name: string;
     maChucVu: string;
-    donVi: string;
+    tenDonVi: string;
     isActive?: boolean;
 }
 

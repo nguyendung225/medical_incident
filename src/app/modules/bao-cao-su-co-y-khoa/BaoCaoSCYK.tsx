@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import { Button, Dropdown } from "react-bootstrap";
 import InputSearch from "../component/InputSearch";
 import "./BaoCaoSCYK.scss";
@@ -19,10 +19,13 @@ import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
 import { exportToFile, handlePrint } from "../utils/FunctionUtils";
 import BaoCaoSCYKDetail from "./components/BaoCaoSCYKDetail";
 import FilterSearchContainer from "./FilterSearchContainer";
+import AppContext from "../../AppContext";
+import generatePDF, { Options } from "react-to-pdf";
 
 type Props = {};
 
 const BaoCaoSCYK = (props: Props) => {
+    const { setPageLoading } = useContext(AppContext);
     const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false);
     const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
@@ -53,6 +56,7 @@ const BaoCaoSCYK = (props: Props) => {
 
     const getMedicalIncidentReportList = async (searchData: any) => {
         try {
+            setPageLoading(true);
             const { data } = await searchByPage(searchData);
             await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.id);
             await setDsBaoCaoSCYK(data?.data?.data);
@@ -64,7 +68,9 @@ const BaoCaoSCYK = (props: Props) => {
                 totalPages: data.data.totalPages,
                 numberOfElements: data.data.numberOfElements,
             })
+            setPageLoading(false);
         } catch (err) {
+            setPageLoading(false);
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
@@ -97,24 +103,29 @@ const BaoCaoSCYK = (props: Props) => {
                 exportAPI: () => thongTinSCYK?.id && exportWordFile(thongTinSCYK?.id), 
                 fileName: "Báo cáo sự cố y khoa",
                 type: TYPE.WORD,
-                // setPageLoading
+                setPageLoading
             })
         } catch (error) {
             toast.error(<>{error}</>)
         }
     }
 
-    const handleExportPdf = () => {
-        try {
-            exportToFile({
-                exportAPI: () => thongTinSCYK?.id && exportPdfFile(thongTinSCYK?.id), 
-                fileName: "Báo cáo sự cố y khoa",
-                type: TYPE.PDF,
-                // setPageLoading
-            })
-        } catch (error) {
-            toast.error(<>{error}</>)
-        }
+    
+    const handleExportPdf = async () => {
+        setPageLoading(true);
+        const options: Options = {
+            filename: "Báo cáo sự cố y khoa.pdf",
+            page: {
+                margin: 20
+            }
+        };
+    
+        const getTargetElement = () => document.getElementById("print-contents");
+        const downloadPdf = async () => generatePDF(getTargetElement, options);
+
+        await downloadPdf();
+        setPageLoading(false);
+        toast.success("Xuất file thành công");
     }
 
     const handleOpenUpdateModal = async () => {

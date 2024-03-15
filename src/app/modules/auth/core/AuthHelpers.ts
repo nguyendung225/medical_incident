@@ -40,7 +40,7 @@ const setAuth = (auth: AuthModel) => {
     console.error('AUTH LOCAL STORAGE SAVE ERROR', error)
   }
 }
-const setSubMenu = (to: string = '') => {
+const setSubMenu = (to: string = '/ds-bao-cao-scyk') => {
   const checkedMenu = checkMenuByPermissions();
 
   if (to) {

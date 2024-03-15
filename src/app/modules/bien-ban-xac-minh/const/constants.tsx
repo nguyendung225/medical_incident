@@ -83,7 +83,7 @@ export const initNguoiThamDu: NguoiThamDuXacMinh = {
     bienBanXacMinhId: "",
     name: "",
     maChucVu: "",
-    donVi: "",
+    tenDonVi: "",
 }
 
 export const initBienBanXacMinh: IBienBanXacMinh = {
