@@ -160,8 +160,8 @@ const TablePagination: FC<TablePaginationProps> = (props) => {
   }
 
   return (
-    <div className="flex flex-space-between spaces fw-500">
-      <div className="d-flex justify-content-centerr gap-2 align-items-center ps-3 pe-3">
+    <div className="flex flex-wrap flex-space-between spaces fw-500">
+      <div className="d-flex justify-content-centerr align-items-center">
           Tổng số bản ghi: {numberOfElements? numberOfElements + "/" : ""}{totalElements}
       </div>
       <div

@@ -1,4 +1,4 @@
-import { Field, Formik } from "formik";
+import { ErrorMessage, Field, Formik } from "formik";
 import moment from "moment";
 import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -43,6 +43,7 @@ export default function DialogThemMoiSCYK({
 		name: Yup.string().required("Bắt buộc nhập"),
 		ngayBaoCao: Yup.date()
 			.concat(checkInvalidDate(intl))
+            .required(lang("VALIDATION.REQUIRE"))
 			.when("ngayXayRa", {
 				is: (tuNgay: Date | null) => tuNgay,
 				then: Yup.date()
@@ -65,8 +66,11 @@ export default function DialogThemMoiSCYK({
 		thongBaoChoBacSi: Yup.string().required("Bắt buộc nhập"),
 		donViBaoCao: Yup.string().required("Bắt buộc nhập"),
 		noiXayRa: Yup.string().required("Bắt buộc nhập"),
-        soDienThoaiNbc: Yup.string().matches(regex.phone, 'Số điện thoại không hợp lệ')
-	});
+        soDienThoaiNbc: Yup.string().matches(regex.phone, 'Số điện thoại không hợp lệ'),
+        loaiDoiTuong: Yup.array()
+            .of(Yup.string())
+            .min(1, 'Yêu cầu chọn loại dối tượng')
+    });
   
     const handleSubmit = async (values: MedicalIncidentInfo) => {
         const thongTinSCYK = { ...values };
@@ -74,20 +78,19 @@ export default function DialogThemMoiSCYK({
 		thongTinSCYK.thoiGianXayRa = moment(`${thongTinSCYK.ngayXayRa}T${thongTinSCYK.thoiGianXayRa}`).format("HH:mm:ss");
 
         try {
-            const { data: { code } } = thongTinSCYK?.id
+            const { data: { code, message } } = thongTinSCYK?.id
                 ? await updateSCYK(thongTinSCYK, thongTinSCYK.id)
                 : await addSCYK(thongTinSCYK);
             if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
                 updatePageData({});
                 handleClose();
-                toast.success("Cập nhật dữ liệu thành công");
+                toast.success(message);
             }
 
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
-
 
 	return (
 		<Modal
@@ -327,6 +330,7 @@ export default function DialogThemMoiSCYK({
 									<div className="doi-tuong-xay-ra-su-co">
 										<div className="d-flex spaces gap-32 h-24">
 											<LabelRequired
+                                                isRequired
 												className="text-primary spaces fw-700"
 												label="Đối tượng xảy ra sự cố"
 											/>
@@ -342,8 +346,9 @@ export default function DialogThemMoiSCYK({
 													{data.name}
 												</label>
 											))}
-										</div>
-									</div>
+                                        </div>
+                                        <ErrorMessage name="loaiDoiTuong" className="text-danger" component="div" />
+                                    </div>
 									<div className="d-flex spaces gap-20 align-items-center">
 										<div className="w-50">
 											<div className="khoa-phong-xay-ra-su-co spaces pb-4">

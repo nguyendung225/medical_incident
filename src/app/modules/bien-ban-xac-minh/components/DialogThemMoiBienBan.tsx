@@ -18,8 +18,9 @@ type Props = {
 };
 
 const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: Props) => {
+
     const validationSchema = Yup.object().shape({
-        maSuCo: Yup.string().required("Bắt buộc chọn"),
+        suCoId: Yup.string().required("Bắt buộc chọn"),
         tenNguoiChuTri: Yup.string().required("Bắt buộc nhập"),
         maChucVuNguoiChuTri: Yup.string().required("Bắt buộc chọn"),
         donViNguoiChuTri: Yup.string().required("Bắt buộc chọn"),
@@ -38,13 +39,23 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
         ngayXacMinh: Yup.date().required("Bắt buộc nhập").max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại'),
         noiXacMinh: Yup.string().required("Bắt buộc nhập"),
         hoiKetThuc: Yup.string().required("Bắt buộc nhập"),
-        namKetThuc: Yup.string().required("Bắt buộc nhập"),
-        ngayKetThuc: Yup.string().required("Bắt buộc nhập"),
-        thangKetThuc: Yup.string().required("Bắt buộc nhập"),
+        // namKetThuc: Yup.string().required("Bắt buộc nhập"),
+        // ngayKetThuc: Yup.string().required("Bắt buộc nhập"),
+        // thangKetThuc: Yup.string().required("Bắt buộc nhập"),
         soTrang: Yup.string().required("Bắt buộc nhập").nullable().test('is-integer', 'Vui lòng nhập một số nguyên', (value) => /^\d+$/.test(value || "")
         ),
         soBan: Yup.string().required("Bắt buộc nhập").nullable().test('is-integer', 'Vui lòng nhập một số nguyên', (value) => /^\d+$/.test(value || "")
         ),
+        ngayKetThuc: Yup.string()
+        .matches(/^(0?[1-9]|[12][0-9]|3[01])$/, 'Ngày không hợp lệ') // Pattern để kiểm tra ngày từ 1 đến 31
+        .required('Ngày không được để trống'),
+        thangKetThuc: Yup.string()
+        .matches(/^(0?[1-9]|1[0-2])$/, 'Tháng không hợp lệ') // Pattern để kiểm tra tháng từ 1 đến 12
+        .required('Tháng không được để trống'),
+        namKetThuc: Yup.string()
+        .matches(/^(19|20)\d{2}$/, 'Năm không hợp lệ') // Pattern để kiểm tra năm từ 1900 đến 2099
+        .required('Năm không được để trống'),
+    
     });
 
     const formatDataBienBan = (data: IBienBanXacMinh) => {
@@ -105,7 +116,10 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                         values.nguoiThamDuXacMinhs.splice(index, 1)
                         setFieldValue("nguoiThamDuXacMinhs", values.nguoiThamDuXacMinhs)
                     }
-
+                    
+                    (thongTinBienBan?.id && !values?.tenSuCo) && setFieldValue("tenSuCo", values.suCoResp.name || "Không xác định");
+                    (!values?.suCoId && values.suCoResp.id) && setFieldValue("suCoId", values.suCoResp.id);
+                    
                     return (
                         <form onSubmit={handleSubmit}>
                             <Modal.Body className="pt-0">
@@ -124,19 +138,19 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                setValues({ ...values, suCoId: selectedOption.id, maSuCo: selectedOption.code, tenSuCo: selectedOption.name })
+                                                                setValues({ ...values, suCoId: selectedOption.id, tenSuCo: selectedOption.name })
                                                             }
                                                             getOptionLabel={(option) => option.code}
                                                             className="spaces h-25 width-100"
-                                                            name="maSuCo"
-                                                            value={values.maSuCo && {
-                                                                code: values.maSuCo,
-                                                                name: values.tenSuCo,
+                                                            name="suCoId"
+                                                            value={values.suCoResp.code ? {
+                                                                code: values.suCoResp.code,
+                                                                name: values.suCoResp.name,
 
-                                                            }}
-                                                            errors={errors?.maSuCo}
+                                                            } : null}
+                                                            errors={errors?.suCoId}
                                                             touched={
-                                                                touched?.maSuCo
+                                                                touched?.suCoId
                                                             }
                                                             searchObject={{}}
                                                             searchFunction={getListSuCoChuaXacMinh}
@@ -548,9 +562,9 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                             <div className="spaces fw-700 mb-6">
                                                 Kết quả xác minh :
                                             </div>
-                                            <div className="pl-75">
+                                            <div className="spaces pl-75">
                                                 <TextField
-                                                    className="spaces min-w-242 pl-80"
+                                                    className="spaces min-w-242"
                                                     name="ketQua"
                                                     as="textarea"
                                                     rows={3}
@@ -735,6 +749,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                         className="spaces min-w-125 fw-500"
                                                     />
                                                     <Autocomplete
+                                                        menuPlacement="top"
                                                         onChange={(
                                                             selectedOption
                                                         ) =>
@@ -762,6 +777,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                         className="spaces min-w-125 fw-500"
                                                     />
                                                     <Autocomplete
+                                                        menuPlacement="top"
                                                         onChange={(
                                                             selectedOption
                                                         ) =>
@@ -791,6 +807,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                         className="spaces min-w-125 fw-500"
                                                     />
                                                     <Autocomplete
+                                                        menuPlacement="top"
                                                         onChange={(
                                                             selectedOption
                                                         ) =>

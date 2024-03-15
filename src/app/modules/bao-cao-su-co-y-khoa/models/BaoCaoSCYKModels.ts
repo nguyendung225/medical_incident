@@ -1,3 +1,5 @@
+import { IBienBanXacMinh } from "../../bien-ban-xac-minh/models/BienBanXacMinhModel";
+
 export interface autocompleteOption {
   name: string,
   code: string,
@@ -33,7 +35,7 @@ export interface MedicalIncidentInfo {
   hinhThuc: number;
   isActive: true;
   khoaPhongDieuTri: null | string;
-  loaiDoiTuong: string;
+  loaiDoiTuong: string[] | string;
   loaiNbc: null | string | number;
   loaiNbcKhac: string;
   maBenhNhan: string;
@@ -58,6 +60,7 @@ export interface MedicalIncidentInfo {
   thongBaoNguoiNha: number;
   trangThaiXuLy: number;
   viTriCuThe: string;
+  bienBanXacMinhResp?: IBienBanXacMinh;
 }
 
 export interface ITiepNhan {

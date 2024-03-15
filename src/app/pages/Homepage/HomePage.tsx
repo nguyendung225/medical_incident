@@ -127,6 +127,12 @@ export function HomePage() {
               text={"Báo cáo SCYK"}
               modulePermission={MODULE.HO_SO}
             />
+            <LinkButton
+              linkTo={"/bien-ban-xac-minh"}
+              iconPath="/media/icons/homepage/profile.svg"
+              text={"Biên bản xác minh SCYK"}
+              modulePermission={MODULE.HO_SO}
+            />
           </Row>
         </div>
       </div>

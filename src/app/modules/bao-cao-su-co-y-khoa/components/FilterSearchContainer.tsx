@@ -1,9 +1,9 @@
 import { Button } from "react-bootstrap";
-import { KTSVG } from "../../../_metronic/helpers";
-import InputSearch from "../component/InputSearch";
+import { KTSVG } from "../../../../_metronic/helpers";
+import InputSearch from "../../component/InputSearch";
 import { Dispatch, SetStateAction, useState } from "react";
-import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
-import { SearchObject } from "./models/BaoCaoSCYKModels";
+import AdvancedSearchDialog from "./AdvancedSearchDialog";
+import { SearchObject } from "../models/BaoCaoSCYKModels";
 
 type TProps = {
     handleCreate: () => void,

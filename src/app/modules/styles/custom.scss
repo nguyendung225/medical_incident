@@ -420,3 +420,27 @@ textarea.customs-input {
     width: 100%;
   }
 }
+
+.bao-cao-scyk-container,
+.bien-ban-xm-container {
+  .tab-content {
+    position: relative;
+  
+    .tab-pane {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block !important;
+        width: 100%;
+    }
+  
+    .active {
+        z-index: 1 !important;
+    }
+  
+    .fade:not(.show) {
+        opacity: 1 !important;
+        z-index: 0;
+    }
+  }
+}
