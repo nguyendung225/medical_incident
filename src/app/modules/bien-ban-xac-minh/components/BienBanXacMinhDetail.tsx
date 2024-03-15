@@ -74,6 +74,11 @@ export const styles = {
 			marginBottom: "80px",
 		},
 	},
+	fontSize: {
+		_15px: {
+			fontSize: "15px",
+		}
+	},
 	fontWeight: {
 		bold: {
 			fontWeight: "bold",
@@ -111,6 +116,12 @@ export const styles = {
 		marginTop: "4px",
 		color: "#1a5e83",
 	},
+	header_title: {
+		fontWeight: "bold",
+		textAlign: "center" as "center",
+		fontSize: "15px",
+		marginBottom: "15px",
+	}
 };
 
 type TProps = {
@@ -127,7 +138,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				<p>Độc lập - Tự do - Hạnh phúc</p>
 			</div>
 			<div>
-				<div style={styles.fontWeight.bold}>
+				<div style={styles.header_title}>
 					BIÊN BẢN XÁC MINH SỰ CỐ Y KHOA
 				</div>
 				<div>
@@ -156,57 +167,57 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					<div style={styles.width._60persent}>
 						{" "}
 						Chức vụ:{" "}
-						<span style={styles.content_text}>Giám đốc</span>
+						<span style={styles.content_text}>{thongTinBienBan?.maChucVuNguoiChuTri}</span>
 					</div>
 					thuộc Đơn vị:{" "}
-					<span style={styles.content_text}>Đơn vị hành chính</span>{" "}
+					<span style={styles.content_text}>{thongTinBienBan?.donViNguoiChuTri}</span>{" "}
 					chủ trì xác minh sự cố y khoa.
 				</div>
 				<div style={styles.d_flex_wrap}>
 					<div style={styles.width._40persent}>
 						<span>Ông/bà:</span>{" "}
 						<span style={styles.content_text}>
-							{thongTinBienBan.tenNguoiChuTri}
+							{thongTinBienBan.tenThanhVienDoan}
 						</span>
 					</div>
 					<div style={styles.width._60persent}>
 						{" "}
 						Chức vụ:{" "}
-						<span style={styles.content_text}>Giám đốc</span>
+						<span style={styles.content_text}>{thongTinBienBan?.maChucVuThanhVienDoan}</span>
 					</div>
 					thuộc Đơn vị:{" "}
-					<span style={styles.content_text}>Đơn vị hành chính</span>{" "}
+					<span style={styles.content_text}>{thongTinBienBan?.donViThanhVienDoan}</span>{" "}
 					thành viên đoàn xác minh sự cố y khoa.
 				</div>
 				<div style={styles.d_flex_wrap}>
 					<div style={styles.width._40persent}>
 						<span>Ông/bà:</span>{" "}
 						<span style={styles.content_text}>
-							{thongTinBienBan.tenNguoiChuTri}
+							{thongTinBienBan.tenNguoiChungKien}
 						</span>
 					</div>
 					<div style={styles.width._60persent}>
 						{" "}
 						Chức vụ:{" "}
-						<span style={styles.content_text}>Giám đốc</span>
+						<span style={styles.content_text}>{thongTinBienBan?.maChucVuNguoiChungKien}</span>
 					</div>
 					thuộc Đơn vị:{" "}
-					<span style={styles.content_text}>Đơn vị hành chính</span>{" "}
+					<span style={styles.content_text}>{thongTinBienBan?.donViNguoiChungKien}</span>{" "}
 					là người chứng kiến.
 				</div>
 
 				<div style={{ ...styles.contentTitle }}>
 					Với sự tham dự của:
 				</div>
-				{thongTinBienBan.nguoiThamDuXacMinhs.map((data) => (
+				{thongTinBienBan.nguoiThamDuXacMinhs.map((nguoiThamDu) => (
 					<div>
 						Ông/bà:{" "}
-						<span style={styles.content_text}>{data.name}</span>{" "}
+						<span style={styles.content_text}>{nguoiThamDu.name}</span>{" "}
 						Chức vụ:{" "}
-						<span style={styles.content_text}>Giám đốc</span> thuộc
+						<span style={styles.content_text}>{nguoiThamDu.maChucVu}</span> thuộc
 						Đơn vị:{" "}
 						<span style={styles.content_text}>
-							Đơn vị hành chính
+							{nguoiThamDu.tenDonVi}
 						</span>
 					</div>
 				))}

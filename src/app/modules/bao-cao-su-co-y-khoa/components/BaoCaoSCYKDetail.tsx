@@ -14,7 +14,7 @@ export const styles = {
     },
     checked: {
         position: "absolute" as "absolute",
-        top: "-3px",
+        top: "-4px",
         left: "1px"
     },
     d_none: {
