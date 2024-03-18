@@ -5,7 +5,7 @@ import "./PhanTichSCYK.scss";
 import { useState } from "react";
 import { KTSVG } from "../../../_metronic/helpers";
 import TableCustom from "../component/table/table-custom/TableCustom";
-import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
+import { TYPE } from "../utils/Constant";
 import TabMenu from "../component/tabs/TabMenu";
 import { toast } from "react-toastify";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
@@ -16,13 +16,14 @@ import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSear
 import AdvancedSearchDialog from "../bao-cao-su-co-y-khoa/components/AdvancedSearchDialog";
 import { IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { searchByPage } from "./services/PhanTichSCYKServices";
-import { PHAN_TICH_SCYK_INFO_INIT, phanTichScykTableColumns } from "./constants/constants";
 import { IPhanTichScyk } from "./models/PhanTichSCYKModels";
 import { getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
 import { InitThongTinSCYK, SCYK_DETAIL_INFO_INIT } from "../bao-cao-su-co-y-khoa/const/constants";
 import BienBanXacMinhDetail from "../bien-ban-xac-minh/components/BienBanXacMinhDetail";
 import { initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
+import { phanTichScykTableColumns } from "./constants/constants";
+import PhanTichScykDetail from "./components/PhanTichScykDetail";
 
 type Props = {};
 
@@ -86,8 +87,15 @@ const PhanTichSCYK = (props: Props) => {
     };
 
     const getThongTinSCYK = async (scykId: any) => {
-        const res = await getScykInfoDetailById(scykId as string);
-        setThongTinSCYK(res.data.data)
+        try {
+            setPageLoading(true);
+            const res = await getScykInfoDetailById(scykId as string);
+            setThongTinSCYK(res.data.data);
+            setPageLoading(false);
+        } catch (error) {
+            setPageLoading(false);
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
     }
 
     // const handleDeleteSCYK = async () => {
@@ -131,7 +139,7 @@ const PhanTichSCYK = (props: Props) => {
             {
                 eventKey: "2",
                 title: "Phân Tích sự cố",
-                component: <></>,
+                component: <PhanTichScykDetail phanTichScyk={thongTinSCYK?.phanTichResp}/>,
             },
             {
                 eventKey: "3",
