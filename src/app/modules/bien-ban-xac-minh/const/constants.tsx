@@ -1,5 +1,5 @@
-import { InitThongTinSCYK, OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constanst";
-import { convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
+import { InitThongTinSCYK, OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constants";
+import { convertGenderToString, convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 import { handlePrint } from "../../utils/FunctionUtils";
 import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
 
@@ -32,7 +32,7 @@ export const tableDSBienBanColumns = [
     },
     {
         name: "Hình thức báo cáo",
-        field: "chucVu",
+        field: "hinhThuc",
         headerStyle: {
             minWidth: "150px"
         },
@@ -40,7 +40,7 @@ export const tableDSBienBanColumns = [
     },
     {
         name: "Ngày xác minh",
-        field: "chucVu",
+        field: "ngayGioXacMinh",
         headerStyle: {
             minWidth: "125px"
         },
@@ -48,7 +48,7 @@ export const tableDSBienBanColumns = [
     },
     {
         name: "Đơn vị báo cáo",
-        field: "chucVu",
+        field: "tenDonViBaoCao",
         headerStyle: {
             minWidth: "125px"
         },
@@ -56,22 +56,25 @@ export const tableDSBienBanColumns = [
     },
     {
         name: "Họ và tên",
-        field: "chucVu",
+        field: "hoTen",
         headerStyle: {
-            minWidth: "125px"
+            minWidth: "200px"
+        },
+        cellStyle: {
+            textAlign: "left",
         },
         render: (row: any) => (
-            row?.tenBenhNhan && (
+            row?.suCoResp?.benhNhan && (
                 <div className="d-flex flex-column text-up">
-                    <span className="text-uppercase">{row?.tenBenhNhan}</span>
-                    {/* <span>{row?.maBenhNhan} - {convertGenderToString(row?.gioiTinh)} - {formatDateToString(row?.ngaySinh)}</span> */}
+                    <span className="text-uppercase">{row?.suCoResp?.benhNhan?.name}</span>
+                    <span>{row?.suCoResp?.benhNhan?.code} - {convertGenderToString(row?.suCoResp?.benhNhan?.gioiTinh)} - {formatDateToString(row?.suCoResp?.benhNhan?.ngaySinh)}</span>
                 </div>
             )
         )
     },
     {
         name: "Khoa/phòng BN điều trị",
-        field: "chucVu",
+        field: "tenKhoaPhong",
         headerStyle: {
             minWidth: "200px"
         },
@@ -133,7 +136,7 @@ export const initBienBanXacMinh: IBienBanXacMinh = {
     namKetThuc: "",
     ngayKetThuc: "",
     thangKetThuc: "",
-    suCoResp: InitThongTinSCYK,
+    // suCoResp: InitThongTinSCYK,
 };
 
 export const SINGIN_OPTION = [

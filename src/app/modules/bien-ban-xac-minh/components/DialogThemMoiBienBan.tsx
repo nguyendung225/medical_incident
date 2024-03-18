@@ -2,7 +2,7 @@ import { Formik } from "formik";
 import { Button, Col, Modal, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { CHUC_VU_OPTION, DV_BAO_CAO, } from "../../bao-cao-su-co-y-khoa/const/constanst";
+import { CHUC_VU_OPTION, DV_BAO_CAO, } from "../../bao-cao-su-co-y-khoa/const/constants";
 import LabelRequired from "../../component/LabelRequired";
 import TextField from "../../component/TextField";
 import Autocomplete from "../../component/input-field/Autocomplete";
@@ -116,9 +116,8 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                         values.nguoiThamDuXacMinhs.splice(index, 1)
                         setFieldValue("nguoiThamDuXacMinhs", values.nguoiThamDuXacMinhs)
                     }
-                    
-                    (thongTinBienBan?.id && !values?.tenSuCo) && setFieldValue("tenSuCo", values.suCoResp.name || "Không xác định");
-                    (!values?.suCoId && values.suCoResp.id) && setFieldValue("suCoId", values.suCoResp.id);
+                    (thongTinBienBan?.id && !values?.tenSuCo) && setFieldValue("tenSuCo", values?.suCoResp?.name || "Không xác định");
+                    (!values?.suCoId && values.suCoResp?.id) && setFieldValue("suCoId", values.suCoResp.id);
                     
                     return (
                         <form onSubmit={handleSubmit}>
@@ -143,7 +142,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             getOptionLabel={(option) => option.code}
                                                             className="spaces h-25 width-100"
                                                             name="suCoId"
-                                                            value={values.suCoResp.code ? {
+                                                            value={values?.suCoResp?.code ? {
                                                                 code: values.suCoResp.code,
                                                                 name: values.suCoResp.name,
 

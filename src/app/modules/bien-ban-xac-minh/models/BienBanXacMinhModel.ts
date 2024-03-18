@@ -53,6 +53,6 @@ export interface IBienBanXacMinh {
     hinhThuc: number;
     phanLoaiSuCo: number;
     ngayTao: string;
-    suCoResp: MedicalIncidentInfo;
+    suCoResp?: MedicalIncidentInfo;
 }
 

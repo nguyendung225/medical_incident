@@ -1,6 +1,6 @@
 import moment from "moment";
 import { MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
-import { DOI_TUONG_XAY_RA_SC, OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH, OPTION_PHAN_LOAI, OPTION_XAC_NHAN, TT_NGUOI_THONG_BAO } from "../const/constanst";
+import { DOI_TUONG_XAY_RA_SC, OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH, OPTION_PHAN_LOAI, OPTION_XAC_NHAN, TT_NGUOI_THONG_BAO } from "../const/constants";
 import { convertGenderToString } from "../../utils/FormatUtils";
 
 export const styles = {
@@ -127,7 +127,7 @@ const BaoCaoSCYKDetail = ({ thongTinSCYK }: TProps) => {
                             return (
                                 <div style={{...styles.d_flex_align_center}}>
                                     <div style={styles.box_square}>
-                                        <span style={thongTinSCYK.loaiDoiTuong.includes(item.code.toString()) ? styles.checked : styles.d_none}>&#10003;</span>
+                                        <span style={thongTinSCYK.loaiDoiTuong?.includes(item.code.toString()) ? styles.checked : styles.d_none}>&#10003;</span>
                                     </div>
                                     <span style={styles.marginLeft._10px}>{item.name}</span>
                                 </div>

@@ -23,6 +23,11 @@ export const getSCYKById = (id: string) => {
     return axios.get(url);
 };
 
+export const getScykInfoDetailById = (id: string) => {
+    const url = API_PATH + `/api/v1/su-co/all-data/${id}`;
+    return axios.get(url);
+};
+
 export const deleteSCYKById = (id: string) => {
     const url = API_PATH + `/api/v1/su-co/${id}`;
     return axios.delete(url);
