@@ -71,6 +71,11 @@
                     height: 33px;
                 }
             }
+
+            .tab-content .tab-pane {
+                height: calc(100vh - 155px);
+                background: $color-white;
+            }
         }
     }
 }

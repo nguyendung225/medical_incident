@@ -1,5 +1,6 @@
 import { InitThongTinSCYK, OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constanst";
 import { convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
+import { handlePrint } from "../../utils/FunctionUtils";
 import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
 
 export const tableDSBienBanColumns = [
@@ -150,3 +151,14 @@ export const STATUS_BIEN_BAN = {
     LUU_NHAP: 1,
     DA_XAC_MINH: 2
 }
+
+export const IN_PHIEU_DROPDOWN_BUTTONS = [
+    {
+        title: "Báo cáo scyk",
+        handleClick: () => handlePrint("in-phieu-bao-cao-scyk"),
+    },
+    {
+        title: "Biên bản xác minh",
+        handleClick: () => handlePrint("in-phieu-bien-ban-xac-minh"),
+    }
+]

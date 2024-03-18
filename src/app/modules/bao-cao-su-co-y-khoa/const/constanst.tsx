@@ -205,7 +205,7 @@ export const InitThongTinSCYK: MedicalIncidentInfo = {
     thoiGianXayRa: "",
     ngayBaoCao: "",
     benhNhanId: null,
-    loaiDoiTuong: "",
+    loaiDoiTuong: [],
     noiXayRa: "",
     viTriCuThe: "",
     moTa: "",

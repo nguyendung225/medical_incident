@@ -38,3 +38,12 @@ export const deleteBienBan = (id: string) => {
     const url = API_PATH + `/api/v1/bien-ban-xac-minh/${id}`;
     return axios.delete(url);
 };
+
+export const exportWord = (id: string) => {
+    const url = API_PATH + `/api/v1/bien-ban-xac-minh/export-word/${id}`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}

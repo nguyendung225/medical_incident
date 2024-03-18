@@ -76,7 +76,7 @@ export const styles = {
         background: "white",
         padding: "10px",
         overflow: "scroll",
-        height: "calc(100vh - 200px)",
+        height: "calc(100vh - 160px)",
         marginTop: "3px"
     },
     formTitle: {
@@ -93,7 +93,7 @@ type TProps = {
 
 const BaoCaoSCYKDetail = ({ thongTinSCYK }: TProps) => {
     return (
-        <div style={styles.container} id="print-contents">
+        <div style={styles.container} id="in-phieu-bao-cao-scyk">
             <div style={styles.formTitle}>PHIẾU BÁO CÁO SỰ CỐ Y KHOA</div>
             <div style={styles.d_flex_j_between}>
                 <div style={styles.width._48persent}>

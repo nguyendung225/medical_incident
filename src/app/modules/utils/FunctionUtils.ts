@@ -7,6 +7,7 @@ import { localStorageItem } from "./LocalStorage";
 import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING, EXTENSIONS } from "./Constant";
 import { TMenu, allMenu } from "../../pages/Homepage/listMenu";
 import { RESPONSE_STATUS_CODE } from "./Constant";
+import generatePDF, { Options } from "react-to-pdf";
 
 export const checkTypeOf = (value: any) => {
   return Object.prototype.toString.call(value).slice(8, -1);
@@ -230,3 +231,19 @@ export const handlePrint = (id: string) => {
     pri.focus();
     pri.print();
 };
+
+export const handleExportPdf = async ({elementId, fileName, setPageLoading}) => {
+  setPageLoading(true);
+  const options: Options = {
+      filename: fileName,
+      page: {
+          margin: 20
+      }
+  };
+  const getTargetElement = () => document.getElementById(elementId);
+  const downloadPdf = async () => generatePDF(getTargetElement, options);
+
+  await downloadPdf();
+  setPageLoading(false);
+  toast.success("Xuất file thành công");
+}

@@ -98,7 +98,7 @@ export const styles = {
 		background: "white",
 		padding: "10px",
 		overflow: "scroll",
-		height: "calc(100vh - 200px)",
+		height: "calc(100vh - 160px)",
 		marginTop: "3px",
 	},
 	text_center: {
@@ -132,7 +132,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 	const timeXacMinh = seperateTime(thongTinBienBan?.ngayGioXacMinh);
 	const timeKetThuc = seperateTime(thongTinBienBan?.ngayGioKetThuc);
 	return (
-		<div style={styles.container} id="bien-ban-xac-minh">
+		<div style={styles.container} id="in-phieu-bien-ban-xac-minh">
 			<div style={styles.header}>
 				CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
 				<p>Độc lập - Tự do - Hạnh phúc</p>

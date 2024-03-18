@@ -1,27 +1,32 @@
-import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Button, Dropdown } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
 import { SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
-import { deleteSCYKById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
+import { deleteSCYKById, exportWordFile as exportWordBaoCaoSCYK } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
 import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import "./BienBanXacMinh.scss";
-import { initBienBanXacMinh, tableDSBienBanColumns } from "./const/constants";
+import { IN_PHIEU_DROPDOWN_BUTTONS, initBienBanXacMinh, tableDSBienBanColumns } from "./const/constants";
 import { IBienBanXacMinh } from "./models/BienBanXacMinhModel";
-import { getBienBanById, searchByPage } from "./services/BienBanXacMinhServices";
+import { exportWord as exportWordBienBanXacMinh, getBienBanById, searchByPage } from "./services/BienBanXacMinhServices";
 import DialogThemMoiBienBan from "./components/DialogThemMoiBienBan";
 import { convertBooleanToNumber, seperateTime } from "../utils/FormatUtils";
-import FilterSearchContainer from "../bao-cao-su-co-y-khoa/FilterSearchContainer";
+import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
 import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
 import BienBanXacMinhDetail from "./components/BienBanXacMinhDetail";
-import { handlePrint } from "../utils/FunctionUtils";
+import { exportToFile, handleExportPdf, handlePrint } from "../utils/FunctionUtils";
+import AppContext from "../../AppContext";
+import DropdownButton from "../component/button/DropdownButton";
 
 type Props = {};
 
+
+
 const BienBanXacMinh = (props: Props) => {
+    const { setPageLoading } = useContext(AppContext);
     const [openThemMoiBienBan, setOpenThemMoiBienBan] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
         pageNumber: 1,
@@ -34,6 +39,10 @@ const BienBanXacMinh = (props: Props) => {
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
     const [tabList, setTabList] = useState<any>([]);
+    const [exportFileDropdown, setExportFileDropdown] = useState([{
+        title: "",
+        handleClick: () => {},
+    }]);
 
     const handleSearch = () => {
         updatePageData({
@@ -51,8 +60,9 @@ const BienBanXacMinh = (props: Props) => {
 
     const getDSBienBan = async (searchData: any) => {
         try {
+            setPageLoading(true);
             const { data } = await searchByPage(searchData);
-            await getThongTinBienBan(data?.data?.data[indexRowSelected || 0]?.id)
+            data?.data?.data?.length > 0 && await getThongTinBienBan(data?.data?.data[indexRowSelected || 0]?.id);
             await setDsBienBan(data?.data?.data);
             setIndexRowSelected(0);
             setConfigTable({
@@ -62,7 +72,9 @@ const BienBanXacMinh = (props: Props) => {
                 totalPages: data.data.totalPages,
                 numberOfElements: data.data.numberOfElements,
             })
+            setPageLoading(false);
         } catch (err) {
+            setPageLoading(false);
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
@@ -115,6 +127,10 @@ const BienBanXacMinh = (props: Props) => {
         !thongTinBienBan?.id && await getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
         setOpenThemMoiBienBan(true);
     }
+    const handleCloseModal = async () => {
+        !thongTinBienBan?.id && await getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
+        setOpenThemMoiBienBan(false);
+    }
 
     useEffect(() => {
         !isNaN(indexRowSelected) && getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
@@ -138,6 +154,48 @@ const BienBanXacMinh = (props: Props) => {
                 component: <>Tài liệu đính kèm</>
             }
         ])
+
+        setExportFileDropdown([
+            {
+                title: "Báo cáo scyk.docx",
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinBienBan?.suCoResp?.id && exportWordBaoCaoSCYK(thongTinBienBan?.suCoResp?.id), 
+                    fileName: "Báo cáo scyk",
+                    type: TYPE.WORD,
+                    setPageLoading
+                }),
+            },
+            {
+                title: "Báo cáo scyk.pdf",
+                handleClick: () => {
+                    handleExportPdf({
+                        elementId: "in-phieu-bao-cao-scyk",
+                        fileName: "Báo cáo scyk",
+                        setPageLoading
+                    })
+                }
+            },
+            {
+                title: "Biên bản xác minh.docx",
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinBienBan?.id && exportWordBienBanXacMinh(thongTinBienBan?.id), 
+                    fileName: "Biên bản xác minh",
+                    type: TYPE.WORD,
+                    setPageLoading
+                }),
+            },
+            {
+                title: "Biên bản xác minh.pdf",
+                handleClick: () => {
+                    handleExportPdf({
+                        elementId: "in-phieu-bien-ban-xac-minh",
+                        fileName: "Biên bản xác minh",
+                        setPageLoading
+                    })
+                }
+                
+            }
+        ])
     }, [thongTinBienBan])
 
     return (
@@ -155,7 +213,7 @@ const BienBanXacMinh = (props: Props) => {
                 />
                 <div>
                     <TableCustom
-                        height={"calc(100vh - 340px)"}
+                        height={"calc(100vh - 315px)"}
                         id="profile2"
                         columns={tableDSBienBanColumns}
                         data={dsBienBan}
@@ -203,14 +261,14 @@ const BienBanXacMinh = (props: Props) => {
                         >
                             Sửa
                         </Button>
-                        <Button className="button-primary">
-                            Xuất file
-                        </Button>
-                        <Button className="button-primary"
-                            onClick={() => handlePrint("bien-ban-xac-minh")}
-                        >
-                            In phiếu
-                        </Button>
+                        <DropdownButton 
+                            title="Xuất file"
+                            dropdownItems={exportFileDropdown}
+                        />
+                        <DropdownButton 
+                            title="In phiếu"
+                            dropdownItems={IN_PHIEU_DROPDOWN_BUTTONS}
+                        />
                     </div>
                 </div>
                 <div className="tt-tabs">
@@ -234,7 +292,7 @@ const BienBanXacMinh = (props: Props) => {
                 <DialogThemMoiBienBan
                     thongTinBienBan={thongTinBienBan}
                     updatePageData={updatePageData}
-                    handleClose={() => setOpenThemMoiBienBan(false)} 
+                    handleClose={handleCloseModal} 
                 />
             )}
             <iframe
