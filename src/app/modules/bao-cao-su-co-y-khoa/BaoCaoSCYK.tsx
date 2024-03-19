@@ -1,17 +1,16 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useContext, useEffect } from "react"
-import { Button, Dropdown } from "react-bootstrap";
-import InputSearch from "../component/InputSearch";
+import { useContext, useEffect } from "react"
+import { Button } from "react-bootstrap";
 import "./BaoCaoSCYK.scss";
-import { InitThongTinSCYK, dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constants";
+import { SCYK_DETAIL_INFO_INIT, tableDSSuCoYKhoaColumns } from "./const/constants";
 import { useState } from "react";
 import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
 import { KTSVG } from "../../../_metronic/helpers";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import TabMenu from "../component/tabs/TabMenu";
-import { deleteSCYKById, getSCYKById, searchByPage, exportWordFile as exportWordBaoCaoSCYK } from "./services/BaoCaoSCYKServices";
-import { MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
+import { deleteSCYKById, searchByPage, exportWordFile as exportWordBaoCaoSCYK, getScykInfoDetailById } from "./services/BaoCaoSCYKServices";
+import { IMedicalIncidentDetailInfo, MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
 import { toast } from "react-toastify";
 import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
@@ -23,6 +22,7 @@ import AppContext from "../../AppContext";
 import BienBanXacMinhDetail from "../bien-ban-xac-minh/components/BienBanXacMinhDetail";
 import DropdownButton from "../component/button/DropdownButton";
 import { exportWord as exportWordBienBanXacMinh} from "../bien-ban-xac-minh/services/BienBanXacMinhServices";
+import PhanTichsScykDetail from "../phan-tich-scyk/components/PhanTichScykDetail";
 
 type Props = {};
 
@@ -35,7 +35,7 @@ const BaoCaoSCYK = (props: Props) => {
         pageSize: 10,
     })
     const [dsBaoCaoSCYK, setDsBaoCaoSCYK] = useState<MedicalIncidentInfo[]>([]);
-    const [thongTinSCYK, setThongTinSCYK] = useState<MedicalIncidentInfo>(InitThongTinSCYK);
+    const [thongTinSCYK, setThongTinSCYK] = useState<IMedicalIncidentDetailInfo>(SCYK_DETAIL_INFO_INIT);
     const [configTable, setConfigTable] = useState<any>({});
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
     const [openDialogTiepNhan, setOpenDialogTiepNhan] = useState(false)
@@ -88,18 +88,25 @@ const BaoCaoSCYK = (props: Props) => {
     };
 
     const getThongTinSCYK = async (scykId: any) => {
-        const res = await getSCYKById(scykId as string);
-        setThongTinSCYK(res.data.data)
+        try {
+            setPageLoading(true);
+            const res = await getScykInfoDetailById(scykId as string);
+            setThongTinSCYK(res.data.data);
+            setPageLoading(false);
+        } catch (error) {
+            setPageLoading(false);
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
     }
 
     const handleDeleteSCYK = async () => {
         try {
-            if (thongTinSCYK.id) {
-                const res = await deleteSCYKById(thongTinSCYK.id)
+            if (thongTinSCYK?.suCoResp?.id) {
+                const res = await deleteSCYKById(thongTinSCYK?.suCoResp?.id)
                 if (res?.data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
                     toast.success(res.data?.message)
                     setShouldOpenConfirmDeleteDialog(false)
-                    setThongTinSCYK(InitThongTinSCYK)
+                    setThongTinSCYK(SCYK_DETAIL_INFO_INIT)
                     updatePageData({});
                 }
             }
@@ -109,29 +116,28 @@ const BaoCaoSCYK = (props: Props) => {
     };
 
     const handleOpenUpdateModal = async () => {
-        !thongTinSCYK?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
+        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
         setOpenDialogThemMoiSCYK(true);
     }
+
     const handleCloseModal = async () => {
-        !thongTinSCYK?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
+        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
         setOpenDialogThemMoiSCYK(false);
     }
-
-
 
     useEffect(() => {
         const tabListTemp = [
             {
                 eventKey: "0",
                 title: "Báo cáo sự cố",
-                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK}/>,
+                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK?.suCoResp}/>,
             },
         ]
         const exportFileDropdownTemp = [
             {
                 title: "Báo cáo scyk.docx",
                 handleClick: () => exportToFile({
-                    exportAPI: () => thongTinSCYK?.id && exportWordBaoCaoSCYK(thongTinSCYK?.id), 
+                    exportAPI: () => thongTinSCYK?.suCoResp?.id && exportWordBaoCaoSCYK(thongTinSCYK?.suCoResp?.id), 
                     fileName: "Báo cáo scyk",
                     type: TYPE.WORD,
                     setPageLoading
@@ -155,62 +161,50 @@ const BaoCaoSCYK = (props: Props) => {
             }
         ]
 
-        switch(thongTinSCYK?.trangThaiXuLy) {
-            case MEDICAL_INCIDENT_REPORT_STATUS.DA_XAC_MINH: {
-                if(thongTinSCYK?.bienBanXacMinhResp) {
-                    tabListTemp.push({
-                        eventKey: "1",
-                        title: "Biên bản xác minh",
-                        component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp}/>
-                    });
-                    exportFileDropdownTemp.push(
-                        {
-                            title: "Biên bản xác minh.docx",
-                            handleClick: () => exportToFile({
-                                exportAPI: () => thongTinSCYK?.bienBanXacMinhResp?.id && exportWordBienBanXacMinh(thongTinSCYK?.bienBanXacMinhResp?.id), 
-                                fileName: "Biên bản xác minh",
-                                type: TYPE.WORD,
-                                setPageLoading
-                            }),
-                        },
-                        {
-                            title: "Biên bản xác minh.pdf",
-                            handleClick: () => {
-                                handleExportPdf({
-                                    elementId: "in-phieu-bien-ban-xac-minh",
-                                    fileName: "Biên bản xác minh",
-                                    setPageLoading
-                                })
-                            }
-                            
-                        }
-                    )
-                }
-                dropdownPhieuInList.push(
-                    {
-                        title: "Biên bản xác minh",
-                        handleClick: () => handlePrint("in-phieu-bien-ban-xac-minh"),
+        if(thongTinSCYK?.bienBanXacMinhResp) {
+            tabListTemp.push({
+                eventKey: "1",
+                title: "Biên bản xác minh",
+                component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp}/>
+            });
+            exportFileDropdownTemp.push(
+                {
+                    title: "Biên bản xác minh.docx",
+                    handleClick: () => exportToFile({
+                        exportAPI: () => thongTinSCYK?.bienBanXacMinhResp?.id && exportWordBienBanXacMinh(thongTinSCYK?.bienBanXacMinhResp?.id), 
+                        fileName: "Biên bản xác minh",
+                        type: TYPE.WORD,
+                        setPageLoading
+                    }),
+                },
+                {
+                    title: "Biên bản xác minh.pdf",
+                    handleClick: () => {
+                        handleExportPdf({
+                            elementId: "in-phieu-bien-ban-xac-minh",
+                            fileName: "Biên bản xác minh",
+                            setPageLoading
+                        })
                     }
-                )
-                break;
-            }
-            case MEDICAL_INCIDENT_REPORT_STATUS.DA_PHAN_TICH: {
-                tabListTemp.push({
-                    eventKey: "2",
-                    title: "Phân tích SCYK",
-                    component: <></>
-                })
-                break;
-            }
-            case MEDICAL_INCIDENT_REPORT_STATUS.TAO_BIEN_BAN: {
-                tabListTemp.push({
-                    eventKey: "3",
-                    title: "Biên bản họp",
-                    component: <></>
-                })
-                break;
-            }
+                    
+                }
+            )
+            dropdownPhieuInList.push(
+                {
+                    title: "Biên bản xác minh",
+                    handleClick: () => handlePrint("in-phieu-bien-ban-xac-minh"),
+                }
+            )
         }
+
+        if(thongTinSCYK?.phanTichResp) {
+            tabListTemp.push({
+                eventKey: "2",
+                title: "Phân tích SCYK",
+                component: <PhanTichsScykDetail phanTichScyk={thongTinSCYK?.phanTichResp}/>
+            });
+        }
+
         tabListTemp.push({
             eventKey: "4",
             title: "Tài liệu đính kèm",
@@ -232,7 +226,7 @@ const BaoCaoSCYK = (props: Props) => {
                     title="Danh sách báo cáo sự cố y khoa"
                     handleChangeSearchObj={setSearchObj}
                     handleCreate={() => {
-                        setThongTinSCYK(InitThongTinSCYK);
+                        setThongTinSCYK(SCYK_DETAIL_INFO_INIT);
                         setOpenDialogThemMoiSCYK(true);
                     }}
                     searchObj={searchObj}
@@ -244,7 +238,7 @@ const BaoCaoSCYK = (props: Props) => {
                         id="profile2"
                         columns={tableDSSuCoYKhoaColumns}
                         data={dsBaoCaoSCYK}
-                        dataChecked={[thongTinSCYK]}
+                        dataChecked={[thongTinSCYK.suCoResp]}
                         buttonAdd={false}
                         setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
@@ -309,8 +303,7 @@ const BaoCaoSCYK = (props: Props) => {
                         <Button 
                             className="button-primary"
                             onClick={() => setOpenDialogTiepNhan(true)}
-                            disabled={!(thongTinSCYK?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN)}
-                        
+                            disabled={!(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN)}
                         >
                            Tiếp nhận
                         </Button>
@@ -343,7 +336,7 @@ const BaoCaoSCYK = (props: Props) => {
 
             {openDialogThemMoiSCYK && (
                 <DialogThemMoiSCYK
-                    thongTinSCYK={thongTinSCYK}
+                    thongTinSCYK={thongTinSCYK?.suCoResp}
                     updatePageData={updatePageData}
                     handleClose={handleCloseModal}
                 />
@@ -352,7 +345,7 @@ const BaoCaoSCYK = (props: Props) => {
             {openDialogTiepNhan && (
                 <TiepNhanSCYKDialog
                     updatePageData={updatePageData}
-                    suCoId={thongTinSCYK?.id || ""}
+                    suCoId={thongTinSCYK?.suCoResp?.id || ""}
                     handleClose={() => setOpenDialogTiepNhan(false)}
                 />
             )}
