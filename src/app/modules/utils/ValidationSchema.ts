@@ -25,3 +25,8 @@ export const checkInvalidDate = (intl: any) => {
         return value ? newDate <= maxDate && newDate >= minDate : true;
     });
 }
+
+export const integerValidation = Yup.string()
+    .required("Bắt buộc nhập")
+    .nullable()
+    .test('is-integer', 'Vui lòng nhập một số nguyên', (value) => /^\d+$/.test(value || ""));
