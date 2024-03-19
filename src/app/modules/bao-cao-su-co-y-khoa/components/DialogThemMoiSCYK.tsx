@@ -18,7 +18,7 @@ import {
     OPTION_XAC_NHAN,
     OTHER_FIELD_LOAI_NBC,
     TT_NGUOI_THONG_BAO
-} from "../const/constanst";
+} from "../const/constants";
 import { MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
 import { addSCYK, updateSCYK } from "../services/BaoCaoSCYKServices";
 import LabelRequired from "./../../component/LabelRequired";

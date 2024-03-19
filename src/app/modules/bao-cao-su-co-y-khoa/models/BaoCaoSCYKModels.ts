@@ -1,4 +1,5 @@
 import { IBienBanXacMinh } from "../../bien-ban-xac-minh/models/BienBanXacMinhModel";
+import { IPhanTichScyk } from "../../phan-tich-scyk/models/PhanTichSCYKModels";
 
 export interface autocompleteOption {
   name: string,
@@ -61,6 +62,24 @@ export interface MedicalIncidentInfo {
   trangThaiXuLy: number;
   viTriCuThe: string;
   bienBanXacMinhResp?: IBienBanXacMinh;
+}
+
+export interface IMedicalIncidentDetailInfo {
+  benhNhanResp?: IBenhNhan;
+  suCoResp: MedicalIncidentInfo;
+  bienBanXacMinhResp: IBienBanXacMinh;
+  phanTichResp: IPhanTichScyk;
+  bienBanHopResp?: any;
+}
+
+export interface IBenhNhan {
+  code: string;
+  gioiTinh: string | number;
+  id: string;
+  khoaPhongDieuTriId: null;
+  name: string;
+  ngaySinh: string;
+  tenKhoaPhongDieuTri: string;
 }
 
 export interface ITiepNhan {

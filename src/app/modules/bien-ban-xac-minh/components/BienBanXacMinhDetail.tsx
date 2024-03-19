@@ -161,7 +161,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					<div style={styles.width._40persent}>
 						<span>Ông/bà:</span>{" "}
 						<span style={styles.content_text}>
-							{thongTinBienBan.tenNguoiChuTri}
+							{thongTinBienBan?.tenNguoiChuTri}
 						</span>
 					</div>
 					<div style={styles.width._60persent}>
@@ -177,7 +177,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					<div style={styles.width._40persent}>
 						<span>Ông/bà:</span>{" "}
 						<span style={styles.content_text}>
-							{thongTinBienBan.tenThanhVienDoan}
+							{thongTinBienBan?.tenThanhVienDoan}
 						</span>
 					</div>
 					<div style={styles.width._60persent}>
@@ -193,7 +193,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					<div style={styles.width._40persent}>
 						<span>Ông/bà:</span>{" "}
 						<span style={styles.content_text}>
-							{thongTinBienBan.tenNguoiChungKien}
+							{thongTinBienBan?.tenNguoiChungKien}
 						</span>
 					</div>
 					<div style={styles.width._60persent}>
@@ -209,7 +209,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				<div style={{ ...styles.contentTitle }}>
 					Với sự tham dự của:
 				</div>
-				{thongTinBienBan.nguoiThamDuXacMinhs.map((nguoiThamDu) => (
+				{thongTinBienBan?.nguoiThamDuXacMinhs?.map((nguoiThamDu) => (
 					<div>
 						Ông/bà:{" "}
 						<span style={styles.content_text}>{nguoiThamDu.name}</span>{" "}
@@ -226,7 +226,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				</div>
 				<div>
 					<span style={styles.content_text}>
-						{thongTinBienBan.veViec}
+						{thongTinBienBan?.veViec}
 					</span>
 				</div>
 				<div
@@ -249,17 +249,17 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				</div>
 				<div>
 					<span style={styles.content_text}>
-						{thongTinBienBan.yKien}
+						{thongTinBienBan?.yKien}
 					</span>
 				</div>
 				<div>
 					Biên bản này gồm có{" "}
 					<span style={styles.content_text}>
-						{thongTinBienBan.soTrang}
+						{thongTinBienBan?.soTrang}
 					</span>{" "}
 					trang, được lập thành{" "}
 					<span style={styles.content_text}>
-						{thongTinBienBan.soBan}
+						{thongTinBienBan?.soBan}
 					</span>{" "}
 					bản có nội dung và giá trị pháp lý như nhau. Biên bản này
 					được đọc cho những người có tên phía trên nghe, công nhận

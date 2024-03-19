@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from "react"
 import { Button, Dropdown } from "react-bootstrap";
 import InputSearch from "../component/InputSearch";
 import "./BaoCaoSCYK.scss";
-import { InitThongTinSCYK, dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constanst";
+import { InitThongTinSCYK, dsTabThongTinSCYK, tableDSSuCoYKhoaColumns } from "./const/constants";
 import { useState } from "react";
 import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
 import { KTSVG } from "../../../_metronic/helpers";
@@ -240,7 +240,7 @@ const BaoCaoSCYK = (props: Props) => {
                 />
                 <div>
                     <TableCustom
-                        height={"calc(100vh - 340px)"}
+                        height={"calc(100vh - 315px)"}
                         id="profile2"
                         columns={tableDSSuCoYKhoaColumns}
                         data={dsBaoCaoSCYK}
@@ -327,7 +327,7 @@ const BaoCaoSCYK = (props: Props) => {
                             Xóa
                         </Button>
                         <DropdownButton 
-                            title="In phiếu"
+                            title="Xuất file"
                             dropdownItems={exportFileDropdown}
                         />
                         <DropdownButton 

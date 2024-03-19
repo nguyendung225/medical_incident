@@ -1,6 +1,8 @@
+import { initBienBanXacMinh } from "../../bien-ban-xac-minh/const/constants";
+import { PHAN_TICH_SCYK_INFO_INIT } from "../../phan-tich-scyk/constants/constants";
 import { convertGenderToString, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
-import { MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
-import { ITiepNhan } from './../models/BaoCaoSCYKModels';
+import { IMedicalIncidentDetailInfo, MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
+import { ITiepNhan } from '../models/BaoCaoSCYKModels';
 
 export const OPTION_MUC_DO_AH = [
     { name: "Nặng", code: 1 },
@@ -92,16 +94,16 @@ export const tableDSSuCoYKhoaColumns = [
         name: "Họ và tên",
         field: "",
         headerStyle: {
-            minWidth: "190px"
+            minWidth: "200px"
         },
         cellStyle: {
             textAlign: "left"
         },
         render: (row: any) => (
-            row?.tenBenhNhan && (
+            row?.benhNhan && (
                 <div className="d-flex flex-column text-up">
-                    <span className="text-uppercase">{row?.tenBenhNhan}</span>
-                    <span>{row?.maBenhNhan} - {convertGenderToString(row?.gioiTinh)} - {formatDateToString(row?.ngaySinh)}</span>
+                    <span className="text-uppercase">{row?.benhNhan?.name}</span>
+                    <span>{row?.benhNhan?.code} - {convertGenderToString(row?.benhNhan?.gioiTinh)} - {formatDateToString(row?.benhNhan?.ngaySinh)}</span>
                 </div>
             )
         )
@@ -262,4 +264,11 @@ export const initTiepNhan: ITiepNhan = {
     khoaPhongXuLy: "",
     phuongAnXuLy: "",
     suCoId:""
+}
+
+export const SCYK_DETAIL_INFO_INIT: IMedicalIncidentDetailInfo = {
+    benhNhanResp: undefined,
+    suCoResp: InitThongTinSCYK,
+    bienBanXacMinhResp: initBienBanXacMinh,
+    phanTichResp: PHAN_TICH_SCYK_INFO_INIT,
 }

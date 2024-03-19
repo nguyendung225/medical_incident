@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import LabelRequired from '../../component/LabelRequired';
 import TextField from '../../component/TextField';
 import Autocomplete from '../../component/input-field/Autocomplete';
-import { initTiepNhan, KHOA_PHONG } from '../const/constanst';
+import { initTiepNhan, KHOA_PHONG } from '../const/constants';
 import *as Yup  from 'yup';
 import { ITiepNhan } from '../models/BaoCaoSCYKModels';
 import { tiepNhanSCYK } from '../services/BaoCaoSCYKServices';
