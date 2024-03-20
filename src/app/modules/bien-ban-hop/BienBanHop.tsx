@@ -21,6 +21,7 @@ import { getBienBanHopById, searchByPage } from "./services/BienBanHopServices";
 import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
 import BienBanXacMinhDetail from "../bien-ban-xac-minh/components/BienBanXacMinhDetail";
 import PhanTichScykDetail from "../phan-tich-scyk/components/PhanTichScykDetail";
+import BienBanHopDetail from "./components/BienBanHopDetail";
 
 type Props = {};
 
@@ -152,7 +153,7 @@ const BienBanHop = (props: Props) => {
             {
                 eventKey: "3",
                 title: "Biên bản họp",
-                component: <>Biên bản họp</>,
+                component: <BienBanHopDetail thongTinBienBan={thongTinSCYK?.bienBanHopResp}/>,
             },
             {
                 eventKey: "4",
@@ -169,7 +170,7 @@ const BienBanHop = (props: Props) => {
                 <FilterSearchContainer
                     title="Danh sách biên bản họp"
                     handleCreate={() => {
-                        // setThongTinBienBan(initBienBanHop);
+                        setThongTinSCYK(SCYK_DETAIL_INFO_INIT);
                         setOpenThemMoiBienBan(true);
                     }}
                     searchObj={searchObj}

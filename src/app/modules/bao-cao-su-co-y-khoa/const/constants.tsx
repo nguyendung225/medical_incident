@@ -305,6 +305,10 @@ export const printStyles = {
 		display: "flex",
 		justifyContent: "space-between",
 	},
+	d_flex_j_center: {
+		display: "flex",
+		justifyContent: "center",
+	},
 	width: {
 		_30persent: {
 			width: "30%",
@@ -319,11 +323,14 @@ export const printStyles = {
 			width: "60%",
 		},
 	},
-	marginLeft: {
-		_10px: {
-			marginLeft: "10px",
-		},
-	},
+    marginLeft: {
+        _10px: {
+            marginLeft: "10px",
+        },
+        _180px: {
+            marginLeft: "180px",
+        },
+    },
 	marginTop: {
 		_0px: {
 			marginTop: "0",
