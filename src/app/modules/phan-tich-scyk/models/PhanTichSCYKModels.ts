@@ -3,7 +3,10 @@ import { MedicalIncidentInfo } from "../../bao-cao-su-co-y-khoa/models/BaoCaoSCY
 export interface IPhanTichScyk {
   id: string;
   suCoId: string;
+  tenSuCo: string;
   moTa: string;
+  toKhaiLietKe: boolean;
+  fileDinhKems: string[];
   thucHienQuyTrinhChuyenMon: string[];
   nhiemKhuanBenhVien: string[];
   thuocVaDichTruyen: string[];
@@ -27,14 +30,15 @@ export interface IPhanTichScyk {
   hanhDongXuLy: string;
   deXuatKhuyenCaoPhongNgua: string;
   moTaKetQuaPhatHien: string;
-  thaoLuanDuaKhuyenCaoNbc: 0;
-  phuHopVoiKhuyenCao: 0;
+  thaoLuanDuaKhuyenCaoNbc: 1;
+  phuHopVoiKhuyenCao: 1;
   cuTheKhuyenCao: string;
   tonHaiNguoiBenh: string;
   tonHaiToChuc: string[];
   tonHaiToChucKhacText: string;
   tenNguoiPhanTich: string;
   chucDanhNguoiPhanTich: string;
+  gioNgayPhanTich: string;
   ngayPhanTich: string;
   gioPhanTich: string;
   trangThaiXuLy: string | number;

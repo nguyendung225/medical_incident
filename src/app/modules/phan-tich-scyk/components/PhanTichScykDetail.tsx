@@ -11,7 +11,7 @@ import {
     MUC_DO_TON_THUONG_TREN_TO_CHUC_OPTIONS,
     NHAN_VIEN_HOAC_NGUOI_BENH_OPTIONS,
     NHIEM_KHUAN_BENH_VIEN_OPTIONS,
-    QUAN_LY_NGUYON_LUC_TO_CHUC_OPTIONS,
+    QUAN_LY_NGUON_LUC_TO_CHUC_OPTIONS,
     TAI_NAN_DOI_VOI_NGUOI_BENH_OPTIONS,
     THIET_BI_Y_TE_OPTIONS,
     THUOC_VA_DICH_TRUYEN_OPTIONS,
@@ -124,7 +124,7 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                 ))}
             </div>
             <div style={{ ...printStyles.fontWeight.bold, ...printStyles.marginTop._10px }}>9. Quản lý nguồn lực, tổ chức</div>
-            {QUAN_LY_NGUYON_LUC_TO_CHUC_OPTIONS.map(item => (
+            {QUAN_LY_NGUON_LUC_TO_CHUC_OPTIONS.map(item => (
                 <div style={printStyles.d_flex_align_center}>
                     <div style={printStyles.box_square}>
                         <span style={phanTichScyk?.quanLyNguonLucToChuc?.includes(item.code.toString()) ? printStyles.checked : printStyles.d_none}>&#10003;</span>
