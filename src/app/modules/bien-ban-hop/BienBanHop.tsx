@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
 import AppContext from "../../AppContext";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
-import { KHOA_PHONG } from "../bao-cao-su-co-y-khoa/const/constants";
-import { SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
-import { deleteSCYKById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
+import { KHOA_PHONG, SCYK_DETAIL_INFO_INIT } from "../bao-cao-su-co-y-khoa/const/constants";
+import { IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
+import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import { IN_PHIEU_DROPDOWN_BUTTONS, tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
 import DropdownButton from "../component/button/DropdownButton";
 import TableCustom from "../component/table/table-custom/TableCustom";
@@ -18,6 +18,9 @@ import DialogThemMoiBienBanHop from "./components/DialogThemMoiBienBanHop";
 import { initBienBanHop } from "./const/constants";
 import { IBienBanHop } from "./model/BienBanHopModel";
 import { getBienBanHopById, searchByPage } from "./services/BienBanHopServices";
+import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
+import BienBanXacMinhDetail from "../bien-ban-xac-minh/components/BienBanXacMinhDetail";
+import PhanTichScykDetail from "../phan-tich-scyk/components/PhanTichScykDetail";
 
 type Props = {};
 
@@ -29,8 +32,7 @@ const BienBanHop = (props: Props) => {
         pageSize: 10,
     })
     const [dsBienBan, setDsBienBan] = useState<IBienBanHop[]>([]);
-    const [thongTinBienBan, setThongTinBienBan] =
-        useState<IBienBanHop>(initBienBanHop);
+    const [thongTinSCYK, setThongTinSCYK] = useState<IMedicalIncidentDetailInfo>(SCYK_DETAIL_INFO_INIT);
     const [configTable, setConfigTable] = useState<any>({});
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
     const [tabList, setTabList] = useState<any>([]);
@@ -57,7 +59,7 @@ const BienBanHop = (props: Props) => {
         try {
             setPageLoading(true);
             const { data } = await searchByPage(searchData);
-            data?.data?.data?.length > 0 && await getThongTinBienBan(data?.data?.data[indexRowSelected || 0]?.id);
+            data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.suCoId);
             setDsBienBan(data?.data?.data);
             setIndexRowSelected(0);
             setConfigTable({
@@ -101,24 +103,65 @@ const BienBanHop = (props: Props) => {
         return formatData
     }
 
-    const getThongTinBienBan = async (bienBanId: string) => {
-        const { data: { data } } = await getBienBanHopById(bienBanId as string);
-        setThongTinBienBan(formatDataBienBan(data));
+    const getThongTinSCYK = async (scykId: any) => {
+        try {
+            setPageLoading(true);
+            const { data: { data } } = await getScykInfoDetailById(scykId as string);
+            setThongTinSCYK({
+                ...data,
+                bienBanHopResp: formatDataBienBan(data?.bienBanHopResp),
+            });
+            setPageLoading(false);
+        } catch (error) {
+            setPageLoading(false);
+            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        }
     }
 
     const handleOpenUpdateModal = async () => {
-        !thongTinBienBan?.id && await getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
+        !thongTinSCYK?.bienBanHopResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId);
         setOpenThemMoiBienBan(true);
     }
 
     const handleCloseModal = async () => {
-        !thongTinBienBan?.id && await getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
+        !thongTinSCYK?.bienBanHopResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId);
         setOpenThemMoiBienBan(false);
     }
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinBienBan(dsBienBan[indexRowSelected]?.id)
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId);
     }, [indexRowSelected])
+
+    useEffect(() => {
+        const tabListTemp = [
+            {
+                eventKey: "0",
+                title: "Báo cáo sự cố",
+                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK?.suCoResp} />,
+            },
+            {
+                eventKey: "1",
+                title: "Biên bản xác minh",
+                component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp} />,
+            },
+            {
+                eventKey: "2",
+                title: "Phân Tích sự cố",
+                component: <PhanTichScykDetail phanTichScyk={thongTinSCYK?.phanTichResp}/>,
+            },
+            {
+                eventKey: "3",
+                title: "Biên bản họp",
+                component: <>Biên bản họp</>,
+            },
+            {
+                eventKey: "4",
+                title: "Tài liệu đính kèm",
+                component: <>Tài liệu đính kèm</>
+            }
+        ]
+        setTabList(tabListTemp)
+    }, [thongTinSCYK])
 
     return (
         <div className="bien-ban-xm-container">
@@ -126,7 +169,7 @@ const BienBanHop = (props: Props) => {
                 <FilterSearchContainer
                     title="Danh sách biên bản họp"
                     handleCreate={() => {
-                        setThongTinBienBan(initBienBanHop);
+                        // setThongTinBienBan(initBienBanHop);
                         setOpenThemMoiBienBan(true);
                     }}
                     searchObj={searchObj}
@@ -135,11 +178,11 @@ const BienBanHop = (props: Props) => {
                 />
                 <div>
                     <TableCustom
-                        height={"calc(100vh - 315px)"}
+                        height={"calc(100vh - 255px)"}
                         id="profile2"
                         columns={tableDSBienBanColumns}
                         data={dsBienBan}
-                        dataChecked={[thongTinBienBan]}
+                        dataChecked={[thongTinSCYK?.bienBanHopResp]}
                         buttonAdd={false}
                         setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
@@ -200,7 +243,10 @@ const BienBanHop = (props: Props) => {
 
             {openThemMoiBienBan && (
                 <DialogThemMoiBienBanHop
-                    thongTinBienBan={thongTinBienBan}
+                    thongTinBienBan={{
+                        ...thongTinSCYK?.bienBanHopResp,
+                        suCoResp: thongTinSCYK?.suCoResp,
+                    }}
                     updatePageData={updatePageData}
                     handleClose={handleCloseModal}
                 />
