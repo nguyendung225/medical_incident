@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
 import AppContext from "../../AppContext";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
-import { KHOA_PHONG, RenderTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
-import { IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
+import { KHOA_PHONG, getTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
+import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import { tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
 import DropdownButton from "../component/button/DropdownButton";
@@ -17,6 +17,7 @@ import "./BienBanHop.scss";
 import DialogThemMoiBienBanHop from "./components/DialogThemMoiBienBanHop";
 import { IBienBanHop } from "./model/BienBanHopModel";
 import { searchByPage } from "./services/BienBanHopServices";
+import { tab } from "../models/tabModels";
 
 type Props = {};
 
@@ -31,12 +32,9 @@ const BienBanHop = (props: Props) => {
     const [thongTinSCYK, setThongTinSCYK] = useState<IMedicalIncidentDetailInfo>(SCYK_DETAIL_INFO_INIT);
     const [configTable, setConfigTable] = useState<any>({});
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
-    const [tabList, setTabList] = useState<any>([]);
-    const [phieuInList, setPhieuInList] = useState<any>([]);
-    const [exportedFileList, setExportedFileList] = useState([{
-        title: "",
-        handleClick: () => { },
-    }]);
+    const [tabList, setTabList] = useState<tab[]>([]);
+    const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
+    const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
 
     const handleSearch = () => {
         updatePageData({
@@ -130,7 +128,7 @@ const BienBanHop = (props: Props) => {
     }, [indexRowSelected])
 
     useEffect(() => {
-        setTabList(RenderTabList(thongTinSCYK));
+        setTabList(getTabList(thongTinSCYK));
         setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
         setPhieuInList(getPhieuInList(thongTinSCYK));
     }, [thongTinSCYK])

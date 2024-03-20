@@ -21,7 +21,7 @@ const DropdownButton = ({title, dropdownItems} : TProps) => {
                 {title}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-                {dropdownItems.map((dropdownItem) => (
+                {dropdownItems?.map((dropdownItem) => (
                     <Dropdown.Item
                         onClick={() => dropdownItem.handleClick()}
                     >

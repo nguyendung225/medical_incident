@@ -1,30 +1,26 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { Button, Dropdown } from "react-bootstrap";
+import { useContext, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
-import { IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
-import { deleteSCYKById, exportWordFile as exportWordBaoCaoSCYK, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
+import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
+import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
 import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import "./BienBanXacMinh.scss";
-import { IN_PHIEU_DROPDOWN_BUTTONS, initBienBanXacMinh, tableDSBienBanColumns } from "./const/constants";
+import { tableDSBienBanColumns } from "./const/constants";
 import { IBienBanXacMinh } from "./models/BienBanXacMinhModel";
-import { exportWord as exportWordBienBanXacMinh, getBienBanById, searchByPage } from "./services/BienBanXacMinhServices";
+import { searchByPage } from "./services/BienBanXacMinhServices";
 import DialogThemMoiBienBan from "./components/DialogThemMoiBienBan";
 import { convertBooleanToNumber, seperateTime } from "../utils/FormatUtils";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
-import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
-import BienBanXacMinhDetail from "./components/BienBanXacMinhDetail";
-import { exportToFile, handleExportPdf, handlePrint } from "../utils/FunctionUtils";
 import AppContext from "../../AppContext";
 import DropdownButton from "../component/button/DropdownButton";
-import { InitThongTinSCYK, SCYK_DETAIL_INFO_INIT } from "../bao-cao-su-co-y-khoa/const/constants";
+import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList } from "../bao-cao-su-co-y-khoa/const/constants";
+import { tab } from "../models/tabModels";
 
 type Props = {};
-
-
 
 const BienBanXacMinh = (props: Props) => {
     const { setPageLoading } = useContext(AppContext);
@@ -39,11 +35,9 @@ const BienBanXacMinh = (props: Props) => {
     const [configTable, setConfigTable] = useState<any>({});
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
-    const [tabList, setTabList] = useState<any>([]);
-    const [exportFileDropdown, setExportFileDropdown] = useState([{
-        title: "",
-        handleClick: () => {},
-    }]);
+    const [tabList, setTabList] = useState<tab[]>([]);
+    const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
+    const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
 
     const handleSearch = () => {
         updatePageData({
@@ -142,65 +136,9 @@ const BienBanXacMinh = (props: Props) => {
     }, [indexRowSelected])
 
     useEffect(() => {
-        setTabList([
-            {
-                eventKey: "0",
-                title: "Báo cáo sự cố",
-                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK?.suCoResp || InitThongTinSCYK}/>,
-            },
-            {
-                eventKey: "1",
-                title: "Biên bản xác minh",
-                component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp} />
-            },
-            {
-                eventKey: "2",
-                title: "Tài liệu đính kèm",
-                component: <>Tài liệu đính kèm</>
-            }
-        ])
-
-        setExportFileDropdown([
-            {
-                title: "Báo cáo scyk.docx",
-                handleClick: () => exportToFile({
-                    exportAPI: () => thongTinSCYK?.suCoResp?.id && exportWordBaoCaoSCYK(thongTinSCYK?.suCoResp?.id), 
-                    fileName: "Báo cáo scyk",
-                    type: TYPE.WORD,
-                    setPageLoading
-                }),
-            },
-            {
-                title: "Báo cáo scyk.pdf",
-                handleClick: () => {
-                    handleExportPdf({
-                        elementId: "in-phieu-bao-cao-scyk",
-                        fileName: "Báo cáo scyk",
-                        setPageLoading
-                    })
-                }
-            },
-            {
-                title: "Biên bản xác minh.docx",
-                handleClick: () => exportToFile({
-                    exportAPI: () => thongTinSCYK?.bienBanXacMinhResp?.id && exportWordBienBanXacMinh(thongTinSCYK?.bienBanXacMinhResp?.id), 
-                    fileName: "Biên bản xác minh",
-                    type: TYPE.WORD,
-                    setPageLoading
-                }),
-            },
-            {
-                title: "Biên bản xác minh.pdf",
-                handleClick: () => {
-                    handleExportPdf({
-                        elementId: "in-phieu-bien-ban-xac-minh",
-                        fileName: "Biên bản xác minh",
-                        setPageLoading
-                    })
-                }
-                
-            }
-        ])
+        setTabList(getTabList(thongTinSCYK));
+        setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
+        setPhieuInList(getPhieuInList(thongTinSCYK));
     }, [thongTinSCYK])
 
     return (
@@ -268,11 +206,11 @@ const BienBanXacMinh = (props: Props) => {
                         </Button>
                         <DropdownButton 
                             title="Xuất file"
-                            dropdownItems={exportFileDropdown}
+                            dropdownItems={exportedFileList}
                         />
                         <DropdownButton 
                             title="In phiếu"
-                            dropdownItems={IN_PHIEU_DROPDOWN_BUTTONS}
+                            dropdownItems={phieuInList}
                         />
                     </div>
                 </div>

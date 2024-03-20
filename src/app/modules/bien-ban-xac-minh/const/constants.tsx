@@ -154,14 +154,3 @@ export const STATUS_BIEN_BAN = {
     LUU_NHAP: 1,
     DA_XAC_MINH: 2
 }
-
-export const IN_PHIEU_DROPDOWN_BUTTONS = [
-    {
-        title: "Báo cáo scyk",
-        handleClick: () => handlePrint("in-phieu-bao-cao-scyk"),
-    },
-    {
-        title: "Biên bản xác minh",
-        handleClick: () => handlePrint("in-phieu-bien-ban-xac-minh"),
-    }
-]

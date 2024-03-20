@@ -20,17 +20,19 @@ import {
     YEU_TO_BEN_NGOAI_OPTIONS
 } from "../constants/constants";
 import { IPhanTichScyk } from "../models/PhanTichSCYKModels";
+import { MedicalIncidentInfo } from "../../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 
 type TProps = {
-    phanTichScyk: IPhanTichScyk
+    phanTichScyk: IPhanTichScyk,
+    thongTinScyk: MedicalIncidentInfo,
 }
 
-const PhanTichsScykDetail = ({ phanTichScyk }: TProps) => {
-    console.log(phanTichScyk);
+const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
+
     return (
-        <div style={printStyles.container} id="in-phieu-bien-ban-xac-minh">
+        <div style={printStyles.container} id="in-phieu-phan-tich-scyk">
             <div style={printStyles.formTitle}>PHIẾU TÌM HIỂU VÀ PHÂN TÍCH SỰ CỐ</div>
-            <div style={printStyles.fontWeight.bold}>Số báo cáo/Mã số sự cố:</div>
+            <div style={printStyles.fontWeight.bold}>Số báo cáo/Mã số sự cố: {thongTinScyk?.code}</div>
             <div style={printStyles.contentTitle}>A. Dành cho nhân viên chuyên trách</div>
             <div style={printStyles.contentTitle}>I. Mô tả chi tiết sự cổ</div>
             <div>{phanTichScyk?.moTa}</div>
