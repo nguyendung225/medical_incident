@@ -19,7 +19,7 @@ import { getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSC
 import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { phanTichScykTableColumns } from "./constants/constants";
 import { tab } from "../models/tabModels";
-import DialogThemMoiPhanTich from "./components/DialogThemMoiPhanTich";
+import DialogThemMoiPhanTich from './components/DialogThemMoiPhanTich';
 
 type Props = {};
 

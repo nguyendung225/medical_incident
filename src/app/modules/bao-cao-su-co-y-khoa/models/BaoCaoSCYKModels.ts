@@ -93,3 +93,14 @@ export interface IDropdownButton {
     title: string;
     handleClick: () => void;
 }
+
+export interface IKetLuanSCYK {
+    lyDo: string;
+    suCoId: string;
+    nguoiKetLuanId: string;
+    maChucVu?: string;
+    tenChucVu?: string;
+    maKhoaPhong?: string;
+    tenKhoaPhong?: string;
+    ghiChu: string;
+}

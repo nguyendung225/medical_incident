@@ -20,6 +20,7 @@ const TRANG_THAI_OPTIONS = [
     { name: "Đã phân tích", code: "5" },
     { name: "Tạo biên bản", code: "6" },
     { name: "Đã báo cáo", code: "7" },
+    { name: "Đã kết luận", code: "8" },
 ]
 
 const HINH_THUC_OPTIONS = [

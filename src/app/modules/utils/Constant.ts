@@ -327,5 +327,6 @@ export const MEDICAL_INCIDENT_REPORT_STATUS =  {
     DA_XAC_MINH: 4,
     DA_PHAN_TICH: 5,
     TAO_BIEN_BAN: 6,
-    DA_BAO_CAO: 7
+    DA_BAO_CAO: 7,
+    DA_KET_LUAN: 8
 }

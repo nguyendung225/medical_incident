@@ -90,7 +90,7 @@ const handleResponse = (responseConfig: AxiosResponse<ResponseModel>) => {
       break
     case RESPONSE_STATUS_CODE.CREATED:
     case RESPONSE_STATUS_CODE.NO_CONTENT:
-      toast.success(data.message)
+    //   toast.success(data.message)
       break
     default:
       break

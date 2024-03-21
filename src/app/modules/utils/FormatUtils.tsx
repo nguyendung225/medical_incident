@@ -162,6 +162,8 @@ export const renderMedicalIncidentReportStatus = (reportStatus: number) => {
             return (<i className="bi bi-circle-fill spaces fs-10 color-gunmetal"></i>);
         case MEDICAL_INCIDENT_REPORT_STATUS.DA_BAO_CAO:
             return (<i className="bi bi-circle-fill spaces fs-10 color-primary"></i>);
+        case MEDICAL_INCIDENT_REPORT_STATUS.DA_KET_LUAN:
+            return (<i className="bi bi-circle-fill spaces fs-10 color-purple"></i>);
     }
 }
 

@@ -94,8 +94,9 @@ const DialogThemMoiBienBanHop = ({
                 code === RESPONSE_STATUS_CODE.CREATED ||
                 code === RESPONSE_STATUS_CODE.SUCCESS
             ) {
-                await fileUpload(values.fileDinhKems, thongTinBienBan?.id)
-                await deleteFileBienBanHop(getListDeleteItem(thongTinBienBan?.fileDinhKems, values.fileDinhKems))
+                values.fileDinhKems.some((item: any) => item instanceof File) && await fileUpload(values.fileDinhKems, thongTinBienBan?.id)
+                const listIdDelete = getListDeleteItem(thongTinBienBan?.fileDinhKems, values.fileDinhKems)
+                listIdDelete.length > 0 && await deleteFileBienBanHop(listIdDelete)
                 updatePageData({});
                 handleClose();
                 toast.success(message);

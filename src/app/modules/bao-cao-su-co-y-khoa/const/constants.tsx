@@ -8,7 +8,7 @@ import { TYPE } from "../../utils/Constant";
 import { convertGenderToString, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 import { exportToFile, handleExportPdf, handlePrint } from "../../utils/FunctionUtils";
 import BaoCaoSCYKDetail from "../components/BaoCaoSCYKDetail";
-import { IMedicalIncidentDetailInfo, MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
+import { IKetLuanSCYK, IMedicalIncidentDetailInfo, MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
 import { ITiepNhan } from '../models/BaoCaoSCYKModels';
 import { exportWordFile as exportWordBaoCaoSCYK} from "../services/BaoCaoSCYKServices";
 import { exportWord as exportWordBienBanXacMinh} from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
@@ -275,6 +275,13 @@ export const initTiepNhan: ITiepNhan = {
     khoaPhongXuLy: "",
     phuongAnXuLy: "",
     suCoId:""
+}
+
+export const initKetLuan: IKetLuanSCYK = {
+    lyDo: "",
+    suCoId: "",
+    nguoiKetLuanId: "",
+    ghiChu: ""
 }
 
 export const SCYK_DETAIL_INFO_INIT: IMedicalIncidentDetailInfo = {

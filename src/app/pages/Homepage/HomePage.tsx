@@ -1,4 +1,4 @@
-import { toAbsoluteUrl } from "../../../_metronic/helpers";
+import { KTSVG, toAbsoluteUrl } from "../../../_metronic/helpers";
 import "./homepage.scss";
 import { Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -72,13 +72,10 @@ const LinkButton = (props: LinkBtnProps) => {
       <Col xs={12} sm={6} md={colSize} xl={colSize} className="flex flex-center">
         <Link to={linkTo} onClick={() => setSubMenu(linkTo)}>
           <div className="link-button-container">
-            <button
-              type="button"
-              className="button-link"
-            >
+            <button type="button" className="button-link">
               <div className="cirle-animation cirle-animation-1"></div>
               <div className="cirle-animation cirle-animation-2"></div>
-              <Image src={toAbsoluteUrl(iconPath)} alt="image" />
+              <KTSVG svgClassName="spaces w-36 h-36" path={toAbsoluteUrl(iconPath)} />
             </button>
             <span className="button-text">{text}</span>
           </div>
@@ -120,19 +117,47 @@ export function HomePage() {
               <h2 className="title-software">{"PHẦN MỀM QUẢN LÝ SCYK"}</h2>
             </Col>
           </Row>
-          <Row className="flex flex-start">
-            <LinkButton
-              linkTo={"/ds-bao-cao-scyk"}
-              iconPath="/media/icons/homepage/profile.svg"
-              text={"Báo cáo SCYK"}
-              modulePermission={MODULE.HO_SO}
-            />
-            <LinkButton
-              linkTo={"/bien-ban-xac-minh"}
-              iconPath="/media/icons/homepage/profile.svg"
-              text={"Biên bản xác minh SCYK"}
-              modulePermission={MODULE.HO_SO}
-            />
+          <Row>
+            <Col xs={4}>
+              <LinkButton
+                linkTo={"/ds-bao-cao-scyk"}
+                iconPath="/media/svg/icons/warning-fill.svg"
+                text={"Báo cáo SCYK"}
+                modulePermission={MODULE.HO_SO}
+              />
+            </Col>
+            <Col xs={4}>
+              <LinkButton
+                linkTo={"/bien-ban-xac-minh"}
+                iconPath="/media/svg/icons/file-earmark-check-fill.svg"
+                text={"Biên bản xác minh SCYK"}
+                modulePermission={MODULE.HO_SO}
+              />
+            </Col>
+            <Col xs={4}>
+              <LinkButton
+                linkTo={"/phan-tich-scyk"}
+                iconPath="/media/svg/icons/info-square-fill.svg"
+                text={"Phân tích SCYK"}
+                modulePermission={MODULE.HO_SO}
+              />
+            </Col>
+            <Col xs={4}>
+              <LinkButton
+                linkTo={"/bien-ban-hop"}
+                iconPath="/media/svg/icons/folder-fill.svg"
+                text={"Biên bản hop"}
+                modulePermission={MODULE.HO_SO}
+              />
+            </Col>
+            <Col xs={4}>
+              <LinkButton
+                linkTo={"/bien-ban-hop"}
+                iconPath="/media/svg/icons/bookmark-fill.svg"
+                text={"Báo cáo cục"}
+                modulePermission={MODULE.HO_SO}
+              />
+            </Col>
           </Row>
         </div>
       </div>
