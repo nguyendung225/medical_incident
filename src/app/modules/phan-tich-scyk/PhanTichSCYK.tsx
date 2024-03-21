@@ -8,25 +8,18 @@ import TableCustom from "../component/table/table-custom/TableCustom";
 import { TYPE } from "../utils/Constant";
 import TabMenu from "../component/tabs/TabMenu";
 import { toast } from "react-toastify";
-import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
-import { exportToFile, handleExportPdf, handlePrint } from "../utils/FunctionUtils";
 import AppContext from "../../AppContext";
 import DropdownButton from "../component/button/DropdownButton";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
 import AdvancedSearchDialog from "../bao-cao-su-co-y-khoa/components/AdvancedSearchDialog";
 import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
-import { searchByPage, exportWord as exportWordPhanTichScyk } from "./services/PhanTichSCYKServices";
+import { searchByPage } from "./services/PhanTichSCYKServices";
 import { IPhanTichScyk } from "./models/PhanTichSCYKModels";
 import { getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
-import { InitThongTinSCYK, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList } from "../bao-cao-su-co-y-khoa/const/constants";
-import BienBanXacMinhDetail from "../bien-ban-xac-minh/components/BienBanXacMinhDetail";
-import { initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
+import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { phanTichScykTableColumns } from "./constants/constants";
-import PhanTichScykDetail from "./components/PhanTichScykDetail"; 
-import { exportWordFile as exportWordBaoCaoSCYK } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import { exportWord as exportWordBienBanXacMinh } from "../bien-ban-xac-minh/services/BienBanXacMinhServices";
 import { tab } from "../models/tabModels";
+import DialogThemMoiPhanTich from "./components/DialogThemMoiPhanTich";
 
 type Props = {};
 
@@ -40,7 +33,7 @@ const PhanTichSCYK = (props: Props) => {
     const [phanTichScykList, setPhanTichScykList] = useState<IPhanTichScyk[]>([]);
     const [thongTinSCYK, setThongTinSCYK] = useState<IMedicalIncidentDetailInfo>(SCYK_DETAIL_INFO_INIT);
     const [configTable, setConfigTable] = useState<any>({});
-    const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
+    const [shouldOpenDialogThemMoiPhanTichSCYK, setShouldOpenDialogThemMoiPhanTichSCYK] = useState(false)
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
     const [tabList, setTabList] = useState<tab[]>([]);
     const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
@@ -93,31 +86,15 @@ const PhanTichSCYK = (props: Props) => {
         }
     }
 
-    // const handleDeleteSCYK = async () => {
-    //     try {
-    //         if (thongTinSCYK.id) {
-    //             const res = await deleteSCYKById(thongTinSCYK.id)
-    //             if (res?.data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
-    //                 toast.success(res.data?.message)
-    //                 setShouldOpenConfirmDeleteDialog(false)
-    //                 setThongTinSCYK(InitThongTinSCYK)
-    //                 updatePageData({});
-    //             }
-    //         }
-    //     } catch (error) {
-    //         toast.error("Lỗi hệ thống, vui lòng thử lại!");
-    //     }
-    // };
+    const handleOpenUpdateModal = async () => {
+        !thongTinSCYK?.phanTichResp.id && await getThongTinSCYK(phanTichScykList[indexRowSelected]?.suCoId);
+        setShouldOpenDialogThemMoiPhanTichSCYK(true);
+    }
 
-    // const handleOpenUpdateModal = async () => {
-    //     !thongTinSCYK?.id && await getThongTinSCYK(phanTichScykList[indexRowSelected]?.id);
-    //     setOpenDialogThemMoiSCYK(true);
-    // }
-
-    // const handleCloseModal = async () => {
-    //     !thongTinSCYK?.id && await getThongTinSCYK(phanTichScykList[indexRowSelected]?.id);
-    //     setOpenDialogThemMoiSCYK(false);
-    // }
+    const handleCloseModal = async () => {
+        !thongTinSCYK?.phanTichResp.id && await getThongTinSCYK(phanTichScykList[indexRowSelected]?.suCoId);
+        setShouldOpenDialogThemMoiPhanTichSCYK(false);
+    }
 
     useEffect(() => {
         setTabList(getTabList(thongTinSCYK));
@@ -136,8 +113,8 @@ const PhanTichSCYK = (props: Props) => {
                     title="Danh sách phân tích sự cố y khoa"
                     handleChangeSearchObj={setSearchObj}
                     handleCreate={() => {
-                        // setThongTinSCYK(InitThongTinSCYK);
-                        // setOpenDialogThemMoiSCYK(true);
+                        setThongTinSCYK(SCYK_DETAIL_INFO_INIT);
+                        setShouldOpenDialogThemMoiPhanTichSCYK(true);
                     }}
                     searchObj={searchObj}
                     handleSearch={handleSearch}
@@ -153,7 +130,6 @@ const PhanTichSCYK = (props: Props) => {
                         setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
                         notDelete={false}
-                        // handleDelete={deleteSCYKById}
                         justFilter={true}
                         fixedColumnsCount={0}
                         noPagination={false}
@@ -188,7 +164,7 @@ const PhanTichSCYK = (props: Props) => {
                     <div className="d-flex spaces gap-10">
                         <Button
                             className="button-primary"
-                            // onClick={handleOpenUpdateModal}
+                            onClick={handleOpenUpdateModal}
                         >
                             Sửa
                         </Button>
@@ -206,24 +182,22 @@ const PhanTichSCYK = (props: Props) => {
                     <TabMenu danhsachTabs={tabList} />
                 </div>
             </div>
-
-            {shouldOpenConfirmDeleteDialog && (
-                <ConfirmDialog
-                    show={shouldOpenConfirmDeleteDialog}
-                    title={"Xác nhận xóa"}
-                    message={"Bạn có muốn xóa không ?"}
-                    yes={"Xác nhận"}
-                    // onYesClick={handleDeleteSCYK}
-                    cancel={"Hủy"}
-                    onCancelClick={() => setShouldOpenConfirmDeleteDialog(false)}
-                />
-            )}
             {shouldOpenAdvancedSearchDialog && (
                 <AdvancedSearchDialog
                     handleClose={() => setShouldOpenAdvancedSearchDialog(false)}
                     handleSearch={handleSearch}
                     searchObj={searchObj}
                     handleChangeSearchObj={(searchData: SearchObject) => setSearchObj(searchData)}
+                />
+            )}
+            {shouldOpenDialogThemMoiPhanTichSCYK && (
+                <DialogThemMoiPhanTich
+                    thongTinPhanTich={{
+                        ...thongTinSCYK.phanTichResp,
+                        suCoResp: thongTinSCYK.suCoResp
+                    }}
+                    updatePageData={updatePageData}
+                    handleClose={handleCloseModal}
                 />
             )}
             <iframe

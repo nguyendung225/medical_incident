@@ -7,7 +7,7 @@ export const fileUpload = (files: any, idFile?: any) => {
     if (file instanceof File) {
       formData.append(`files`, files[index]);
     }
-  })
+  });
   const config = {
     headers: {
       "Content-Type": "multipart/form-data",

@@ -21,3 +21,22 @@ export const exportWord = (id: string) => {
         responseType: "blob",
     });
 }
+export const addPhanTich = (data: any) => {
+    const url = API_PATH + "/api/v1/phan-tich";
+    return axios.post(url, data);
+};
+
+export const updatePhanTich = (data: any, id: string) => {
+    const url = API_PATH + `/api/v1/phan-tich/${id}`;
+    return axios.put(url, data);
+};
+
+export const deleteFilePhanTich = (id: string, fileId: string) => {
+    const url = API_PATH + `/api/v1/phan-tich/${id}/file-dinh-kem/${fileId}`;
+    return axios.delete(url);
+};
+
+export const getListSuCoChuaPhanTich = () => {
+    const url = API_PATH + "/api/v1/su-co/list-chua-phan-tich";
+    return axios.get(url);
+};
