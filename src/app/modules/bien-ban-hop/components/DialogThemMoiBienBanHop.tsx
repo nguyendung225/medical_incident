@@ -1,18 +1,24 @@
 import { Formik } from "formik";
+import moment from "moment";
+import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { CHUC_VU_OPTION, KHOA_PHONG } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { SINGIN_OPTION, STATUS_BIEN_BAN } from "../../bien-ban-xac-minh/const/constants";
+import FileUploadDialog from "../../component/FileUpload/FileUploadDialog";
 import LabelRequired from "../../component/LabelRequired";
 import TextField from "../../component/TextField";
 import Autocomplete from "../../component/input-field/Autocomplete";
+import { heightSelectMutil } from "../../component/input-field/StyleComponent";
 import { RESPONSE_STATUS_CODE } from "../../utils/Constant";
+import { fileUpload } from "../../utils/FileServices";
+import { getListDeleteItem } from "../../utils/FunctionUtils";
+import { integerValidation } from "../../utils/ValidationSchema";
 import { IBienBanHop } from "../model/BienBanHopModel";
 import { addBienBan, getListNhanVien, getListSuCoChuaHop, updateBienBan } from "../services/BienBanHopServices";
-import { heightSelectMutil } from "../../component/input-field/StyleComponent";
-import { integerValidation } from "../../utils/ValidationSchema";
-import moment from "moment";
+import FileInfo from "../../component/FileUpload/FileInfo";
+import { deleteFileBienBanHop } from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
 
 type Props = {
     handleClose: () => void;
@@ -25,6 +31,7 @@ const DialogThemMoiBienBanHop = ({
     updatePageData,
     thongTinBienBan,
 }: Props) => {
+    const [openFileDialog, setOpenFileDialog] = useState(false)
     const validationSchema = Yup.object().shape({
         departmentId: Yup.string().required("Bắt buộc chọn"),
         bienBan: Yup.string().required("Bắt buộc chọn"),
@@ -77,9 +84,7 @@ const DialogThemMoiBienBanHop = ({
 
     const handleSubmit = async (values: IBienBanHop) => {
         try {
-            const {
-                data: { code, message },
-            } = thongTinBienBan?.id
+            const { data: { code, message } } = thongTinBienBan?.id
                     ? await updateBienBan(
                         formatDataBienBan(values),
                         thongTinBienBan.id
@@ -89,6 +94,8 @@ const DialogThemMoiBienBanHop = ({
                 code === RESPONSE_STATUS_CODE.CREATED ||
                 code === RESPONSE_STATUS_CODE.SUCCESS
             ) {
+                await fileUpload(values.fileDinhKems, thongTinBienBan?.id)
+                await deleteFileBienBanHop(getListDeleteItem(thongTinBienBan?.fileDinhKems, values.fileDinhKems))
                 updatePageData({});
                 handleClose();
                 toast.success(message);
@@ -114,22 +121,21 @@ const DialogThemMoiBienBanHop = ({
                     errors,
                     values,
                     touched,
-                    handleChange,
                     handleSubmit,
                     setFieldValue,
                     setValues,
                 }) => {
+                    
                     const handleChangeSelect = (name: string, value: any) => {
                         setFieldValue(name, value?.code);
                     };
-
 
                     return (
                         <form onSubmit={handleSubmit}>
                             <Modal.Body className="pt-0">
                                 <div className="form-container">
                                     <div className="d-flex spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 isRequired
                                                 label="Bộ môn/Khoa/Phòng"
@@ -218,7 +224,7 @@ const DialogThemMoiBienBanHop = ({
                                         1.Thời gian họp
                                     </div>
                                     <div className="d-flex  spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 isRequired
                                                 label="Thời gian bắt đầu"
@@ -273,7 +279,7 @@ const DialogThemMoiBienBanHop = ({
                                         2.Thành phần tham dự
                                     </div>
                                     <div className="d-flex spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 isRequired
                                                 label="Chủ trì"
@@ -331,7 +337,7 @@ const DialogThemMoiBienBanHop = ({
                                         <div className="d-flex spaces width-24" />
                                     </div>
                                     <div className="d-flex spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 label="Thư kí"
                                                 isRequired
@@ -392,7 +398,7 @@ const DialogThemMoiBienBanHop = ({
                                         <div className="d-flex spaces width-24" />
                                     </div>
                                     <div className="d-flex spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 isRequired
                                                 label="Thành viên có mặt"
@@ -424,7 +430,7 @@ const DialogThemMoiBienBanHop = ({
                                         3.Nội dung
                                     </div>
                                     <div className="d-flex spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 isRequired
                                                 label="Trình bày báo cáo"
@@ -484,7 +490,7 @@ const DialogThemMoiBienBanHop = ({
                                         </div>
                                         <div className="d-flex spaces width-24" />
                                     </div>
-                                    <div className="d-flex align-items-center spaces width-100 ml-10">
+                                    <div className="d-flex align-items-center spaces width-100 pl-10">
                                         <LabelRequired
                                             isRequired
                                             label="Tóm tắt báo cáo"
@@ -498,7 +504,7 @@ const DialogThemMoiBienBanHop = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="d-flex align-items-center spaces width-100 ml-10">
+                                    <div className="d-flex align-items-center spaces width-100 pl-10">
                                         <LabelRequired
                                             label="Thảo luận"
                                             className="spaces min-w-130 fw-500"
@@ -511,7 +517,7 @@ const DialogThemMoiBienBanHop = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="d-flex align-items-center spaces width-100 ml-10">
+                                    <div className="d-flex align-items-center spaces width-100 pl-10">
                                         <LabelRequired
                                             label="Ý kiến phát biếu"
                                             className="spaces min-w-130 fw-500"
@@ -524,7 +530,7 @@ const DialogThemMoiBienBanHop = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="d-flex align-items-center spaces width-100 ml-10">
+                                    <div className="d-flex align-items-center spaces width-100 pl-10">
                                         <LabelRequired
                                             isRequired
                                             label="Kết luận của chủ trì"
@@ -538,7 +544,7 @@ const DialogThemMoiBienBanHop = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="d-flex align-items-center spaces width-100 ml-10">
+                                    <div className="d-flex align-items-center spaces width-100 pl-10">
                                         <LabelRequired
                                             label="Biểu quyết"
                                             className="spaces min-w-130 fw-500"
@@ -548,7 +554,7 @@ const DialogThemMoiBienBanHop = ({
                                         </div>
                                     </div>
                                     <div className="d-flex  spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 isRequired
                                                 label="Kết thúc vào"
@@ -578,11 +584,7 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Đính kèm"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <TextField
-                                                className="spaces width-100"
-                                                name="tenThanhVienDoan"
-                                                type="text"
-                                            />
+                                            <FileInfo numberFile={values.fileDinhKems.length} handleOpenDialogUpload={() => setOpenFileDialog(true)} />
                                         </div>
 
                                         <div className="d-flex spaces width-24">
@@ -611,7 +613,7 @@ const DialogThemMoiBienBanHop = ({
                                         4.Ký biên bản
                                     </div>
                                     <div className="d-flex  spaces gap-10">
-                                        <div className="d-flex spaces width-28 ml-10">
+                                        <div className="d-flex spaces width-28 pl-10">
                                             <LabelRequired
                                                 isRequired
                                                 label="Chủ trì"
@@ -704,6 +706,11 @@ const DialogThemMoiBienBanHop = ({
                                     Lưu
                                 </Button>
                             </Modal.Footer>
+                            {
+                                openFileDialog && <FileUploadDialog listFile={values.fileDinhKems} setListFile={(value: any) => {
+                                    setFieldValue("fileDinhKems", value)
+                                }} handleClose={() => setOpenFileDialog(false)} />
+                            }
                         </form>
                     );
                 }}

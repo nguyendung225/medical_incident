@@ -41,6 +41,6 @@ export const initBienBanHop: IBienBanHop = {
     isThuKyKy: null,
     trangThaiXuLy: 0,
     ketLuan: '',
-    isActive: true
-
+    isActive: true,
+    fileDinhKems: []
 };

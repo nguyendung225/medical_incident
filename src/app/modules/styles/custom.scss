@@ -17,6 +17,10 @@
   border-color: $color-silver !important;
   border-radius: 6px;
 
+  &.error {
+    border-color: #f1416c !important;
+  }
+
   &:disabled {
     border-color: $royal-blue !important;
   }
@@ -265,6 +269,10 @@ textarea.customs-input {
   .modal-body {
     padding: 12px;
   }
+}
+
+.modal_custom {
+    background-color: rgb(0, 0, 0, 15%);
 }
 
 .bg-transparent {

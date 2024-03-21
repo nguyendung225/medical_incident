@@ -247,3 +247,9 @@ export const handleExportPdf = async ({elementId, fileName, setPageLoading}) => 
   setPageLoading(false);
   toast.success("Xuất file thành công");
 }
+
+export const getListDeleteItem = (arrBeforeDelete, arrAfterDelete) => {
+    const initialIds = arrBeforeDelete?.map(item => item.id);
+    const deletedIds = initialIds?.filter(id => !arrAfterDelete.some(item => item.id === id));
+    return deletedIds;
+}
