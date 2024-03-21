@@ -49,5 +49,6 @@ export interface IBienBanHop {
     ketLuan: string;
     isActive: boolean;
     suCoResp?: MedicalIncidentInfo
+    fileDinhKems?: any
 
 }

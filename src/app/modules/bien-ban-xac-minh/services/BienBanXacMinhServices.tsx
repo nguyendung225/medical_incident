@@ -39,6 +39,13 @@ export const deleteBienBan = (id: string) => {
     return axios.delete(url);
 };
 
+export const deleteFileBienBanHop = (ids: string[]) => {
+    const url = API_PATH + `/api/v1/file-dinh-kem/file-bien-ban-hop/delete-multiple`;
+    return axios.delete(url, {
+        data: ids
+    });
+};
+
 export const exportWord = (id: string) => {
     const url = API_PATH + `/api/v1/bien-ban-xac-minh/export-word/${id}`;
     return axios({

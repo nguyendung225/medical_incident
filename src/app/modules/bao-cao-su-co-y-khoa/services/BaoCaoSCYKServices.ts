@@ -56,3 +56,8 @@ export const tiepNhanSCYK = (data: ITiepNhan) => {
     const url = API_PATH + "/api/v1/tiep-nhan-su-co";
     return axios.post(url, data);
 };
+
+export const getDSChucVu = () => {
+    const url = API_PATH + `/api/v1/su-co/chuc-vu`;
+    return axios.get(url);
+}

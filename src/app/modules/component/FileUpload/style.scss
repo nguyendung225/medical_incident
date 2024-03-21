@@ -9,13 +9,17 @@ input[type="file"] {
     justify-content: space-between;
     border: 1px solid $color-silver;
     display: inline-block;
-    border-radius: 0.475rem;
-    padding: 7px 12px;
+    border-radius: 3px;
+    padding: 8px 10px;
     width: 100%;
 }
-
 .file-preview {
     margin-left: 4px;
     padding-left: 4px;
     border-left: #ddd 1px solid;
+}
+
+.list-file {
+    overflow: scroll;
+    max-height: 250px;
 }
