@@ -12,6 +12,7 @@ import { IMedicalIncidentDetailInfo, MedicalIncidentInfo } from "../models/BaoCa
 import { ITiepNhan } from '../models/BaoCaoSCYKModels';
 import { exportWordFile as exportWordBaoCaoSCYK} from "../services/BaoCaoSCYKServices";
 import { exportWord as exportWordBienBanXacMinh} from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
+import { exportWord as exportWordPhanTichSCYK } from "../../phan-tich-scyk/services/PhanTichSCYKServices";
 import { exportWord as exportWordBienBanHop} from "../../bien-ban-hop/services/BienBanHopServices";
 
 export const OPTION_MUC_DO_AH = [
@@ -390,8 +391,8 @@ export const printStyles = {
 	container: {
 		background: "white",
 		padding: "10px",
-		overflow: "scroll",
-		height: "calc(100vh - 160px)",
+		// overflow: "scroll",
+		// height: "calc(100vh - 160px)",
 		marginTop: "3px",
 	},
 	text_center: {
@@ -423,7 +424,7 @@ export const printStyles = {
     }
 };
 
-export const RenderTabList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
+export const getTabList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
     const tabList = [
         {
             eventKey: "0",
@@ -444,7 +445,7 @@ export const RenderTabList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
         tabList.push({
             eventKey: "2",
             title: "Phân tích SCYK",
-            component: <PhanTichsScykDetail phanTichScyk={thongTinSCYK?.phanTichResp} />
+            component: <PhanTichsScykDetail phanTichScyk={thongTinSCYK?.phanTichResp} thongTinScyk={thongTinSCYK?.suCoResp}/>
         })
     }
 
@@ -550,7 +551,7 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
             {
                 title: "Phân tích Scyk.docx",
                 handleClick: () => exportToFile({
-                    exportAPI: () => thongTinSCYK?.phanTichResp?.id && exportWordBienBanXacMinh(thongTinSCYK?.phanTichResp?.id),
+                    exportAPI: () => thongTinSCYK?.phanTichResp?.id && exportWordPhanTichSCYK(thongTinSCYK?.phanTichResp?.id),
                     fileName: "Phân tích Scyk",
                     type: TYPE.WORD,
                     setPageLoading

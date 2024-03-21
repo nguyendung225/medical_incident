@@ -88,3 +88,8 @@ export interface ITiepNhan {
     phuongAnXuLy: string
     suCoId:string
 }
+
+export interface IDropdownButton {
+    title: string;
+    handleClick: () => void;
+}

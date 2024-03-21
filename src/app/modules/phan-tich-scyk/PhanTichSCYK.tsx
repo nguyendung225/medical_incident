@@ -14,16 +14,19 @@ import AppContext from "../../AppContext";
 import DropdownButton from "../component/button/DropdownButton";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
 import AdvancedSearchDialog from "../bao-cao-su-co-y-khoa/components/AdvancedSearchDialog";
-import { IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
-import { searchByPage } from "./services/PhanTichSCYKServices";
+import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
+import { searchByPage, exportWord as exportWordPhanTichScyk } from "./services/PhanTichSCYKServices";
 import { IPhanTichScyk } from "./models/PhanTichSCYKModels";
 import { getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
-import { InitThongTinSCYK, SCYK_DETAIL_INFO_INIT } from "../bao-cao-su-co-y-khoa/const/constants";
+import { InitThongTinSCYK, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList } from "../bao-cao-su-co-y-khoa/const/constants";
 import BienBanXacMinhDetail from "../bien-ban-xac-minh/components/BienBanXacMinhDetail";
 import { initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
 import { phanTichScykTableColumns } from "./constants/constants";
-import PhanTichScykDetail from "./components/PhanTichScykDetail";
+import PhanTichScykDetail from "./components/PhanTichScykDetail"; 
+import { exportWordFile as exportWordBaoCaoSCYK } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
+import { exportWord as exportWordBienBanXacMinh } from "../bien-ban-xac-minh/services/BienBanXacMinhServices";
+import { tab } from "../models/tabModels";
 
 type Props = {};
 
@@ -39,17 +42,9 @@ const PhanTichSCYK = (props: Props) => {
     const [configTable, setConfigTable] = useState<any>({});
     const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
-    const [tabList, setTabList] = useState<any>([]);
-    const [dropdownPhieuIn, setDropdownPhieuIn] = useState([
-        {
-            title: "Báo cáo scyk",
-            handleClick: () => handlePrint("in-phieu-bao-cao-scyk"),
-        },
-    ]);
-    const [exportFileDropdown, setExportFileDropdown] = useState([{
-        title: "",
-        handleClick: () => { },
-    }]);
+    const [tabList, setTabList] = useState<tab[]>([]);
+    const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
+    const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
 
     const handleSearch = () => {
         updatePageData({
@@ -125,68 +120,9 @@ const PhanTichSCYK = (props: Props) => {
     // }
 
     useEffect(() => {
-        const tabListTemp = [
-            {
-                eventKey: "0",
-                title: "Báo cáo sự cố",
-                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK?.suCoResp || InitThongTinSCYK} />,
-            },
-            {
-                eventKey: "1",
-                title: "Biên bản xác minh",
-                component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp || initBienBanXacMinh} />,
-            },
-            {
-                eventKey: "2",
-                title: "Phân Tích sự cố",
-                component: <PhanTichScykDetail phanTichScyk={thongTinSCYK?.phanTichResp}/>,
-            },
-            {
-                eventKey: "3",
-                title: "Tài liệu đính kèm",
-                component: <>Tài liệu đính kèm</>
-            }
-        ]
-        const exportFileDropdownTemp = [
-            {
-                title: "Báo cáo scyk.docx",
-                handleClick: () => exportToFile({
-                    // exportAPI: () => thongTinSCYK?.id && exportWordPhanTichSCYK(thongTinSCYK?.id),
-                    fileName: "Báo cáo scyk",
-                    type: TYPE.WORD,
-                    setPageLoading
-                }),
-            },
-            {
-                title: "Báo cáo scyk.pdf",
-                handleClick: () => {
-                    handleExportPdf({
-                        elementId: "in-phieu-bao-cao-scyk",
-                        fileName: "Báo cáo scyk",
-                        setPageLoading
-                    })
-                }
-            },
-        ]
-
-        const dropdownPhieuInList = [
-            {
-                title: "Báo cáo scyk",
-                handleClick: () => handlePrint("in-phieu-bao-cao-scyk"),
-            },
-            {
-                title: "Biên bản xác minh",
-                handleClick: () => handlePrint("in-phieu-bien-ban-xac-minh"),
-            },
-            {
-                title: "Phân tích sự cố",
-                handleClick: () => handlePrint("in-phieu-phan-tich-scyk"),
-            }
-        ]
-
-        setTabList(tabListTemp);
-        setDropdownPhieuIn(dropdownPhieuInList);
-        setExportFileDropdown(exportFileDropdownTemp);
+        setTabList(getTabList(thongTinSCYK));
+        setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
+        setPhieuInList(getPhieuInList(thongTinSCYK));
     }, [thongTinSCYK])
 
     useEffect(() => {
@@ -258,11 +194,11 @@ const PhanTichSCYK = (props: Props) => {
                         </Button>
                         <DropdownButton
                             title="In phiếu"
-                            dropdownItems={exportFileDropdown}
+                            dropdownItems={exportedFileList}
                         />
                         <DropdownButton
                             title="In phiếu"
-                            dropdownItems={dropdownPhieuIn}
+                            dropdownItems={phieuInList}
                         />
                     </div>
                 </div>
