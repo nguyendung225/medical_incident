@@ -151,7 +151,7 @@ const BienBanXacMinh = (props: Props) => {
             {
                 eventKey: "1",
                 title: "Biên bản xác minh",
-                component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanHopResp} />
+                component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp} />
             },
             {
                 eventKey: "2",

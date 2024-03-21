@@ -37,3 +37,12 @@ export const getBienBanHopById = (id: string) => {
     const url = API_PATH + `/api/v1/bien-ban-hop/${id}`;
     return axios.get(url);
 };
+
+export const exportWord = (id: string) => {
+    const url = API_PATH + `/api/v1/bien-ban-hop/export-word/${id}`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
