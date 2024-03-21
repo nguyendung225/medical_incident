@@ -1,8 +1,18 @@
+import BienBanHopDetail from "../../bien-ban-hop/components/BienBanHopDetail";
+import { initBienBanHop } from "../../bien-ban-hop/const/constants";
+import BienBanXacMinhDetail from "../../bien-ban-xac-minh/components/BienBanXacMinhDetail";
 import { initBienBanXacMinh } from "../../bien-ban-xac-minh/const/constants";
+import PhanTichsScykDetail from "../../phan-tich-scyk/components/PhanTichScykDetail";
 import { PHAN_TICH_SCYK_INFO_INIT } from "../../phan-tich-scyk/constants/constants";
+import { TYPE } from "../../utils/Constant";
 import { convertGenderToString, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
+import { exportToFile, handleExportPdf, handlePrint } from "../../utils/FunctionUtils";
+import BaoCaoSCYKDetail from "../components/BaoCaoSCYKDetail";
 import { IMedicalIncidentDetailInfo, MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
 import { ITiepNhan } from '../models/BaoCaoSCYKModels';
+import { exportWordFile as exportWordBaoCaoSCYK} from "../services/BaoCaoSCYKServices";
+import { exportWord as exportWordBienBanXacMinh} from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
+import { exportWord as exportWordBienBanHop} from "../../bien-ban-hop/services/BienBanHopServices";
 
 export const OPTION_MUC_DO_AH = [
     { name: "Nặng", code: 1 },
@@ -271,6 +281,7 @@ export const SCYK_DETAIL_INFO_INIT: IMedicalIncidentDetailInfo = {
     suCoResp: InitThongTinSCYK,
     bienBanXacMinhResp: initBienBanXacMinh,
     phanTichResp: PHAN_TICH_SCYK_INFO_INIT,
+    bienBanHopResp: initBienBanHop,
 }
 
 export const printStyles = {
@@ -411,3 +422,176 @@ export const printStyles = {
         marginBottom: "20px"
     }
 };
+
+export const RenderTabList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
+    const tabList = [
+        {
+            eventKey: "0",
+            title: "Báo cáo sự cố",
+            component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK?.suCoResp} />,
+        }
+    ]
+
+    if (thongTinSCYK?.bienBanXacMinhResp) {
+        tabList.push({
+            eventKey: "1",
+            title: "Biên bản xác minh",
+            component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp} />
+        })
+    }
+
+    if (thongTinSCYK?.phanTichResp) {
+        tabList.push({
+            eventKey: "2",
+            title: "Phân tích SCYK",
+            component: <PhanTichsScykDetail phanTichScyk={thongTinSCYK?.phanTichResp} />
+        })
+    }
+
+    if (thongTinSCYK?.bienBanHopResp) {
+        tabList.push({
+            eventKey: "3",
+            title: "Biên bản họp",
+            component: <BienBanHopDetail thongTinBienBan={thongTinSCYK?.bienBanHopResp} />,
+        })
+    }
+
+    tabList.push({
+        eventKey: "4",
+        title: "Tài liệu đính kèm",
+        component: <div style={{height: "calc(100vh - 155px)", background: "#fff"}}>Tài liệu đính kèm</div>
+    })
+
+    return tabList
+}
+
+export const getPhieuInList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
+    const phieuInList = [
+        {
+            title: "Báo cáo scyk",
+            handleClick: () => handlePrint("in-phieu-bao-cao-scyk"),
+        },
+    ]
+
+    if (thongTinSCYK?.bienBanXacMinhResp) {
+        phieuInList.push({
+            title: "Biên bản xác minh",
+            handleClick: () => handlePrint("in-phieu-bien-ban-xac-minh"),
+        })
+    }
+
+    if (thongTinSCYK?.phanTichResp) {
+        phieuInList.push({
+            title: "Phân tích sự cố",
+            handleClick: () => handlePrint("in-phieu-phan-tich-scyk"),
+        })
+    }
+
+    if (thongTinSCYK?.bienBanHopResp) {
+        phieuInList.push({
+            title: "Biên bản họp",
+            handleClick: () => handlePrint("in-phieu-bien-ban-hop"),
+        })
+    }
+    
+    return phieuInList;
+}
+
+export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, setPageLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+    const exportedFileList = [
+        {
+            title: "Báo cáo scyk.docx",
+            handleClick: () => exportToFile({
+                exportAPI: () => thongTinSCYK?.suCoResp?.id && exportWordBaoCaoSCYK(thongTinSCYK?.suCoResp?.id), 
+                fileName: "Báo cáo scyk",
+                type: TYPE.WORD,
+                setPageLoading
+            }),
+        },
+        {
+            title: "Báo cáo scyk.pdf",
+            handleClick: () => {
+                handleExportPdf({
+                    elementId: "in-phieu-bao-cao-scyk",
+                    fileName: "Báo cáo scyk",
+                    setPageLoading
+                })
+            }
+        },
+        
+    ]
+
+    if(thongTinSCYK?.bienBanXacMinhResp) {
+        exportedFileList.push(
+            {
+                title: "Biên bản xác minh.docx",
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinSCYK?.bienBanXacMinhResp?.id && exportWordBienBanXacMinh(thongTinSCYK?.bienBanXacMinhResp?.id),
+                    fileName: "Biên bản xác minh",
+                    type: TYPE.WORD,
+                    setPageLoading
+                }),
+            },
+            {
+                title: "Biên bản xác minh.pdf",
+                handleClick: () => {
+                    handleExportPdf({
+                        elementId: "in-phieu-bien-ban-xac-minh",
+                        fileName: "Biên bản xác minh",
+                        setPageLoading
+                    })
+                }
+            }
+        )
+    }
+
+    if(thongTinSCYK?.phanTichResp) {
+        exportedFileList.push(
+            {
+                title: "Phân tích Scyk.docx",
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinSCYK?.phanTichResp?.id && exportWordBienBanXacMinh(thongTinSCYK?.phanTichResp?.id),
+                    fileName: "Phân tích Scyk",
+                    type: TYPE.WORD,
+                    setPageLoading
+                }),
+            },
+            {
+                title: "Phân tích Scyk.pdf",
+                handleClick: () => {
+                    handleExportPdf({
+                        elementId: "in-phieu-phan-tich-scyk",
+                        fileName: "Phân tích Scyk",
+                        setPageLoading
+                    })
+                }
+            },
+        )
+    }
+
+    if(thongTinSCYK?.bienBanHopResp) {
+        exportedFileList.push(
+            {
+                title: "Biên bản họp.docx",
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinSCYK?.bienBanHopResp?.id && exportWordBienBanHop(thongTinSCYK?.bienBanHopResp?.id),
+                    fileName: "Biên bản họp",
+                    type: TYPE.WORD,
+                    setPageLoading
+                }),
+            },
+            {
+                title: "Biên bản họp.pdf",
+                handleClick: () => {
+                    handleExportPdf({
+                        elementId: "in-phieu-bien-ban-hop",
+                        fileName: "Biên bản họp",
+                        setPageLoading
+                    })
+                }
+            }
+        )
+    }
+
+    return exportedFileList;
+}

@@ -4,10 +4,10 @@ import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
 import AppContext from "../../AppContext";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
-import { KHOA_PHONG, SCYK_DETAIL_INFO_INIT } from "../bao-cao-su-co-y-khoa/const/constants";
+import { KHOA_PHONG, RenderTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import { IN_PHIEU_DROPDOWN_BUTTONS, tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
+import { tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
 import DropdownButton from "../component/button/DropdownButton";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
@@ -15,13 +15,8 @@ import { TYPE } from "../utils/Constant";
 import { convertBooleanToNumber, seperateTime } from "../utils/FormatUtils";
 import "./BienBanHop.scss";
 import DialogThemMoiBienBanHop from "./components/DialogThemMoiBienBanHop";
-import { initBienBanHop } from "./const/constants";
 import { IBienBanHop } from "./model/BienBanHopModel";
-import { getBienBanHopById, searchByPage } from "./services/BienBanHopServices";
-import BaoCaoSCYKDetail from "../bao-cao-su-co-y-khoa/components/BaoCaoSCYKDetail";
-import BienBanXacMinhDetail from "../bien-ban-xac-minh/components/BienBanXacMinhDetail";
-import PhanTichScykDetail from "../phan-tich-scyk/components/PhanTichScykDetail";
-import BienBanHopDetail from "./components/BienBanHopDetail";
+import { searchByPage } from "./services/BienBanHopServices";
 
 type Props = {};
 
@@ -37,7 +32,8 @@ const BienBanHop = (props: Props) => {
     const [configTable, setConfigTable] = useState<any>({});
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
     const [tabList, setTabList] = useState<any>([]);
-    const [exportFileDropdown, setExportFileDropdown] = useState([{
+    const [phieuInList, setPhieuInList] = useState<any>([]);
+    const [exportedFileList, setExportedFileList] = useState([{
         title: "",
         handleClick: () => { },
     }]);
@@ -134,34 +130,9 @@ const BienBanHop = (props: Props) => {
     }, [indexRowSelected])
 
     useEffect(() => {
-        const tabListTemp = [
-            {
-                eventKey: "0",
-                title: "Báo cáo sự cố",
-                component: <BaoCaoSCYKDetail thongTinSCYK={thongTinSCYK?.suCoResp} />,
-            },
-            {
-                eventKey: "1",
-                title: "Biên bản xác minh",
-                component: <BienBanXacMinhDetail thongTinBienBan={thongTinSCYK?.bienBanXacMinhResp} />,
-            },
-            {
-                eventKey: "2",
-                title: "Phân Tích sự cố",
-                component: <PhanTichScykDetail phanTichScyk={thongTinSCYK?.phanTichResp}/>,
-            },
-            {
-                eventKey: "3",
-                title: "Biên bản họp",
-                component: <BienBanHopDetail thongTinBienBan={thongTinSCYK?.bienBanHopResp}/>,
-            },
-            {
-                eventKey: "4",
-                title: "Tài liệu đính kèm",
-                component: <>Tài liệu đính kèm</>
-            }
-        ]
-        setTabList(tabListTemp)
+        setTabList(RenderTabList(thongTinSCYK));
+        setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
+        setPhieuInList(getPhieuInList(thongTinSCYK));
     }, [thongTinSCYK])
 
     return (
@@ -229,11 +200,11 @@ const BienBanHop = (props: Props) => {
                         </Button>
                         <DropdownButton
                             title="Xuất file"
-                            dropdownItems={exportFileDropdown}
+                            dropdownItems={exportedFileList}
                         />
                         <DropdownButton
                             title="In phiếu"
-                            dropdownItems={IN_PHIEU_DROPDOWN_BUTTONS}
+                            dropdownItems={phieuInList}
                         />
                     </div>
                 </div>

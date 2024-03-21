@@ -1,3 +1,4 @@
+import { IBienBanHop } from "../../bien-ban-hop/model/BienBanHopModel";
 import { IBienBanXacMinh } from "../../bien-ban-xac-minh/models/BienBanXacMinhModel";
 import { IPhanTichScyk } from "../../phan-tich-scyk/models/PhanTichSCYKModels";
 
@@ -69,7 +70,7 @@ export interface IMedicalIncidentDetailInfo {
   suCoResp: MedicalIncidentInfo;
   bienBanXacMinhResp: IBienBanXacMinh;
   phanTichResp: IPhanTichScyk;
-  bienBanHopResp?: any;
+  bienBanHopResp: IBienBanHop;
 }
 
 export interface IBenhNhan {
