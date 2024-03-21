@@ -15,11 +15,11 @@ import { toast } from "react-toastify";
 import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
-import { handlePrint } from "../utils/FunctionUtils";
 import FilterSearchContainer from "./components/FilterSearchContainer";
 import AppContext from "../../AppContext";
 import DropdownButton from "../component/button/DropdownButton";
 import { tab } from "../models/tabModels";
+import KetLuanSCYKDialog from "./components/KetLuanDialog";
 
 type Props = {};
 
@@ -40,6 +40,7 @@ const BaoCaoSCYK = (props: Props) => {
     const [tabList, setTabList] = useState<tab[]>([]);
     const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
+    const [openDialogKetLuan, setOpenDialogKetLuan] = useState(false)
 
     const handleSearch = () => {
         updatePageData({
@@ -195,6 +196,10 @@ const BaoCaoSCYK = (props: Props) => {
                             <i className="bi bi-circle-fill spaces fs-10 color-primary"></i>
                             <span>Đã báo cáo</span>
                         </div>
+                        <div className="status-box-item">
+                            <i className="bi bi-circle-fill spaces fs-10 color-purple"></i>
+                            <span>Đã kết luận</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -205,13 +210,23 @@ const BaoCaoSCYK = (props: Props) => {
                         <span className="title">Thông tin sự cố y khoa</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        <Button 
-                            className="button-primary"
-                            onClick={() => setOpenDialogTiepNhan(true)}
-                            disabled={!(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN)}
-                        >
-                           Tiếp nhận
-                        </Button>
+                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN || thongTinSCYK.bienBanHopResp) &&
+                            <Button
+                                className="button-primary"
+                                onClick={() => setOpenDialogKetLuan(true)}
+                            >
+                                Kết luận
+                            </Button>
+                        }
+                        {
+                            (thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN) &&
+                            <Button
+                                className="button-primary"
+                                onClick={() => setOpenDialogTiepNhan(true)}
+                            >
+                                Tiếp nhận
+                            </Button>
+                        }
                         <Button
                             className="button-primary"
                             onClick={handleOpenUpdateModal}
@@ -252,6 +267,14 @@ const BaoCaoSCYK = (props: Props) => {
                     updatePageData={updatePageData}
                     suCoId={thongTinSCYK?.suCoResp?.id || ""}
                     handleClose={() => setOpenDialogTiepNhan(false)}
+                />
+            )}
+
+            {openDialogKetLuan && (
+                <KetLuanSCYKDialog
+                    updatePageData={updatePageData}
+                    suCoId={thongTinSCYK?.suCoResp?.id || ""}
+                    handleClose={() => setOpenDialogKetLuan(false)}
                 />
             )}
 

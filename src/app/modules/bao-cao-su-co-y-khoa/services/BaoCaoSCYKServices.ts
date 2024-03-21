@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ITiepNhan, MedicalIncidentInfo, SearchObject } from "../models/BaoCaoSCYKModels";
+import { IKetLuanSCYK, ITiepNhan, MedicalIncidentInfo, SearchObject } from "../models/BaoCaoSCYKModels";
 
 const API_PATH = process.env.REACT_APP_API_URL;
 
@@ -54,6 +54,11 @@ export const exportPdfFile = (id: string) => {
 
 export const tiepNhanSCYK = (data: ITiepNhan) => {
     const url = API_PATH + "/api/v1/tiep-nhan-su-co";
+    return axios.post(url, data);
+};
+
+export const ketLuanSCYK = (data: IKetLuanSCYK) => {
+    const url = API_PATH + "/api/v1/ket-luan";
     return axios.post(url, data);
 };
 
