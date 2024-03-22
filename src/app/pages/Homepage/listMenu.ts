@@ -27,6 +27,14 @@ export const allMenu: TMenu[] = [
     ability: MODULE.HO_SO,
     subMenu: [
       {
+        title: "Thống kê SCYK",
+        to: "/thong-ke-scyk",
+        hasBullet: false,
+        icon: "/media/svg/icons/statistic.svg",
+        permission: PERMISSIONS.EMPLOYEE,
+        ability: PERMISSION_ABILITY.VIEW,
+      },
+      {
         title: "Báo cáo SCYK",
         to: "/ds-bao-cao-scyk",
         hasBullet: false,

@@ -1,0 +1,29 @@
+@import '../styles/variable';
+
+.itemTongSo {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 10px 12px 10px;
+    margin: 15px;
+    border-radius: 5px;
+    align-items: center;
+    border: 2px solid $color-border-blue;
+
+    .title {
+        font-size: 14px;
+        color: $color-text-cyan;
+    }
+
+    .value {
+        font-size: 18px;
+        font-weight: 500;
+        color: $color-text-cyan;
+        line-height: 22px;
+        padding: 5px 0px;
+
+        &_red {
+            color: $color-dark-red;
+        }
+    }
+}

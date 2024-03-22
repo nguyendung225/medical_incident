@@ -11,6 +11,7 @@ import BaoCaoSCYK from "../modules/bao-cao-su-co-y-khoa/BaoCaoSCYK";
 import BienBanXacMinh from "../modules/bien-ban-xac-minh/BienBanXacMinh";
 import PhanTichSCYK from "../modules/phan-tich-scyk/PhanTichSCYK";
 import BienBanHop from "../modules/bien-ban-hop/BienBanHop";
+import ThongKeSCYK from "../modules/thong-ke/ThongKeSCYK";
 
 interface PrivateRouteProps {
   auth: string;
@@ -44,6 +45,7 @@ const PrivateRoutes = () => {
         <Route path="auth/*" element={<Navigate to="quan-ly-ca-benh" />} />
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
+        <Route path="/thong-ke-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={ThongKeSCYK} redirect="/thong-ke-scyk" />} />
         <Route path="/ds-bao-cao-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoSCYK} redirect="/ds-bao-cao-scyk" />} />
         <Route path="/bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BienBanXacMinh} redirect="/bien-ban-xac-minh" />} />
         <Route path="/bien-ban-hop" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BienBanHop} redirect="/bien-ban-xac-minh" />} />
