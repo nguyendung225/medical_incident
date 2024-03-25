@@ -89,6 +89,7 @@ const BienBanXacMinh = (props: Props) => {
         formatData.isNguoiLapKy = convertBooleanToNumber(formatData.isNguoiLapKy)
         formatData.isNguoiThamDuKy = convertBooleanToNumber(formatData.isNguoiThamDuKy)
         formatData.isThanhVienDoanKy = convertBooleanToNumber(formatData.isThanhVienDoanKy)
+        formatData.nguoiThamDus = formatData.nguoiThamDus || []
 
         return formatData
     }

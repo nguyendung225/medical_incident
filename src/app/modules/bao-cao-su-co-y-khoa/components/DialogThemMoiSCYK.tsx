@@ -10,9 +10,7 @@ import { regex } from "../../constant";
 import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE } from "../../utils/Constant";
 import {
     DOI_TUONG_XAY_RA_SC,
-    DV_BAO_CAO,
     GENDER_OPTION,
-    KHOA_PHONG,
     OPTION_HINH_THUC_BC,
     OPTION_MUC_DO_AH,
     OPTION_XAC_NHAN,
@@ -24,6 +22,7 @@ import { addSCYK, updateSCYK } from "../services/BaoCaoSCYKServices";
 import LabelRequired from "./../../component/LabelRequired";
 import { checkInvalidDate } from "../../utils/ValidationSchema";
 import useMultiLanguage from "../../../hook/useMultiLanguage";
+import { LOCALSTORAGE_STORE } from "../../auth/core/_consts";
 
 type Props = {
 	handleClose: () => void;
@@ -64,18 +63,19 @@ export default function DialogThemMoiSCYK({
 		deXuat: Yup.string().required("Bắt buộc nhập"),
 		dieuTriBanDau: Yup.string().required("Bắt buộc nhập"),
 		thongBaoChoBacSi: Yup.string().required("Bắt buộc nhập"),
-		donViBaoCao: Yup.string().required("Bắt buộc nhập"),
+        donViBaoCao: Yup.string().required("Bắt buộc chọn").nullable(),
 		noiXayRa: Yup.string().required("Bắt buộc nhập"),
         soDienThoaiNbc: Yup.string().matches(regex.phone, 'Số điện thoại không hợp lệ'),
         loaiDoiTuong: Yup.array()
             .of(Yup.string())
-            .min(1, 'Yêu cầu chọn loại dối tượng')
+            .min(1, 'Yêu cầu chọn loại dối tượng').nullable()
     });
   
     const handleSubmit = async (values: MedicalIncidentInfo) => {
         const thongTinSCYK = { ...values };
         thongTinSCYK.loaiDoiTuong = thongTinSCYK.loaiDoiTuong?.toString();
-		thongTinSCYK.thoiGianXayRa = moment(`${thongTinSCYK.ngayXayRa}T${thongTinSCYK.thoiGianXayRa}`).format("HH:mm:ss");
+        thongTinSCYK.benhNhanId = thongTinSCYK.benhNhan?.id;
+        thongTinSCYK.thoiGianXayRa = moment(`${thongTinSCYK.ngayXayRa}T${thongTinSCYK.thoiGianXayRa}`).format("HH:mm:ss");
 
         try {
             const { data: { code, message } } = thongTinSCYK?.id
@@ -118,11 +118,6 @@ export default function DialogThemMoiSCYK({
 					handleSubmit,
 					setFieldValue,
 				}) => {
-                    const handleChangeSelect = (name: string, value: any) => {
-                        setFieldValue(name, value?.code);
-                    };
-
-
 					return (
 						<form onSubmit={handleSubmit}>
 							<Modal.Body className="spaces p-10">
@@ -168,7 +163,6 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-242"
 													name="name"
 													type="text "
-													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -178,17 +172,17 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<Autocomplete
-                                                    onChange={(
-                                                        selectedOption
-                                                    ) =>
-                                                        handleChangeSelect(
-                                                            "donViBaoCao",
-                                                            selectedOption
-                                                        )
-                                                    }
+													onChange={(
+														selectedOption
+													) =>
+														setFieldValue(
+															"donViBaoCao",
+															selectedOption?.id
+														)
+													}
 													className="spaces h-25 min-w-242"
 													name="donViBaoCao"
-													options={DV_BAO_CAO}
+                                                    options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
 													value={values?.donViBaoCao}
 													errors={errors?.donViBaoCao}
 													touched={
@@ -253,12 +247,24 @@ export default function DialogThemMoiSCYK({
 													label="Mã bệnh nhân"
 													className="spaces min-w-140 fw-500"
 												/>
-												<TextField
-													className="spaces min-w-242"
-													type="text "
-													name="benhNhan.code"
-                                                    value={values.benhNhan?.code}
-													handleChange={handleChange}
+                                                <Autocomplete
+                                                    onChange={(
+                                                        selectedOption
+                                                    ) =>
+                                                        setFieldValue(
+                                                            "benhNhan",
+                                                            selectedOption,
+                                                        )
+                                                    }
+                                                    getOptionLabel={(option) =>
+                                                        `${option.code}`
+                                                    }
+													className="spaces h-25 min-w-242"
+													name="benhNhan"
+													value={values.benhNhan}
+													errors={errors?.benhNhan}
+													touched={touched?.benhNhan}
+                                                    options={LOCALSTORAGE_STORE.DS_BENH_NHAN}
 												/>
 											</div>
 											<div className="d-flex">
@@ -267,11 +273,11 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
+													readOnly
 													className="spaces min-w-242"
                                                     name="benhNhan.name"
                                                     value={values.benhNhan?.name}
 													type="text "
-													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -280,6 +286,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
+													readOnly
 													className="spaces min-w-242"
                                                     name="benhNhan.soBenhAn"
                                                     value={values.benhNhan?.soBenhAn}
@@ -295,6 +302,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
+													readOnly
 													className="spaces min-w-242"
                                                     name="benhNhan.ngaySinh"
                                                     value={values.benhNhan?.ngaySinh && moment(values.benhNhan?.ngaySinh).format('YYYY-MM-DD')}
@@ -308,6 +316,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<Autocomplete
+													isReadOnly
 													className="spaces h-25 min-w-242"
 													name="gioiTinh"
                                                     value={values?.benhNhan?.gioiTinh}
@@ -320,9 +329,11 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<Autocomplete
+													isReadOnly
 													className="spaces h-25 min-w-242"
 													name="khoaPhong"
-													options={KHOA_PHONG}
+                                                    options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+													value={values?.benhNhan?.khoaPhongDieuTriId}
 												/>
 											</div>
 										</div>

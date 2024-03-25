@@ -115,6 +115,14 @@ const BaoCaoSCYK = (props: Props) => {
         setOpenDialogThemMoiSCYK(false);
     }
 
+    const handleFormatData = (data: IMedicalIncidentDetailInfo) => {
+        return {
+            ...data.suCoResp,
+            benhNhan: data.benhNhanResp,
+        } as MedicalIncidentInfo;
+
+    }
+
     useEffect(() => {
         setTabList(getTabList(thongTinSCYK));
         setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
@@ -256,7 +264,7 @@ const BaoCaoSCYK = (props: Props) => {
 
             {openDialogThemMoiSCYK && (
                 <DialogThemMoiSCYK
-                    thongTinSCYK={thongTinSCYK?.suCoResp}
+                    thongTinSCYK={handleFormatData(thongTinSCYK)}
                     updatePageData={updatePageData}
                     handleClose={handleCloseModal}
                 />

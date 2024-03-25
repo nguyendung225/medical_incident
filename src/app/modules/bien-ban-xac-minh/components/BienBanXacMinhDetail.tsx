@@ -87,7 +87,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				<div style={{ ...printStyles.contentTitle }}>
 					Với sự tham dự của:
 				</div>
-				{thongTinBienBan?.nguoiThamDuXacMinhs?.map((nguoiThamDu) => (
+				{thongTinBienBan?.nguoiThamDus?.map((nguoiThamDu) => (
 					<div>
 						Ông/bà:{" "}
 						<span style={printStyles.content_text}>{nguoiThamDu.name}</span>{" "}
@@ -95,7 +95,7 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 						<span style={printStyles.content_text}>{nguoiThamDu.maChucVu}</span> thuộc
 						Đơn vị:{" "}
 						<span style={printStyles.content_text}>
-							{nguoiThamDu.tenDonVi}
+							{nguoiThamDu.donVi}
 						</span>
 					</div>
 				))}

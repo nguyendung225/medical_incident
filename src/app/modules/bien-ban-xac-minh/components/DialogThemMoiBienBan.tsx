@@ -2,7 +2,6 @@ import { Formik } from "formik";
 import { Button, Col, Modal, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { CHUC_VU_OPTION, DV_BAO_CAO, } from "../../bao-cao-su-co-y-khoa/const/constants";
 import LabelRequired from "../../component/LabelRequired";
 import TextField from "../../component/TextField";
 import Autocomplete from "../../component/input-field/Autocomplete";
@@ -10,6 +9,7 @@ import { RESPONSE_STATUS_CODE } from "../../utils/Constant";
 import { SINGIN_OPTION, STATUS_BIEN_BAN, initNguoiThamDu } from "../const/constants";
 import { IBienBanXacMinh } from "../models/BienBanXacMinhModel";
 import { addBienBan, getListSuCoChuaXacMinh, updateBienBan } from "../services/BienBanXacMinhServices";
+import { LOCALSTORAGE_STORE } from "../../auth/core/_consts";
 
 type Props = {
     handleClose: () => void;
@@ -112,10 +112,15 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                         setFieldValue(name, value?.code);
                     };
 
+                    const handleChangeSelectId = (name: string, value: any) => {
+                        setFieldValue(name, value?.id);
+                    };
+
                     const handleDeleteNguoiThamGia = (index: number) => {
-                        values.nguoiThamDuXacMinhs.splice(index, 1)
-                        setFieldValue("nguoiThamDuXacMinhs", values.nguoiThamDuXacMinhs)
+                        values.nguoiThamDus.splice(index, 1)
+                        setFieldValue("nguoiThamDus", values.nguoiThamDus)
                     }
+                    
                     (thongTinBienBan?.id && !values?.tenSuCo) && setFieldValue("tenSuCo", values?.suCoResp?.name || "Không xác định");
                     (!values?.suCoId && values.suCoResp?.id) && setFieldValue("suCoId", values.suCoResp.id);
                     
@@ -259,7 +264,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                handleChangeSelect(
+                                                            handleChangeSelectId(
                                                                     "maChucVuNguoiChuTri",
                                                                     selectedOption
                                                                 )
@@ -267,7 +272,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.maChucVuNguoiChuTri}
                                                             className="spaces h-25 width-100"
                                                             name="maChucVuNguoiChuTri"
-                                                            options={CHUC_VU_OPTION}
+                                                            options={LOCALSTORAGE_STORE.DS_CHUC_VU}
                                                             errors={errors?.maChucVuNguoiChuTri}
                                                             touched={
                                                                 touched?.maChucVuNguoiChuTri
@@ -286,7 +291,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                handleChangeSelect(
+                                                                handleChangeSelectId(
                                                                     "donViNguoiChuTri",
                                                                     selectedOption
                                                                 )
@@ -294,7 +299,8 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.donViNguoiChuTri}
                                                             className="spaces h-25 width-100"
                                                             name="donViNguoiChuTri"
-                                                            options={DV_BAO_CAO}
+                                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                            getOptionValue={option=>option.code}
                                                             errors={errors?.donViNguoiChuTri}
                                                             touched={
                                                                 touched?.donViNguoiChuTri
@@ -336,7 +342,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                handleChangeSelect(
+                                                            handleChangeSelectId(
                                                                     "maChucVuThanhVienDoan",
                                                                     selectedOption
                                                                 )
@@ -344,7 +350,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.maChucVuThanhVienDoan}
                                                             className="spaces h-25 width-100"
                                                             name="maChucVuThanhVienDoan"
-                                                            options={CHUC_VU_OPTION}
+                                                            options={LOCALSTORAGE_STORE.DS_CHUC_VU}
                                                             errors={errors?.maChucVuThanhVienDoan}
                                                             touched={
                                                                 touched?.maChucVuThanhVienDoan
@@ -363,7 +369,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                handleChangeSelect(
+                                                                handleChangeSelectId(
                                                                     "donViThanhVienDoan",
                                                                     selectedOption
                                                                 )
@@ -371,7 +377,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.donViThanhVienDoan}
                                                             className="spaces h-25 width-100"
                                                             name="donViThanhVienDoan"
-                                                            options={DV_BAO_CAO}
+                                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
                                                             errors={errors?.donViThanhVienDoan}
                                                             touched={
                                                                 touched?.donViThanhVienDoan
@@ -411,7 +417,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                handleChangeSelect(
+                                                                handleChangeSelectId(
                                                                     "maChucVuNguoiChungKien",
                                                                     selectedOption
                                                                 )
@@ -419,7 +425,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.maChucVuNguoiChungKien}
                                                             className="spaces h-25 width-100"
                                                             name="maChucVuNguoiChungKien"
-                                                            options={CHUC_VU_OPTION}
+                                                            options={LOCALSTORAGE_STORE.DS_CHUC_VU}
                                                             errors={errors?.maChucVuNguoiChungKien}
                                                             touched={
                                                                 touched?.maChucVuNguoiChungKien
@@ -438,7 +444,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                handleChangeSelect(
+                                                                handleChangeSelectId(
                                                                     "donViNguoiChungKien",
                                                                     selectedOption
                                                                 )
@@ -446,7 +452,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.donViNguoiChungKien}
                                                             className="spaces h-25 width-100"
                                                             name="donViNguoiChungKien"
-                                                            options={DV_BAO_CAO}
+                                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
                                                             errors={errors?.donViNguoiChungKien}
                                                             touched={
                                                                 touched?.donViNguoiChungKien
@@ -464,78 +470,84 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                             </div>
                                         </Col>
                                         <div className="group-row">
-                                            {values?.nguoiThamDuXacMinhs?.map((item, index) => (
-                                                <Row className="spaces mb-10 flex-fill">
-                                                    <Col xs={4}>
-                                                        <div className="d-flex">
-                                                            <LabelRequired
-                                                                label="Ông bà"
-                                                                className="spaces min-w-60 fw-500"
-                                                            />
-                                                            <TextField
-                                                                className="spaces width-100"
-                                                                name={`nguoiThamDuXacMinhs[${index}].name`}
-                                                                type="text"
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                    <Col xs={4}>
-                                                        <div className="d-flex">
-                                                            <LabelRequired
-                                                                label="Chức vụ"
-                                                                className="spaces min-w-60 fw-500"
-                                                            />
-                                                            <Autocomplete
-                                                                onChange={(
-                                                                    selectedOption
-                                                                ) =>
-                                                                    handleChangeSelect(
-                                                                        `nguoiThamDuXacMinhs[${index}].maChucVu`,
-                                                                        selectedOption
-                                                                    )
-                                                                }
-                                                                className="spaces h-25 width-100"
-                                                                name={`nguoiThamDuXacMinhs[${index}].maChucVu`}
-                                                                options={CHUC_VU_OPTION}
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                    <Col xs={4}>
-                                                        <div className="d-flex align-items-center">
-                                                            <LabelRequired
-                                                                label="Đơn vị"
-                                                                className="spaces min-w-60 fw-500"
-                                                            />
-                                                            <Autocomplete
-                                                                onChange={(
-                                                                    selectedOption
-                                                                ) =>
-                                                                    handleChangeSelect(
-                                                                        `nguoiThamDuXacMinhs[${index}].donVi`,
-                                                                        selectedOption
-                                                                    )
-                                                                }
-                                                                className="spaces h-25 width-100"
-                                                                name={`nguoiThamDuXacMinhs[${index}].donVi`}
-                                                                options={DV_BAO_CAO}
-                                                            />
-                                                            <OverlayTrigger overlay={<Tooltip className="tooltip">Xóa</Tooltip>}>
-                                                                <i
-                                                                    onClick={() => {
-                                                                        handleDeleteNguoiThamGia(index)
-                                                                    }}
-                                                                    className="bi bi-trash3-fill text-danger spaces ml-6 cursor-pointer"
-                                                                ></i>
-                                                            </OverlayTrigger>
-                                                        </div>
-                                                    </Col>
+                                            {values?.nguoiThamDus?.map((item, index) => {
+                                                item.bienBanXacMinhId = thongTinBienBan.id
+                                                return (
+                                                    (
+                                                        <Row className="spaces mb-10 flex-fill">
+                                                            <Col xs={4}>
+                                                                <div className="d-flex">
+                                                                    <LabelRequired
+                                                                        label="Ông bà"
+                                                                        className="spaces min-w-60 fw-500"
+                                                                    />
+                                                                    <TextField
+                                                                        className="spaces width-100"
+                                                                        name={`nguoiThamDus[${index}].name`}
+                                                                        type="text"
+                                                                    />
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className="d-flex">
+                                                                    <LabelRequired
+                                                                        label="Chức vụ"
+                                                                        className="spaces min-w-60 fw-500"
+                                                                    />
+                                                                    <Autocomplete
+                                                                        onChange={(
+                                                                            selectedOption
+                                                                        ) =>
+                                                                            handleChangeSelectId(
+                                                                                `nguoiThamDus[${index}].maChucVu`,
+                                                                                selectedOption
+                                                                            )
+                                                                        }
+                                                                        value={values.nguoiThamDus[index].maChucVu}
+                                                                        className="spaces h-25 width-100"
+                                                                        name={`nguoiThamDus[${index}].maChucVu`}
+                                                                        options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                                    />
+                                                                </div>
+                                                            </Col>
+                                                            <Col xs={4}>
+                                                                <div className="d-flex align-items-center">
+                                                                    <LabelRequired
+                                                                        label="Đơn vị"
+                                                                        className="spaces min-w-60 fw-500"
+                                                                    />
+                                                                    <Autocomplete
+                                                                        onChange={(
+                                                                            selectedOption
+                                                                        ) =>
+                                                                            handleChangeSelectId(
+                                                                                `nguoiThamDus[${index}].donViId`,
+                                                                                selectedOption
+                                                                            )
+                                                                        }
+                                                                        value={values.nguoiThamDus[index].donViId}
+                                                                        className="spaces h-25 width-100"
+                                                                        name={`nguoiThamDus[${index}].donViId`}
+                                                                        options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                                    />
+                                                                    <OverlayTrigger overlay={<Tooltip className="tooltip">Xóa</Tooltip>}>
+                                                                        <i
+                                                                            onClick={() => {
+                                                                                handleDeleteNguoiThamGia(index)
+                                                                            }}
+                                                                            className="bi bi-trash3-fill text-danger spaces ml-6 cursor-pointer"
+                                                                        ></i>
+                                                                    </OverlayTrigger>
+                                                                </div>
+                                                            </Col>
 
-                                                </Row>
-                                            ))}
+                                                        </Row>
+                                                    )
+                                                )
+                                            })}
                                         </div>
-
                                         <Col xs={12}>
-                                            <div className="text-primary spaces mt-2 pl-78 cursor-pointer max-content-width" onClick={() => setFieldValue("nguoiThamDuXacMinhs", [...values.nguoiThamDuXacMinhs, initNguoiThamDu])}>
+                                            <div className="text-primary spaces mt-2 pl-78 cursor-pointer max-content-width" onClick={() => setFieldValue("nguoiThamDus", [...values.nguoiThamDus, initNguoiThamDu])}>
                                                 Thêm thành viên
                                                 <i className="bi bi-plus"></i>
                                             </div>

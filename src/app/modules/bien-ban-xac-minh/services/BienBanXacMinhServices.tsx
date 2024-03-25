@@ -30,7 +30,7 @@ export const getBienBanById = (id: string) => {
 };
 
 export const getListSuCoChuaXacMinh = () => {
-    const url = API_PATH + "/api/v1/su-co/get-list-chua-xac-minh";
+    const url = API_PATH + "/api/v1/su-co/list-chua-xac-minh";
     return axios.get(url);
 };
 

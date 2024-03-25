@@ -66,3 +66,18 @@ export const getDSChucVu = () => {
     const url = API_PATH + `/api/v1/su-co/chuc-vu`;
     return axios.get(url);
 }
+
+export const getDSChucDanh = () => {
+    const url = API_PATH + `/api/v1/su-co/chuc-danh`;
+    return axios.get(url);
+}
+
+export const getDSBenhNhan = () => {
+    const url = API_PATH + `/api/v1/su-co/benh-nhan`;
+    return axios.get(url);
+}
+
+export const getDSPhongBan = () => {
+    const url = API_PATH + `/api/v1/su-co/phong-ban`;
+    return axios.get(url);
+}

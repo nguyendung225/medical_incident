@@ -101,7 +101,7 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
 
     if ((typeof props?.value === TYPE.STRING) || (typeof props?.value === TYPE.NUMBER)) {
     //   const value = optionList.find((option: any) => option[props?.valueSearch ? props?.valueSearch : "name"] === props?.value ?? false)
-      const value = optionList.find((option: any) => option["code"] === props?.value ?? false)
+         const value = optionList.find((option: any) => option["code"] === props?.value || option["id"] === props?.value)
       setSelectedValue(value)
       return;
     }

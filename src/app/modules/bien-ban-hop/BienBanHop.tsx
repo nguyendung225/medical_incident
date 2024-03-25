@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
 import AppContext from "../../AppContext";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
-import { KHOA_PHONG, getTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
+import { getTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import { tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
@@ -18,6 +18,7 @@ import DialogThemMoiBienBanHop from "./components/DialogThemMoiBienBanHop";
 import { IBienBanHop } from "./model/BienBanHopModel";
 import { searchByPage } from "./services/BienBanHopServices";
 import { tab } from "../models/tabModels";
+import { LOCALSTORAGE_STORE } from "../auth/core/_consts";
 
 type Props = {};
 
@@ -81,19 +82,7 @@ const BienBanHop = (props: Props) => {
         formatData.ngayKetThuc = timeKetThuc.date
         formatData.isChuTriKy = convertBooleanToNumber(formatData.isChuTriKy)
         formatData.isThuKyKy = convertBooleanToNumber(formatData.isThuKyKy)
-        formatData.noiNhan = KHOA_PHONG.filter((option:any) => formatData?.noiNhan?.includes(option.code)) as any
-        formatData.chuTriObj = {
-            code: data.chuTriId,
-            fullName: data.tenChuTri
-        }
-        formatData.thuKyObj = {
-            code: data.thuKyId,
-            fullName: data.tenThuKy
-        }
-        formatData.trinhBayObj = {
-            code: data.nguoiTrinhBayId,
-            fullName: data.tenNguoiTrinhBay
-        }
+        formatData.noiNhan =LOCALSTORAGE_STORE.DS_PHONG_BAN.filter((option: any) => formatData?.noiNhan?.includes(option.code)) as any
 
         return formatData
     }
