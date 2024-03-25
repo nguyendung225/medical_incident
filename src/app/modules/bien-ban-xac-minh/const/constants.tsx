@@ -87,7 +87,8 @@ export const initNguoiThamDu: NguoiThamDuXacMinh = {
     bienBanXacMinhId: "",
     name: "",
     maChucVu: "",
-    tenDonVi: "",
+    donVi: "",
+    donViId: "",
 }
 
 export const initBienBanXacMinh: IBienBanXacMinh = {
@@ -104,7 +105,7 @@ export const initBienBanXacMinh: IBienBanXacMinh = {
     tenNguoiChungKien: "",
     maChucVuNguoiChungKien: "",
     donViNguoiChungKien: "",
-    nguoiThamDuXacMinhs: [
+    nguoiThamDus: [
         initNguoiThamDu
       ],
     veViec: "",

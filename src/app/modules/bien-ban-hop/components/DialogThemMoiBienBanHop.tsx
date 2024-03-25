@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { CHUC_VU_OPTION, KHOA_PHONG } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { SINGIN_OPTION, STATUS_BIEN_BAN } from "../../bien-ban-xac-minh/const/constants";
 import FileUploadDialog from "../../component/FileUpload/FileUploadDialog";
 import LabelRequired from "../../component/LabelRequired";
@@ -16,9 +15,10 @@ import { fileUpload } from "../../utils/FileServices";
 import { getListDeleteItem } from "../../utils/FunctionUtils";
 import { integerValidation } from "../../utils/ValidationSchema";
 import { IBienBanHop } from "../model/BienBanHopModel";
-import { addBienBan, getListNhanVien, getListSuCoChuaHop, updateBienBan } from "../services/BienBanHopServices";
+import { addBienBan, getListSuCoChuaHop, updateBienBan } from "../services/BienBanHopServices";
 import FileInfo from "../../component/FileUpload/FileInfo";
 import { deleteFileBienBanHop } from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
+import { LOCALSTORAGE_STORE } from "../../auth/core/_consts";
 
 type Props = {
     handleClose: () => void;
@@ -33,7 +33,7 @@ const DialogThemMoiBienBanHop = ({
 }: Props) => {
     const [openFileDialog, setOpenFileDialog] = useState(false)
     const validationSchema = Yup.object().shape({
-        departmentId: Yup.string().required("Bắt buộc chọn"),
+        departmentId: Yup.string().required("Bắt buộc chọn").nullable(),
         bienBan: Yup.string().required("Bắt buộc chọn"),
         suCoId: Yup.string().required("Bắt buộc chọn"),
         ketLuan: Yup.string().required("Bắt buộc chọn"),
@@ -57,9 +57,9 @@ const DialogThemMoiBienBanHop = ({
         diaDiem: Yup.string().required("Bắt buộc chọn"),
         tomTatNoiDung: Yup.string().required("Bắt buộc nhập"),
         noiDung: Yup.string().required("Bắt buộc chọn").nullable(),
-        chuTriObj: Yup.object().required("Bắt buộc chọn").nullable(),
-        thuKyObj: Yup.object().required("Bắt buộc chọn").nullable(),
-        trinhBayObj: Yup.object().required("Bắt buộc chọn").nullable(),
+        chuTriId: Yup.string().required("Bắt buộc chọn").nullable(),
+        thuKyId: Yup.string().required("Bắt buộc chọn").nullable(),
+        nguoiTrinhBayId: Yup.string().required("Bắt buộc chọn").nullable(),
         isChuTriKy: Yup.number().required("Bắt buộc chọn").nullable(),
         isThuKyKy: Yup.number().required("Bắt buộc chọn").nullable(),
         ngayKetThuc: Yup.date().required("Bắt buộc nhập").max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại').min(Yup.ref('ngayHop'), 'Ngày kết thúc không được trước ngày họp'),
@@ -75,9 +75,6 @@ const DialogThemMoiBienBanHop = ({
         formatData.isChuTriKy = Boolean(data.isChuTriKy)
         formatData.isThuKyKy = Boolean(data.isThuKyKy)
         formatData.noiNhan = (formatData?.noiNhan as any)?.map((item: any) => item?.code).toString()
-        formatData.chuTriId = formatData?.chuTriObj?.id || formatData.chuTriId
-        formatData.thuKyId = formatData?.thuKyObj?.id || formatData.thuKyId
-        formatData.nguoiTrinhBayId = formatData?.trinhBayObj?.id || formatData.nguoiTrinhBayId
 
         return formatData;
     };
@@ -144,9 +141,9 @@ const DialogThemMoiBienBanHop = ({
                                             />
                                             <Autocomplete
                                                 onChange={(selectedOption) =>
-                                                    handleChangeSelect(
+                                                    setFieldValue(
                                                         "departmentId",
-                                                        selectedOption
+                                                        selectedOption.id
                                                     )
                                                 }
                                                 value={
@@ -154,7 +151,7 @@ const DialogThemMoiBienBanHop = ({
                                                 }
                                                 className="spaces h-25 width-100"
                                                 name="departmentId"
-                                                options={KHOA_PHONG}
+                                                options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
                                                 errors={
                                                     errors?.departmentId
                                                 }
@@ -290,19 +287,21 @@ const DialogThemMoiBienBanHop = ({
                                                 onChange={(
                                                     selectedOption
                                                 ) =>
-                                                    setValues({ ...values, chuTriObj: selectedOption, maChucDanhChuTri: CHUC_VU_OPTION[0].code, maChucVuChuTri: CHUC_VU_OPTION[0].code, })
+                                                    setValues({
+                                                        ...values, chuTriId: selectedOption.id,
+                                                        chucDanhChuTriId: selectedOption.maChucDanh,
+                                                        chucVuChuTriId: selectedOption.maChucVu
+                                                    })
                                                 }
                                                 getOptionLabel={(option) => option.fullName}
                                                 className="spaces h-25 width-100"
-                                                name="chuTriObj"
-                                                value={values.chuTriObj}
-                                                errors={errors?.chuTriObj}
+                                                name="chuTriId"
+                                                value={values.chuTriId}
+                                                errors={errors?.chuTriId}
                                                 touched={
-                                                    touched?.chuTriObj
+                                                    touched?.chuTriId
                                                 }
-                                                searchObject={{}}
-                                                searchFunction={getListNhanVien}
-                                                options={[]}
+                                                options={LOCALSTORAGE_STORE.DS_NHAN_VIEN}
 
                                             />
                                         </div>
@@ -315,9 +314,9 @@ const DialogThemMoiBienBanHop = ({
                                             <Autocomplete
                                                 isDisabled
                                                 className="spaces h-25 width-100"
-                                                name="maChucDanhChuTri"
-                                                options={CHUC_VU_OPTION}
-                                                value={values.maChucDanhChuTri}
+                                                name="chucDanhChuTriId"
+                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                value={values.chucDanhChuTriId}
 
                                             />
                                         </div>
@@ -329,9 +328,9 @@ const DialogThemMoiBienBanHop = ({
                                             <Autocomplete
                                                 isDisabled
                                                 className="spaces h-25 width-100"
-                                                name="maChucVuChuTri"
-                                                options={CHUC_VU_OPTION}
-                                                value={values.maChucVuChuTri}
+                                                name="chucVuChuTriId"
+                                                options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                value={values.chucVuChuTriId}
 
                                             />
                                         </div>
@@ -349,20 +348,20 @@ const DialogThemMoiBienBanHop = ({
                                                     selectedOption
                                                 ) =>
                                                     setValues({
-                                                        ...values, thuKyObj: selectedOption, maChucDanhThuKy: CHUC_VU_OPTION[0].code, maChucVuThuKy: CHUC_VU_OPTION[0].code,
+                                                        ...values, thuKyId: selectedOption.id,
+                                                        chucDanhThuKyId: selectedOption.maChucDanh,
+                                                        chucVuThuKyId: selectedOption.maChucVu
                                                     })
                                                 }
                                                 getOptionLabel={(option) => option.fullName}
                                                 className="spaces h-25 width-100"
-                                                name="thuKyObj"
-                                                value={values.thuKyObj}
-                                                errors={errors?.thuKyObj}
+                                                name="thuKyId"
+                                                value={values.thuKyId}
+                                                errors={errors?.thuKyId}
                                                 touched={
-                                                    touched?.thuKyObj
+                                                    touched?.thuKyId
                                                 }
-                                                searchObject={{}}
-                                                searchFunction={getListNhanVien}
-                                                options={[]}
+                                                options={LOCALSTORAGE_STORE.DS_NHAN_VIEN}
 
                                             />
                                         </div>
@@ -375,9 +374,9 @@ const DialogThemMoiBienBanHop = ({
                                             <Autocomplete
                                                 isDisabled
                                                 className="spaces h-25 width-100"
-                                                name="maChucDanhThuKy"
-                                                options={CHUC_VU_OPTION}
-                                                value={values.maChucDanhThuKy}
+                                                name="chucDanhThuKyId"
+                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                value={values.chucDanhThuKyId}
 
                                             />
                                         </div>
@@ -389,11 +388,9 @@ const DialogThemMoiBienBanHop = ({
                                             <Autocomplete
                                                 isDisabled
                                                 className="spaces h-25 width-100"
-                                                name="maChucVuThuKy"
-                                                options={CHUC_VU_OPTION}
-                                                value={values.maChucVuThuKy}
-
-
+                                                name="chucVuThuKyId"
+                                                options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                value={values.chucVuThuKyId}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24" />
@@ -442,22 +439,20 @@ const DialogThemMoiBienBanHop = ({
                                                     selectedOption
                                                 ) =>
                                                     setValues({
-                                                        ...values, trinhBayObj: selectedOption, maChucDanhNguoiTrinhBay: CHUC_VU_OPTION[0].code, maChucVuNguoiTrinhBay: CHUC_VU_OPTION[0].code,
+                                                        ...values, nguoiTrinhBayId: selectedOption.id,
+                                                        chucDanhNguoiTrinhBayId: selectedOption.maChucDanh,
+                                                        chucVuNguoiTrinhBayId: selectedOption.maChucVu
                                                     })
                                                 }
                                                 getOptionLabel={(option) => option.fullName}
                                                 className="spaces h-25 width-100"
-                                                name="trinhBayObj"
-                                                value={values.trinhBayObj}
-                                                errors={errors?.trinhBayObj}
+                                                name="nguoiTrinhBayId"
+                                                value={values.nguoiTrinhBayId}
+                                                errors={errors?.nguoiTrinhBayId}
                                                 touched={
-                                                    touched?.trinhBayObj
+                                                    touched?.nguoiTrinhBayId
                                                 }
-
-                                                searchObject={{}}
-                                                searchFunction={getListNhanVien}
-                                                options={[]}
-
+                                                options={LOCALSTORAGE_STORE.DS_NHAN_VIEN}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24">
@@ -468,10 +463,9 @@ const DialogThemMoiBienBanHop = ({
                                             <Autocomplete
                                                 isDisabled
                                                 className="spaces h-25 width-100"
-                                                name="maChucDanhNguoiTrinhBay"
-                                                options={CHUC_VU_OPTION}
-                                                value={values.maChucDanhNguoiTrinhBay}
-
+                                                name="chucDanhNguoiTrinhBayId"
+                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                value={values.chucDanhNguoiTrinhBayId}
 
                                             />
                                         </div>
@@ -483,10 +477,9 @@ const DialogThemMoiBienBanHop = ({
                                             <Autocomplete
                                                 isDisabled
                                                 className="spaces h-25 width-100"
-                                                name="maChucVuNguoiTrinhBay"
-                                                options={CHUC_VU_OPTION}
-                                                value={values.maChucVuNguoiTrinhBay}
-
+                                                name="chucVuNguoiTrinhBayId"
+                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                value={values.chucVuNguoiTrinhBayId}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24" />
@@ -580,7 +573,7 @@ const DialogThemMoiBienBanHop = ({
                                                 type="date"
                                             />
                                         </div>
-                                        <div className="d-flex spaces width-24">
+                                        <div className="d-flex spaces width-48">
                                             <LabelRequired
                                                 label="Đính kèm"
                                                 className="spaces min-w-80 fw-500"
@@ -588,27 +581,28 @@ const DialogThemMoiBienBanHop = ({
                                             <FileInfo numberFile={values.fileDinhKems.length} handleOpenDialogUpload={() => setOpenFileDialog(true)} />
                                         </div>
 
-                                        <div className="d-flex spaces width-24">
-                                            <LabelRequired
-                                                label="Nơi nhận"
-                                                className="spaces min-w-80 fw-500"
-                                            />
-                                            <Autocomplete
-                                                onChange={(selectedOption) =>
-                                                    setFieldValue("noiNhan", selectedOption)
-                                                }
-                                                isMulti
-                                                styles={heightSelectMutil("auto", "30px")}
-                                                value={values.noiNhan}
-                                                className="spaces h-25 width-100"
-                                                name="noiNhan"
-                                                options={KHOA_PHONG}
-                                                errors={errors?.noiNhan}
-                                                getOptionValue={(option) => option?.code}
-                                                touched={touched?.noiNhan}
-                                            />
 
-                                        </div>
+                                    </div>
+                                    <div className="d-flex spaces width-100 pl-10">
+                                        <LabelRequired
+                                            label="Nơi nhận"
+                                            className="spaces min-w-130 fw-500"
+                                        />
+                                        <Autocomplete
+                                            onChange={(selectedOption) =>
+                                                setFieldValue("noiNhan", selectedOption)
+                                            }
+                                            isMulti
+                                            styles={heightSelectMutil("auto", "25px")}
+                                            value={values.noiNhan}
+                                            className="spaces width-100"
+                                            name="noiNhan"
+                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                            errors={errors?.noiNhan}
+                                            getOptionValue={(option) => option?.code}
+                                            touched={touched?.noiNhan}
+                                        />
+
                                     </div>
                                     <div className="spaces fw-700 mt-4">
                                         4.Ký biên bản

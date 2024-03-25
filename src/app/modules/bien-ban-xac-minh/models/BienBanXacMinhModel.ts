@@ -5,7 +5,8 @@ export interface NguoiThamDuXacMinh {
     bienBanXacMinhId: string;
     name: string;
     maChucVu: string;
-    tenDonVi: string;
+    donVi: string;
+    donViId: string;
     isActive?: boolean;
 }
 
@@ -29,7 +30,7 @@ export interface IBienBanXacMinh {
     tenNguoiChungKien: string;
     maChucVuNguoiChungKien: string;
     donViNguoiChungKien: string;
-    nguoiThamDuXacMinhs: NguoiThamDuXacMinh[];
+    nguoiThamDus: NguoiThamDuXacMinh[];
     veViec: string;
     ketQua: string;
     yKien: string;

@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import moment from "moment";
 import { useIntl } from "react-intl";
 import { toast } from "react-toastify";
@@ -8,6 +8,9 @@ import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING, EXTENSIONS } from ".
 import { TMenu, allMenu } from "../../pages/Homepage/listMenu";
 import { RESPONSE_STATUS_CODE } from "./Constant";
 import generatePDF, { Options } from "react-to-pdf";
+import { getDSBenhNhan, getDSChucDanh, getDSChucVu, getDSPhongBan } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
+import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
+import { getListNhanVien } from "../bien-ban-hop/services/BienBanHopServices";
 
 export const checkTypeOf = (value: any) => {
   return Object.prototype.toString.call(value).slice(8, -1);
@@ -253,3 +256,41 @@ export const getListDeleteItem = (arrBeforeDelete, arrAfterDelete) => {
     const deletedIds = initialIds?.filter(id => !arrAfterDelete.some(item => item.id === id));
     return deletedIds;
 }
+
+
+export const getListCategory = async () => {
+    try {
+        const res = await getDSChucVu();
+        localStorageItem.set(KEY_LOCALSTORAGE.LIST_CHUC_VU, res.data.data);
+    } catch (error) {
+        toast.error('Lỗi khi lấy danh sách chức vụ');
+    }
+
+    try {
+        const res = await getDSPhongBan();
+        localStorageItem.set(KEY_LOCALSTORAGE.LIST_PHONG_BAN, res.data.data);
+    } catch (error) {
+        toast.error('Lỗi khi lấy danh sách phòng ban');
+    }
+
+    try {
+        const res = await getDSChucDanh();
+        localStorageItem.set(KEY_LOCALSTORAGE.LIST_CHUC_DANH, res.data.data);
+    } catch (error) {
+        toast.error('Lỗi khi lấy danh sách chức danh');
+    }
+
+    try {
+        const res = await getDSBenhNhan();
+        localStorageItem.set(KEY_LOCALSTORAGE.LIST_BENH_NHAN, res.data.data);
+    } catch (error) {
+        toast.error('Lỗi khi lấy danh sách chức danh');
+    }
+    
+    try {
+        const res = await getListNhanVien();
+        localStorageItem.set(KEY_LOCALSTORAGE.LIST_NHAN_VIEN, res.data.data);
+    } catch (error) {
+        toast.error('Lỗi khi lấy danh sách chức danh');
+    }
+};
