@@ -18,7 +18,8 @@ import { IBienBanHop } from "../model/BienBanHopModel";
 import { addBienBan, getListSuCoChuaHop, updateBienBan } from "../services/BienBanHopServices";
 import FileInfo from "../../component/FileUpload/FileInfo";
 import { deleteFileBienBanHop } from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
-import { LOCALSTORAGE_STORE } from "../../auth/core/_consts";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
+import { localStorageItem } from "../../utils/LocalStorage";
 
 type Props = {
     handleClose: () => void;
@@ -151,7 +152,7 @@ const DialogThemMoiBienBanHop = ({
                                                 }
                                                 className="spaces h-25 width-100"
                                                 name="departmentId"
-                                                options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                                 errors={
                                                     errors?.departmentId
                                                 }
@@ -301,7 +302,7 @@ const DialogThemMoiBienBanHop = ({
                                                 touched={
                                                     touched?.chuTriId
                                                 }
-                                                options={LOCALSTORAGE_STORE.DS_NHAN_VIEN}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_NHAN_VIEN)}
 
                                             />
                                         </div>
@@ -315,7 +316,7 @@ const DialogThemMoiBienBanHop = ({
                                                 isDisabled
                                                 className="spaces h-25 width-100"
                                                 name="chucDanhChuTriId"
-                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
                                                 value={values.chucDanhChuTriId}
 
                                             />
@@ -329,7 +330,7 @@ const DialogThemMoiBienBanHop = ({
                                                 isDisabled
                                                 className="spaces h-25 width-100"
                                                 name="chucVuChuTriId"
-                                                options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
                                                 value={values.chucVuChuTriId}
 
                                             />
@@ -361,7 +362,7 @@ const DialogThemMoiBienBanHop = ({
                                                 touched={
                                                     touched?.thuKyId
                                                 }
-                                                options={LOCALSTORAGE_STORE.DS_NHAN_VIEN}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_NHAN_VIEN)}
 
                                             />
                                         </div>
@@ -375,7 +376,7 @@ const DialogThemMoiBienBanHop = ({
                                                 isDisabled
                                                 className="spaces h-25 width-100"
                                                 name="chucDanhThuKyId"
-                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
                                                 value={values.chucDanhThuKyId}
 
                                             />
@@ -389,7 +390,7 @@ const DialogThemMoiBienBanHop = ({
                                                 isDisabled
                                                 className="spaces h-25 width-100"
                                                 name="chucVuThuKyId"
-                                                options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
                                                 value={values.chucVuThuKyId}
                                             />
                                         </div>
@@ -452,7 +453,7 @@ const DialogThemMoiBienBanHop = ({
                                                 touched={
                                                     touched?.nguoiTrinhBayId
                                                 }
-                                                options={LOCALSTORAGE_STORE.DS_NHAN_VIEN}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_NHAN_VIEN)}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24">
@@ -464,7 +465,7 @@ const DialogThemMoiBienBanHop = ({
                                                 isDisabled
                                                 className="spaces h-25 width-100"
                                                 name="chucDanhNguoiTrinhBayId"
-                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
                                                 value={values.chucDanhNguoiTrinhBayId}
 
                                             />
@@ -478,7 +479,7 @@ const DialogThemMoiBienBanHop = ({
                                                 isDisabled
                                                 className="spaces h-25 width-100"
                                                 name="chucVuNguoiTrinhBayId"
-                                                options={LOCALSTORAGE_STORE.DS_CHUC_DANH}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
                                                 value={values.chucVuNguoiTrinhBayId}
                                             />
                                         </div>
@@ -597,7 +598,7 @@ const DialogThemMoiBienBanHop = ({
                                             value={values.noiNhan}
                                             className="spaces width-100"
                                             name="noiNhan"
-                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                            options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                             errors={errors?.noiNhan}
                                             getOptionValue={(option) => option?.code}
                                             touched={touched?.noiNhan}

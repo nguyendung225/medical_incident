@@ -224,11 +224,22 @@ export const exportToFile = async (props: IPropsExport) => {
 
 export const handlePrint = (id: string) => {
     let content = document.getElementById(id);
-    let pri = (document.getElementById("ifmcontentstoprint") as any)
-        .contentWindow;
+    let pri = (document.getElementById("ifmcontentstoprint") as any).contentWindow;
     pri.document.open();
 
-    pri.document.write((content as HTMLElement).innerHTML);
+    pri.document.write(`
+      <head>
+        <style type="text/css" media="print">
+          @page {
+            margin: 5mm;
+          }
+        </style>
+      </head>
+      <body>
+        ${content?.innerHTML}
+      </body>
+    `);
+
 
     pri.document.close();
     pri.focus();

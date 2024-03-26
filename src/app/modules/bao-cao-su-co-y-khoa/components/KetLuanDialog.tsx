@@ -2,7 +2,6 @@ import { Formik } from 'formik';
 import { Button, Col, Modal, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import { getListNhanVien } from '../../bien-ban-hop/services/BienBanHopServices';
 import LabelRequired from '../../component/LabelRequired';
 import TextField from '../../component/TextField';
 import { RESPONSE_STATUS_CODE } from '../../utils/Constant';
@@ -10,6 +9,8 @@ import { initKetLuan } from '../const/constants';
 import { IKetLuanSCYK } from '../models/BaoCaoSCYKModels';
 import { ketLuanSCYK } from '../services/BaoCaoSCYKServices';
 import Autocomplete from './../../component/input-field/Autocomplete';
+import { localStorageItem } from '../../utils/LocalStorage';
+import { KEY_LOCALSTORAGE } from '../../auth/core/_consts';
 
 type Props = {
     handleClose: () => void
@@ -97,8 +98,7 @@ const KetLuanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                                 className="spaces h-25 width-100"
                                                 name="chuTriObj"
                                                 searchObject={{}}
-                                                searchFunction={getListNhanVien}
-                                                options={[]}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_NHAN_VIEN)}
                                                 value={values.nguoiKetLuanId}
                                                 errors={errors?.nguoiKetLuanId}
                                                 touched={

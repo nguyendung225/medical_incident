@@ -3,12 +3,14 @@ import { Formik } from 'formik';
 import LabelRequired from '../../component/LabelRequired';
 import TextField from '../../component/TextField';
 import Autocomplete from '../../component/input-field/Autocomplete';
-import { initTiepNhan, KHOA_PHONG } from '../const/constants';
-import *as Yup  from 'yup';
+import { initTiepNhan } from '../const/constants';
+import * as Yup  from 'yup';
 import { ITiepNhan } from '../models/BaoCaoSCYKModels';
 import { tiepNhanSCYK } from '../services/BaoCaoSCYKServices';
 import { RESPONSE_STATUS_CODE } from '../../utils/Constant';
 import { toast } from 'react-toastify';
+import { localStorageItem } from '../../utils/LocalStorage';
+import { KEY_LOCALSTORAGE } from '../../auth/core/_consts';
 type Props = {
     handleClose: () => void
     suCoId: string
@@ -58,7 +60,7 @@ const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                     isSubmitting,
                 }) => {
                     const handleChangeSelect = (name: string, value: any) => {
-                        setFieldValue(name, value?.code);
+                        setFieldValue(name, value?.id);
                     };
                     
                     return (
@@ -81,7 +83,7 @@ const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                                 selectedOption
                                             )
                                         }
-                                        options={KHOA_PHONG}
+                                        options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                         value={values?.khoaPhongXuLy}
                                         errors={errors?.khoaPhongXuLy}
                                         touched={touched?.khoaPhongXuLy}

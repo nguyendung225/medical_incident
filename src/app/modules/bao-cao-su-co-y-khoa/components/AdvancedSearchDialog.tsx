@@ -32,8 +32,8 @@ const HINH_THUC_OPTIONS = [
 const PHAN_LOAI_OPTIONS = [
     { name: "Tất cả", code: "0" },
     { name: "Nặng", code: "1" },
-    { name: "Trung bình", code: "2" },
-    { name: "Nhẹ", code: "3" },
+    { name: "Trung bình", code: "3" },
+    { name: "Nhẹ", code: "2" },
 ]
 
 const KHOA_PHONG_DIEU_TRI_OPTIONS = [
