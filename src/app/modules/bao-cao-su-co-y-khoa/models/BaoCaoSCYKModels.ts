@@ -86,7 +86,7 @@ export interface IBenhNhan {
 export interface ITiepNhan {
     khoaPhongXuLy: string
     phuongAnXuLy: string
-    suCoId:string
+    suCoId: string
 }
 
 export interface IDropdownButton {

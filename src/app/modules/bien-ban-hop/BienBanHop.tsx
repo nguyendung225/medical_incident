@@ -18,7 +18,8 @@ import DialogThemMoiBienBanHop from "./components/DialogThemMoiBienBanHop";
 import { IBienBanHop } from "./model/BienBanHopModel";
 import { searchByPage } from "./services/BienBanHopServices";
 import { tab } from "../models/tabModels";
-import { LOCALSTORAGE_STORE } from "../auth/core/_consts";
+import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
+import { localStorageItem } from "../utils/LocalStorage";
 
 type Props = {};
 
@@ -82,7 +83,7 @@ const BienBanHop = (props: Props) => {
         formatData.ngayKetThuc = timeKetThuc.date
         formatData.isChuTriKy = convertBooleanToNumber(formatData.isChuTriKy)
         formatData.isThuKyKy = convertBooleanToNumber(formatData.isThuKyKy)
-        formatData.noiNhan =LOCALSTORAGE_STORE.DS_PHONG_BAN.filter((option: any) => formatData?.noiNhan?.includes(option.code)) as any
+        formatData.noiNhan = localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN).filter((option: any) => formatData?.noiNhan?.includes(option.code)) as any
 
         return formatData
     }

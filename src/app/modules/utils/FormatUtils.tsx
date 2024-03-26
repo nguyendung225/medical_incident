@@ -138,7 +138,7 @@ export const renderItemKhamBoPhan = (Data: any) => (
 );
 
 //--------------------------------------------
-export const convertGenderToString = (genderCode: number) => {
+export const convertGenderToString = (genderCode: number | string) => {
     switch(genderCode) {
         case GENDER.MALE: return "Nam";
         case GENDER.FEMALE: return "Nữ";

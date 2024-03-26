@@ -9,7 +9,8 @@ import { RESPONSE_STATUS_CODE } from "../../utils/Constant";
 import { SINGIN_OPTION, STATUS_BIEN_BAN, initNguoiThamDu } from "../const/constants";
 import { IBienBanXacMinh } from "../models/BienBanXacMinhModel";
 import { addBienBan, getListSuCoChuaXacMinh, updateBienBan } from "../services/BienBanXacMinhServices";
-import { LOCALSTORAGE_STORE } from "../../auth/core/_consts";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
+import { localStorageItem } from "../../utils/LocalStorage";
 
 type Props = {
     handleClose: () => void;
@@ -272,7 +273,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.maChucVuNguoiChuTri}
                                                             className="spaces h-25 width-100"
                                                             name="maChucVuNguoiChuTri"
-                                                            options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                            options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
                                                             errors={errors?.maChucVuNguoiChuTri}
                                                             touched={
                                                                 touched?.maChucVuNguoiChuTri
@@ -299,7 +300,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.donViNguoiChuTri}
                                                             className="spaces h-25 width-100"
                                                             name="donViNguoiChuTri"
-                                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                            options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                                             getOptionValue={option=>option.code}
                                                             errors={errors?.donViNguoiChuTri}
                                                             touched={
@@ -350,7 +351,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.maChucVuThanhVienDoan}
                                                             className="spaces h-25 width-100"
                                                             name="maChucVuThanhVienDoan"
-                                                            options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                            options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
                                                             errors={errors?.maChucVuThanhVienDoan}
                                                             touched={
                                                                 touched?.maChucVuThanhVienDoan
@@ -377,7 +378,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.donViThanhVienDoan}
                                                             className="spaces h-25 width-100"
                                                             name="donViThanhVienDoan"
-                                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                            options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                                             errors={errors?.donViThanhVienDoan}
                                                             touched={
                                                                 touched?.donViThanhVienDoan
@@ -425,7 +426,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.maChucVuNguoiChungKien}
                                                             className="spaces h-25 width-100"
                                                             name="maChucVuNguoiChungKien"
-                                                            options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                            options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
                                                             errors={errors?.maChucVuNguoiChungKien}
                                                             touched={
                                                                 touched?.maChucVuNguoiChungKien
@@ -452,7 +453,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             value={values.donViNguoiChungKien}
                                                             className="spaces h-25 width-100"
                                                             name="donViNguoiChungKien"
-                                                            options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                            options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                                             errors={errors?.donViNguoiChungKien}
                                                             touched={
                                                                 touched?.donViNguoiChungKien
@@ -506,7 +507,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                                         value={values.nguoiThamDus[index].maChucVu}
                                                                         className="spaces h-25 width-100"
                                                                         name={`nguoiThamDus[${index}].maChucVu`}
-                                                                        options={LOCALSTORAGE_STORE.DS_CHUC_VU}
+                                                                        options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
                                                                     />
                                                                 </div>
                                                             </Col>
@@ -528,7 +529,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                                         value={values.nguoiThamDus[index].donViId}
                                                                         className="spaces h-25 width-100"
                                                                         name={`nguoiThamDus[${index}].donViId`}
-                                                                        options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                                        options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                                                     />
                                                                     <OverlayTrigger overlay={<Tooltip className="tooltip">Xóa</Tooltip>}>
                                                                         <i

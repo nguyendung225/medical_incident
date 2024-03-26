@@ -41,7 +41,7 @@ const FilterSearchContainer = ({
             <div className="ds-search-box">
                 <div className="box-search">
                     <InputSearch
-                        placeholder="Tìm theo mã SC, mã BN, họ và tên..."
+                        placeholder="Tìm kiếm theo Họ và tên, Mã BN, Mã SC, Tên SC"
                         handleChange={(e) => { 
                             handleChangeSearchObj({...searchObj, keyword: e.target.value}) 
                         }}

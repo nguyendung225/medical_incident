@@ -29,14 +29,6 @@ const KEY_LOCALSTORAGE = {
   LIST_NHAN_VIEN: 'listNhanVien',
 }
 
-export const LOCALSTORAGE_STORE = {
-    DS_PHONG_BAN: localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN),
-    DS_BENH_NHAN: localStorageItem.get(KEY_LOCALSTORAGE.LIST_BENH_NHAN),
-    DS_NHAN_VIEN: localStorageItem.get(KEY_LOCALSTORAGE.LIST_NHAN_VIEN),
-    DS_CHUC_DANH: localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH),
-    DS_CHUC_VU: localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU),
-}
-
 const AUTHORIZE_REQUEST = `${process.env.REACT_APP_SSO_AUTHORIZE_ENDPOINT}?response_type=${process.env.REACT_APP_SSO_RESPONSE_TYPE}&scope=${process.env.REACT_APP_SSO_SCOPE}&client_id=${process.env.REACT_APP_SSO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_SSO_REDIRECT_URI}`;
 
 export { RESPONSE_STATUS_CODE, KEY_LOCALSTORAGE, AUTHORIZE_REQUEST }

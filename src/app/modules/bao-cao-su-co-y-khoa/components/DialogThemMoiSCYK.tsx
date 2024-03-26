@@ -22,7 +22,10 @@ import { addSCYK, updateSCYK } from "../services/BaoCaoSCYKServices";
 import LabelRequired from "./../../component/LabelRequired";
 import { checkInvalidDate } from "../../utils/ValidationSchema";
 import useMultiLanguage from "../../../hook/useMultiLanguage";
-import { LOCALSTORAGE_STORE } from "../../auth/core/_consts";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
+import { localStorageItem } from "../../utils/LocalStorage";
+import { useContext } from "react";
+import AppContext from "../../../AppContext";
 
 type Props = {
 	handleClose: () => void;
@@ -36,6 +39,7 @@ export default function DialogThemMoiSCYK({
 	updatePageData,
 }: Props) {
 	const { lang, intl } = useMultiLanguage();
+	const { setPageLoading } = useContext(AppContext);
 	const validationSchema = Yup.object().shape({
 		hinhThuc: Yup.string().required("Bắt buộc chọn"),
 		moTa: Yup.string().required("Bắt buộc nhập"),
@@ -78,6 +82,7 @@ export default function DialogThemMoiSCYK({
         thongTinSCYK.thoiGianXayRa = moment(`${thongTinSCYK.ngayXayRa}T${thongTinSCYK.thoiGianXayRa}`).format("HH:mm:ss");
 
         try {
+			setPageLoading(true);
             const { data: { code, message } } = thongTinSCYK?.id
                 ? await updateSCYK(thongTinSCYK, thongTinSCYK.id)
                 : await addSCYK(thongTinSCYK);
@@ -86,8 +91,9 @@ export default function DialogThemMoiSCYK({
                 handleClose();
                 toast.success(message);
             }
-
+			setPageLoading(false);
         } catch (error) {
+			setPageLoading(false);
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
@@ -182,7 +188,7 @@ export default function DialogThemMoiSCYK({
 													}
 													className="spaces h-25 min-w-242"
 													name="donViBaoCao"
-                                                    options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                    options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
 													value={values?.donViBaoCao}
 													errors={errors?.donViBaoCao}
 													touched={
@@ -264,7 +270,7 @@ export default function DialogThemMoiSCYK({
 													value={values.benhNhan}
 													errors={errors?.benhNhan}
 													touched={touched?.benhNhan}
-                                                    options={LOCALSTORAGE_STORE.DS_BENH_NHAN}
+                                                    options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_BENH_NHAN)}
 												/>
 											</div>
 											<div className="d-flex">
@@ -332,7 +338,7 @@ export default function DialogThemMoiSCYK({
 													isReadOnly
 													className="spaces h-25 min-w-242"
 													name="khoaPhong"
-                                                    options={LOCALSTORAGE_STORE.DS_PHONG_BAN}
+                                                    options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
 													value={values?.benhNhan?.khoaPhongDieuTriId}
 												/>
 											</div>

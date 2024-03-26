@@ -46,7 +46,7 @@ const BaoCaoSCYK = (props: Props) => {
         updatePageData({
             ...searchObj,
             trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
-            hinhThuc: searchObj?.phanLoai?.code,
+            hinhThuc: searchObj?.hinhThuc?.code,
             phanLoai: searchObj?.phanLoai?.code,
             khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.code,
         });
