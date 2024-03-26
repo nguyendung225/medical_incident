@@ -27,3 +27,14 @@
         }
     }
 }
+.actions-card {
+    align-items: center;
+
+    li {
+        margin: 0 !important;
+
+        >span i {
+            line-height: 40px !important;
+        }
+    }
+}

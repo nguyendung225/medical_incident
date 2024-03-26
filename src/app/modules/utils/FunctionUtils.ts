@@ -11,6 +11,8 @@ import generatePDF, { Options } from "react-to-pdf";
 import { getDSBenhNhan, getDSChucDanh, getDSChucVu, getDSPhongBan } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
 import { getListNhanVien } from "../bien-ban-hop/services/BienBanHopServices";
+import debounce from 'lodash/debounce';
+import * as echarts from "echarts";
 
 export const checkTypeOf = (value: any) => {
   return Object.prototype.toString.call(value).slice(8, -1);
@@ -268,7 +270,6 @@ export const getListDeleteItem = (arrBeforeDelete, arrAfterDelete) => {
     return deletedIds;
 }
 
-
 export const getListCategory = async () => {
     try {
         const res = await getDSChucVu();
@@ -305,3 +306,14 @@ export const getListCategory = async () => {
         toast.error('Lỗi khi lấy danh sách chức danh');
     }
 };
+
+const handleResize = debounce((entries) => {
+  entries.forEach(({ target }: any) => {
+    const instance = echarts.getInstanceByDom(target as HTMLElement);
+    if (instance) {
+      instance.resize();
+    }
+  });
+}, 100);
+
+export const resizeObserver = new window.ResizeObserver(handleResize);
