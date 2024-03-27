@@ -15,6 +15,23 @@ export const fileUpload = (files: any, idFile?: any) => {
   };
   return axios.post(url, formData, config);
 };
+
+export const fileUploadPhanTich = (files: any, idFile?: any) => {
+    let url = `${API_PATH}/api/v1/phan-tich/${idFile}/file-dinh-kem`;
+    let formData = new FormData();
+    files.forEach((file: File, index: number) => {
+      if (file instanceof File) {
+        formData.append(`files`, files[index]);
+      }
+    });
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return axios.post(url, formData, config);
+  };
+
 export const imageUpload = (file: any) => {
   let url = `${API_PATH}/file/upload-image`;
   let formData = new FormData();

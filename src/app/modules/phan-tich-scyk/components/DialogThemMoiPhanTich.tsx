@@ -11,7 +11,7 @@ import TabCapQuanLy from "./TabCapQuanLy";
 import { addPhanTich, deleteFilePhanTich, updatePhanTich } from "../services/PhanTichSCYKServices";
 import moment from "moment";
 import { STATUS_PHAN_TICH, TAB_PHAN_TICH_SCYK_DIALOG } from "../constants/constants";
-import { fileUpload } from "../../utils/FileServices";
+import { fileUploadPhanTich } from "../../utils/FileServices";
 import { getListDeleteItem } from "../../utils/FunctionUtils";
 import { tab } from "../../models/tabModels";
 
@@ -42,7 +42,7 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
         moTaKetQuaPhatHien: Yup.string().required("Bắt buộc nhập"),
         tenNguoiPhanTich: Yup.string().required("Bắt buộc nhập"),
         chucDanhNguoiPhanTich: Yup.string().required("Bắt buộc nhập"),
-        gioNgayPhanTich: Yup.date().required("Bắt buộc chọn"),
+        gioNgayPhanTich: Yup.date().required("Bắt buộc chọn").nullable(),
     });
 
     const formatDataPhanTich = (values: IPhanTichScyk) => {
@@ -110,9 +110,9 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
                         ? await updatePhanTich(formatDataPhanTich(values), thongTinPhanTich.id)
                         : await addPhanTich(formatDataPhanTich(values));
                     if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
-                        values.fileDinhKems.some((item: any) => item instanceof File) && await fileUpload(values.fileDinhKems, thongTinPhanTich?.id)
+                        values.fileDinhKems.some((item: any) => item instanceof File) && await fileUploadPhanTich(values.fileDinhKems, thongTinPhanTich?.id)
                         const listIdDelete = getListDeleteItem(thongTinPhanTich?.fileDinhKems, values.fileDinhKems)
-                        listIdDelete.length > 0 && await deleteFilePhanTich(thongTinPhanTich?.id, listIdDelete)
+                        // listIdDelete.length > 0 && await deleteFilePhanTich(thongTinPhanTich?.id, listIdDelete)
                         updatePageData({});
                         handleClose();
                         toast.success(message)

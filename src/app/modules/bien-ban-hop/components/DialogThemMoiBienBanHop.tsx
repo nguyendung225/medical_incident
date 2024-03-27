@@ -479,7 +479,7 @@ const DialogThemMoiBienBanHop = ({
                                                 isDisabled
                                                 className="spaces h-25 width-100"
                                                 name="chucVuNguoiTrinhBayId"
-                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
                                                 value={values.chucVuNguoiTrinhBayId}
                                             />
                                         </div>

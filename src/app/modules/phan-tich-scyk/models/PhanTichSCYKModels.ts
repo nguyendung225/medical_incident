@@ -38,7 +38,7 @@ export interface IPhanTichScyk {
   tonHaiToChucKhacText: string;
   tenNguoiPhanTich: string;
   chucDanhNguoiPhanTich: string;
-  gioNgayPhanTich: string;
+  gioNgayPhanTich: string | null;
   ngayPhanTich: string;
   gioPhanTich: string;
   trangThaiXuLy: string | number;
