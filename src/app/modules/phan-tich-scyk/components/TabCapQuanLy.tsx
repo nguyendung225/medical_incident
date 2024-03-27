@@ -9,6 +9,9 @@ import { OPTION_XAC_NHAN } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { IPhanTichScyk } from "../models/PhanTichSCYKModels";
 import { useFormikContext } from "formik";
 import { useEffect } from "react";
+import Autocomplete from "../../component/input-field/Autocomplete";
+import { localStorageItem } from "../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 
 const TabCapQuanLy = () => {
 	const {
@@ -198,11 +201,16 @@ const TabCapQuanLy = () => {
 									label="Chức danh"
 									className="spaces min-w-100 fw-500"
 								/>
-								<TextField
-									className="spaces min-w-242"
-									type="text"
-									name="chucDanhNguoiPhanTich"
-								/>
+                                <Autocomplete
+                                    menuPlacement="top"
+                                    className="spaces h-25 width-100"
+                                    name="chucDanhNguoiPhanTich"
+                                    options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
+                                    value={values.chucDanhNguoiPhanTich}
+                                    onChange={(option) => {
+										setFieldValue("chucDanhNguoiPhanTich",option.id);
+									}}
+                                />
 							</div>
 						</Col>
 						<Col xs={4}>

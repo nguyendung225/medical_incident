@@ -11,6 +11,7 @@ import { RESPONSE_STATUS_CODE } from '../../utils/Constant';
 import { toast } from 'react-toastify';
 import { localStorageItem } from '../../utils/LocalStorage';
 import { KEY_LOCALSTORAGE } from '../../auth/core/_consts';
+import { usePageData } from '../../../../_metronic/layout/core';
 type Props = {
     handleClose: () => void
     suCoId: string
@@ -18,6 +19,7 @@ type Props = {
 }
 
 const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
+    const { setUpdateDataTiepNhan } = usePageData()
 
     const validationSchema = Yup.object().shape({
         khoaPhongXuLy: Yup.string().required("Bắt buộc chọn"),
@@ -31,6 +33,7 @@ const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
             if (code === RESPONSE_STATUS_CODE.CREATED) {
                 toast.success(message)
                 updatePageData({})
+                setUpdateDataTiepNhan(prev => !prev)
                 handleClose()
             }
 

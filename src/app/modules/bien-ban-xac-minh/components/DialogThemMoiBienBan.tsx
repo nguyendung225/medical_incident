@@ -56,6 +56,13 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
         namKetThuc: Yup.string()
         .matches(/^(19|20)\d{2}$/, 'Năm không hợp lệ') // Pattern để kiểm tra năm từ 1900 đến 2099
         .required('Năm không được để trống'),
+        nguoiThamDus: Yup.array().of(
+            Yup.object().shape({
+              name: Yup.string().required('Vui lòng nhập tên'),
+              maChucVu: Yup.string().required('Vui lòng nhập mã chức vụ'),
+              donViId: Yup.string().required('Vui lòng nhập ID đơn vị'),
+            })
+          ),
     
     });
 
@@ -508,6 +515,8 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                                         className="spaces h-25 width-100"
                                                                         name={`nguoiThamDus[${index}].maChucVu`}
                                                                         options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
+                                                                        errors={(errors?.nguoiThamDus?.[index] as any)?.maChucVu}
+                                                                        touched={(touched?.nguoiThamDus?.[index] as any)?.maChucVu}
                                                                     />
                                                                 </div>
                                                             </Col>
@@ -530,6 +539,8 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                                         className="spaces h-25 width-100"
                                                                         name={`nguoiThamDus[${index}].donViId`}
                                                                         options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
+                                                                        errors={(errors?.nguoiThamDus?.[index] as any)?.donViId}
+                                                                        touched={(touched?.nguoiThamDus?.[index] as any)?.donViId}
                                                                     />
                                                                     <OverlayTrigger overlay={<Tooltip className="tooltip">Xóa</Tooltip>}>
                                                                         <i

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {FC, createContext, useContext, useEffect, useState} from 'react'
+import React, {Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState} from 'react'
 import {WithChildren} from '../../helpers'
 
 export interface PageLink {
@@ -16,18 +16,23 @@ export interface PageDataContextModel {
   setPageDescription: (_description: string) => void
   pageBreadcrumbs?: Array<PageLink>
   setPageBreadcrumbs: (_breadcrumbs: Array<PageLink>) => void
+  updateDataTiepNhan?: boolean
+  setUpdateDataTiepNhan: Dispatch<SetStateAction<boolean>>
 }
 
 const PageDataContext = createContext<PageDataContextModel>({
   setPageTitle: (_title: string) => {},
   setPageBreadcrumbs: (_breadcrumbs: Array<PageLink>) => {},
   setPageDescription: (_description: string) => {},
+  setUpdateDataTiepNhan: () => {},
 })
 
 const PageDataProvider: FC<WithChildren> = ({children}) => {
   const [pageTitle, setPageTitle] = useState<string>('')
   const [pageDescription, setPageDescription] = useState<string>('')
   const [pageBreadcrumbs, setPageBreadcrumbs] = useState<Array<PageLink>>([])
+  const [updateDataTiepNhan, setUpdateDataTiepNhan] = useState(false)
+
   const value: PageDataContextModel = {
     pageTitle,
     setPageTitle,
@@ -35,6 +40,8 @@ const PageDataProvider: FC<WithChildren> = ({children}) => {
     setPageDescription,
     pageBreadcrumbs,
     setPageBreadcrumbs,
+    setUpdateDataTiepNhan,
+    updateDataTiepNhan
   }
   return <PageDataContext.Provider value={value}>{children}</PageDataContext.Provider>
 }

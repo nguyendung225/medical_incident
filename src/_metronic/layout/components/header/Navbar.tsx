@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 import {HeaderNotificationsMenu, HeaderUserMenu, Search, ThemeModeSwitcher} from '../../../partials'
 import {useLayout} from '../../core'
+import NotificationsBox from '../../../partials/layout/header-menus/NotificationsBox'
 
 const btnClass =
   'btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px'
@@ -20,12 +21,7 @@ const Navbar = () => {
           <KTSVG path={'/media/icons/notification.svg'} className={`svg-icon-2`} />
         </div> */}
         <div className="notification cursor-pointer p-4 mx-3">
-          <button type="button" className="btn p-0 position-relative">
-            <KTSVG path={'/media/icons/notification.svg'} className={`flex mx-0 p-1`} />
-            <span className="position-absolute top-0 translate-middle badge rounded-pill bg-danger">
-              11
-            </span>
-          </button>
+          <NotificationsBox />
         </div>
         <div
           className={clsx('cursor-pointer')}

@@ -12,7 +12,7 @@ type Props = {
 
 function FileUploadDialog(props: Props) {
     const { handleClose, listFile, setListFile } = props;
-    const [selectedFile, setSelectedFile] = useState<any>(listFile);
+    const [selectedFile, setSelectedFile] = useState<any>(listFile || []);
 
     const onChange = async (e: any) => {
         setSelectedFile([...selectedFile, ...Array.from(e.target.files)]);

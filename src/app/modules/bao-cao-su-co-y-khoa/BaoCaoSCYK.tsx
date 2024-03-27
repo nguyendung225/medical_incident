@@ -20,11 +20,13 @@ import AppContext from "../../AppContext";
 import DropdownButton from "../component/button/DropdownButton";
 import { tab } from "../models/tabModels";
 import KetLuanSCYKDialog from "./components/KetLuanDialog";
+import { usePageData } from "../../../_metronic/layout/core";
 
 type Props = {};
 
 const BaoCaoSCYK = (props: Props) => {
     const { setPageLoading } = useContext(AppContext);
+    const { updateDataTiepNhan } = usePageData()
     const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
         pageNumber: 1,
@@ -131,6 +133,10 @@ const BaoCaoSCYK = (props: Props) => {
     useEffect(() => {
         !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
     }, [indexRowSelected])
+
+    useEffect(() => {
+        handleSearch();
+    }, [updateDataTiepNhan]);
 
     return (
         <div className="bao-cao-scyk-container">
