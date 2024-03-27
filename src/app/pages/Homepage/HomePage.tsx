@@ -120,6 +120,14 @@ export function HomePage() {
           <Row>
             <Col xs={4}>
               <LinkButton
+                linkTo={"/thong-ke-scyk"}
+                iconPath="/media/svg/icons/statistic.svg"
+                text={"Thống kê SCYK"}
+                modulePermission={MODULE.HO_SO}
+              />
+            </Col>
+            <Col xs={4}>
+              <LinkButton
                 linkTo={"/ds-bao-cao-scyk"}
                 iconPath="/media/svg/icons/warning-fill.svg"
                 text={"Báo cáo SCYK"}

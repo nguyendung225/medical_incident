@@ -12,3 +12,8 @@ export const searchTongQuanBaoCaoByParam = (searchObject: ISearchObject) => {
     const url = API_PATH + "/api/v1/dashboards/tong-quan-bao-cao";
     return axios.get(url, paramsConfig(searchObject));
 };
+
+export const searchLoaiDoiTuongTheoThangByParam = (searchObject: ISearchObject) => {
+    const url = API_PATH + "/api/v1/dashboards/loai_doi_tuong_theo_thang";
+    return axios.get(url, paramsConfig(searchObject));
+};

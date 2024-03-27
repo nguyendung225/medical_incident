@@ -1,12 +1,13 @@
 import { FC, SetStateAction, createContext, useContext, useState } from "react";
 import { WithChildren } from "../../../_metronic/helpers";
 import StatisticalContent from "./StatisticalContent";
+import { IStatisticalChart } from "./models/IStatisticalChart";
 
 type StatisticalContextProps = {
   type: number | undefined;
   setType: React.Dispatch<SetStateAction<number | undefined>>;
-  year: string | undefined;
-  setYear: React.Dispatch<SetStateAction<string | undefined>>;
+  year: string | number | undefined;
+  setYear: React.Dispatch<SetStateAction<string | number | undefined>>;
   loading: boolean | undefined;
   setLoading: React.Dispatch<SetStateAction<boolean | undefined>>;
 }
@@ -25,7 +26,7 @@ export const useStatisticalContext = () => useContext(StatisticalContext);
 
 const Statistical: FC<WithChildren> = ({ children }) => {
   const [type, setType] = useState<number>();
-  const [year, setYear] = useState<string>();
+  const [year, setYear] = useState<string | number | undefined>();
   const [loading, setLoading] = useState<boolean>();
 
   const value = { type, setType, year, setYear, loading, setLoading };

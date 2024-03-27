@@ -3,7 +3,7 @@ import moment from "moment";
 
 export type IStatisticalParams = {
   type?: number;
-  year?: string;
+  year?: string | number;
 }
 
 const API_URL = process.env.REACT_APP_API_URL;
