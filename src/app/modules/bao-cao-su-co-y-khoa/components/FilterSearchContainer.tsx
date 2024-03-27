@@ -4,6 +4,7 @@ import InputSearch from "../../component/InputSearch";
 import { Dispatch, SetStateAction, useState } from "react";
 import AdvancedSearchDialog from "./AdvancedSearchDialog";
 import { SearchObject } from "../models/BaoCaoSCYKModels";
+import { ISelectOption } from "../../models/models";
 
 type TProps = {
     handleCreate: () => void,
@@ -11,6 +12,7 @@ type TProps = {
     title: string,
     searchObj: SearchObject,
     handleChangeSearchObj: Dispatch<SetStateAction<SearchObject>>,
+    statusOptions: ISelectOption[],
 }
 
 const FilterSearchContainer = ({
@@ -18,7 +20,8 @@ const FilterSearchContainer = ({
     handleSearch,
     title,
     searchObj,
-    handleChangeSearchObj
+    handleChangeSearchObj,
+    statusOptions
 }: TProps) => {
     const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
 
@@ -63,6 +66,7 @@ const FilterSearchContainer = ({
                     handleSearch={handleSearch}
                     searchObj={searchObj}
                     handleChangeSearchObj={(searchData: SearchObject) => handleChangeSearchObj(searchData)}
+                    statusOptions={statusOptions}
                 />
             )}
         </>

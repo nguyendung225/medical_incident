@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/iframe-has-title */
 import { useContext, useEffect } from "react"
 import { Button } from "react-bootstrap";
@@ -11,7 +12,6 @@ import { toast } from "react-toastify";
 import AppContext from "../../AppContext";
 import DropdownButton from "../component/button/DropdownButton";
 import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSearchContainer";
-import AdvancedSearchDialog from "../bao-cao-su-co-y-khoa/components/AdvancedSearchDialog";
 import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { searchByPage } from "./services/PhanTichSCYKServices";
 import { IPhanTichScyk } from "./models/PhanTichSCYKModels";
@@ -20,12 +20,12 @@ import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList 
 import { phanTichScykTableColumns } from "./constants/constants";
 import { tab } from "../models/tabModels";
 import DialogThemMoiPhanTich from './components/DialogThemMoiPhanTich';
+import { STATUS_REPORT_OPTION } from "../bien-ban-xac-minh/const/constants";
 
 type Props = {};
 
 const PhanTichSCYK = (props: Props) => {
     const { setPageLoading } = useContext(AppContext);
-    const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
         pageNumber: 1,
         pageSize: 10,
@@ -103,7 +103,7 @@ const PhanTichSCYK = (props: Props) => {
     }, [thongTinSCYK])
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(phanTichScykList[indexRowSelected]?.suCoId);
+        !isNaN(indexRowSelected) && getThongTinSCYK(phanTichScykList[indexRowSelected]?.suCoId || "");
     }, [indexRowSelected])
 
     return (
@@ -118,6 +118,7 @@ const PhanTichSCYK = (props: Props) => {
                     }}
                     searchObj={searchObj}
                     handleSearch={handleSearch}
+                    statusOptions={STATUS_REPORT_OPTION}
                 />
                 <div>
                     <TableCustom
@@ -182,14 +183,6 @@ const PhanTichSCYK = (props: Props) => {
                     <TabMenu danhsachTabs={tabList} />
                 </div>
             </div>
-            {shouldOpenAdvancedSearchDialog && (
-                <AdvancedSearchDialog
-                    handleClose={() => setShouldOpenAdvancedSearchDialog(false)}
-                    handleSearch={handleSearch}
-                    searchObj={searchObj}
-                    handleChangeSearchObj={(searchData: SearchObject) => setSearchObj(searchData)}
-                />
-            )}
             {shouldOpenDialogThemMoiPhanTichSCYK && (
                 <DialogThemMoiPhanTich
                     thongTinPhanTich={{

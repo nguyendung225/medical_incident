@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/iframe-has-title */
 import { useContext, useEffect } from "react"
 import { Button } from "react-bootstrap";
 import "./BaoCaoSCYK.scss";
-import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList, tableDSSuCoYKhoaColumns } from "./const/constants";
+import { SCYK_DETAIL_INFO_INIT, TRANG_THAI_OPTIONS, getExportedFileList, getPhieuInList, getTabList, tableDSSuCoYKhoaColumns } from "./const/constants";
 import { useState } from "react";
 import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
 import { KTSVG } from "../../../_metronic/helpers";
@@ -12,7 +13,6 @@ import TabMenu from "../component/tabs/TabMenu";
 import { deleteSCYKById, searchByPage, getScykInfoDetailById } from "./services/BaoCaoSCYKServices";
 import { IDropdownButton, IMedicalIncidentDetailInfo, MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
 import { toast } from "react-toastify";
-import AdvancedSearchDialog from "./components/AdvancedSearchDialog";
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TiepNhanSCYKDialog from "./components/TiepNhanSCYKDialog";
 import FilterSearchContainer from "./components/FilterSearchContainer";
@@ -26,7 +26,6 @@ type Props = {};
 const BaoCaoSCYK = (props: Props) => {
     const { setPageLoading } = useContext(AppContext);
     const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false);
-    const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
         pageNumber: 1,
         pageSize: 10,
@@ -145,6 +144,7 @@ const BaoCaoSCYK = (props: Props) => {
                     }}
                     searchObj={searchObj}
                     handleSearch={handleSearch}
+                    statusOptions={TRANG_THAI_OPTIONS}
                 />
                 <div>
                     <TableCustom
@@ -295,14 +295,6 @@ const BaoCaoSCYK = (props: Props) => {
                     onYesClick={handleDeleteSCYK}
                     cancel={"Hủy"}
                     onCancelClick={() => setShouldOpenConfirmDeleteDialog(false)}
-                />
-            )}
-            {shouldOpenAdvancedSearchDialog && (
-                <AdvancedSearchDialog
-                    handleClose={() => setShouldOpenAdvancedSearchDialog(false)}
-                    handleSearch={handleSearch}
-                    searchObj={searchObj}
-                    handleChangeSearchObj={(searchData: SearchObject) => setSearchObj(searchData)}
                 />
             )}
             <iframe

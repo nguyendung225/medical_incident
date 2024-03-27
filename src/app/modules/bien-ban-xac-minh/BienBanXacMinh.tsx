@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -9,7 +10,7 @@ import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
 import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import "./BienBanXacMinh.scss";
-import { tableDSBienBanColumns } from "./const/constants";
+import { STATUS_REPORT_OPTION, tableDSBienBanColumns } from "./const/constants";
 import { IBienBanXacMinh } from "./models/BienBanXacMinhModel";
 import { searchByPage } from "./services/BienBanXacMinhServices";
 import DialogThemMoiBienBan from "./components/DialogThemMoiBienBan";
@@ -154,6 +155,7 @@ const BienBanXacMinh = (props: Props) => {
                     searchObj={searchObj}
                     handleChangeSearchObj={setSearchObj}
                     handleSearch={handleSearch}
+                    statusOptions={STATUS_REPORT_OPTION}
                 />
                 <div>
                     <TableCustom

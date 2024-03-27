@@ -3,25 +3,15 @@ import TextValidator from "../../component/input-field/TextValidator";
 import Autocomplete from "../../component/input-field/Autocomplete";
 import LabelRequired from "../../component/LabelRequired";
 import { SearchObject } from "../models/BaoCaoSCYKModels";
+import { ISelectOption } from "../../models/models";
 
 type TProps = {
     handleClose: () => void,
     handleSearch: () => void,
     searchObj: SearchObject,
     handleChangeSearchObj: (searchObj: SearchObject) => void,
+    statusOptions: ISelectOption[],
 }
-
-const TRANG_THAI_OPTIONS = [
-    { name: "Tất cả", code: "0" },
-    { name: "Mới tạo", code: "1" },
-    { name: "Chờ tiếp nhận", code: "2" },
-    { name: "Đã tiếp nhận", code: "3" },
-    { name: "Đã xác minh", code: "4" },
-    { name: "Đã phân tích", code: "5" },
-    { name: "Tạo biên bản", code: "6" },
-    { name: "Đã báo cáo", code: "7" },
-    { name: "Đã kết luận", code: "8" },
-]
 
 const HINH_THUC_OPTIONS = [
     { name: "Tất cả", code: "0" },
@@ -44,7 +34,8 @@ const AdvancedSearchDialog = ({
     handleClose, 
     handleSearch, 
     searchObj,
-    handleChangeSearchObj
+    handleChangeSearchObj,
+    statusOptions,
 }: TProps) => {
     const handleSumbit = () => {
         handleClose();
@@ -62,6 +53,13 @@ const AdvancedSearchDialog = ({
         handleChangeSearchObj({
             ...searchObj,
             [name]: value
+        })
+    }
+
+    const handleRemoveSearchParam = () => {
+        handleChangeSearchObj({
+            pageNumber: 0,
+            pageSize: 0,
         })
     }
 
@@ -88,7 +86,7 @@ const AdvancedSearchDialog = ({
                                 lable={"Thời gian báo cáo"}
                                 name="ngayBaoCaoStart"
                                 type="date"
-                                value={searchObj?.ngayBaoCaoStart}
+                                value={searchObj?.ngayBaoCaoStart || ""}
                                 onChange={handleChange}
                             />
                             <span className="spaces mx-5">-</span>
@@ -96,7 +94,7 @@ const AdvancedSearchDialog = ({
                                 className="d-flex spaces gap-10"
                                 name="ngayBaoCaoEnd"
                                 type="date"
-                                value={searchObj?.ngayBaoCaoEnd}
+                                value={searchObj?.ngayBaoCaoEnd || ""}
                                 onChange={handleChange}
                             />
                         </div>
@@ -112,7 +110,7 @@ const AdvancedSearchDialog = ({
                             <Autocomplete
                                 className="spaces h-25 min-w-256"
                                 name="trangThaiXuLy"
-                                options={TRANG_THAI_OPTIONS}
+                                options={statusOptions}
                                 value={searchObj?.trangThaiXuLy}
                                 onChange={(value) => {
                                     handleChangeSelect("trangThaiXuLy", value)
@@ -176,6 +174,9 @@ const AdvancedSearchDialog = ({
                 </Row>
             </Modal.Body>
             <Modal.Footer className="d-flex justify-content-center spaces py-10">
+                <Button className="button-primary" onClick={handleRemoveSearchParam}>
+                    Bỏ lọc
+                </Button>
                 <Button className="button-primary" onClick={handleSumbit}>
                     Tìm kiếm
                 </Button>
