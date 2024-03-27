@@ -34,6 +34,57 @@ export const INIT_DASHBOARD_DATA: IDashboardObject = {
             nam: 0,
         },
     ],
+    hinhThucBaoCao: {
+        tuNguyen: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+        batBuoc: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+    },
+    mucDoTonThuong: {
+        nhe: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+        trungBinh: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+        nang: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+    },
+    loaiDoiTuong: {
+        nguoiBenh: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+        nhanVienYTe: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+        nguoiNhaOrKhachTham: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+        trangThietBiOrCoSoHaTang: {
+            name: '',
+            percent: 0,
+            quantity: 0,
+        },
+    },
 };
 
 export const CategoryChartSCYKTheoThang: { name: string; value: string, namePercent: string }[] = [
@@ -42,3 +93,5 @@ export const CategoryChartSCYKTheoThang: { name: string; value: string, namePerc
     { name: 'Người nhà / Khách đến thăm', value: 'soNguoiNha', namePercent: 'phanTramNguoiNha' },
     { name: 'Trang thiết bị / Cơ sở hạ tầng', value: 'soTrangThietBi', namePercent: 'phanTramTrangThietBi' },
 ];
+
+export const colorsPieChart = ['#FF708B', '#F7CB45', '#AF52DE', '#5CC8BE'];

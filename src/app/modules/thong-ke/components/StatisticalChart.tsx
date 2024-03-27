@@ -199,7 +199,7 @@ export const StatisticalChart: React.FC<IStatisticalChart> = ({
             }}
             actions={[
                 <i className="spaces bi bi-eye fs-16" title="Phóng to biểu đồ" onClick={toggleFullscreen}></i>,
-                <Dropdown ref={dropdownRef} show={isOpen} onClick={toggleDropdown}>
+                <Dropdown ref={dropdownRef} show={isOpen} onClick={toggleDropdown} className="dropdown-xuatthongke">
                     <i className="spaces bi bi-download fs-16" title="Tải ảnh biểu đồ"></i>
                     <Dropdown.Menu>
                         <Dropdown.Item onClick={() => handleExport('jpg')}>{title} jpg</Dropdown.Item>
@@ -211,7 +211,7 @@ export const StatisticalChart: React.FC<IStatisticalChart> = ({
         >
             <div
                 ref={chartRef}
-                style={{ width: "100%", height: "100%" }}
+                style={{ width: "100%", height: "400px" }}
             />
         </Card>
     );
