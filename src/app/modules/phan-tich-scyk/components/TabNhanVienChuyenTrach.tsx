@@ -30,6 +30,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 	const [listFile, setListFile] = useState<any>(values?.fileDinhKems || []);
 
 	useEffect(() => {
+        setFieldValue("toKhaiLietKe", values?.fileDinhKems?.length > 0)
 		setListFile(values?.fileDinhKems || []);
 	}, [values?.fileDinhKems]);
 
@@ -105,6 +106,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 									onChange={(e) => {
 										setFieldValue("toKhaiLietKe", e.target.checked);
 									}}
+                                    checked={values.toKhaiLietKe}
 								>
 									Tờ khai liệt kê
 								</Checkbox>

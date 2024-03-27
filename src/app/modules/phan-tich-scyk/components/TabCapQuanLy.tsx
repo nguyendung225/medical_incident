@@ -21,7 +21,7 @@ const TabCapQuanLy = () => {
 	} = useFormikContext<IPhanTichScyk>();
 
 	useEffect(() => {
-		setFieldValue("gioNgayPhanTich", values?.ngayPhanTich + "T" + values?.gioPhanTich);
+        setFieldValue("gioNgayPhanTich", (values?.ngayPhanTich && values?.gioPhanTich) ? values?.ngayPhanTich + "T" + values?.gioPhanTich : null);
 	}, []);
 
 	return (
