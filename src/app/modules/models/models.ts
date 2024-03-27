@@ -33,3 +33,8 @@ export interface APIResponse {
 export interface IErrorResponse {
   errorMessage: string;
 };
+
+export interface ISelectOption {
+  name: string;
+  code: string | number;
+}

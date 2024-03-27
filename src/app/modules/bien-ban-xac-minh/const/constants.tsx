@@ -1,6 +1,5 @@
-import { InitThongTinSCYK, OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constants";
+import { OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { convertGenderToString, convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
-import { handlePrint } from "../../utils/FunctionUtils";
 import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
 
 export const tableDSBienBanColumns = [
@@ -155,3 +154,9 @@ export const STATUS_BIEN_BAN = {
     LUU_NHAP: 1,
     DA_XAC_MINH: 2
 }
+
+export const STATUS_REPORT_OPTION = [
+    { code: 1, name: "Lưu nháp" },
+    { code: 2, name: "Lưu" },
+    { code: 0, name: "Tất cả" },
+]

@@ -51,6 +51,18 @@ export const DOI_TUONG_XAY_RA_SC = [
     },
 ];
 
+export const TRANG_THAI_OPTIONS = [
+    { name: "Tất cả", code: "0" },
+    { name: "Mới tạo", code: "1" },
+    { name: "Chờ tiếp nhận", code: "2" },
+    { name: "Đã tiếp nhận", code: "3" },
+    { name: "Đã xác minh", code: "4" },
+    { name: "Đã phân tích", code: "5" },
+    { name: "Tạo biên bản", code: "6" },
+    { name: "Đã báo cáo", code: "7" },
+    { name: "Đã kết luận", code: "8" },
+]
+
 const renderPhanLoaiBaoCao = (phanLoaiCode: number) => {
     const phanLoaiBaoCao = OPTION_MUC_DO_AH.filter((mucDo) => mucDo.code === phanLoaiCode);
     return phanLoaiBaoCao && phanLoaiBaoCao[0]?.name;

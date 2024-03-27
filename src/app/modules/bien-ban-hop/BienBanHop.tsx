@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -7,7 +8,7 @@ import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSear
 import { getTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import { tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
+import { STATUS_REPORT_OPTION, tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
 import DropdownButton from "../component/button/DropdownButton";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
@@ -114,7 +115,7 @@ const BienBanHop = (props: Props) => {
     }
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId);
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId || "");
     }, [indexRowSelected])
 
     useEffect(() => {
@@ -135,6 +136,7 @@ const BienBanHop = (props: Props) => {
                     searchObj={searchObj}
                     handleChangeSearchObj={setSearchObj}
                     handleSearch={handleSearch}
+                    statusOptions={STATUS_REPORT_OPTION}
                 />
                 <div>
                     <TableCustom
