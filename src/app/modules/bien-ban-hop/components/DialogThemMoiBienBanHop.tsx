@@ -579,7 +579,7 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Đính kèm"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <FileInfo numberFile={values.fileDinhKems.length} handleOpenDialogUpload={() => setOpenFileDialog(true)} />
+                                            <FileInfo numberFile={values.fileDinhKems?.length} handleOpenDialogUpload={() => setOpenFileDialog(true)} />
                                         </div>
 
 

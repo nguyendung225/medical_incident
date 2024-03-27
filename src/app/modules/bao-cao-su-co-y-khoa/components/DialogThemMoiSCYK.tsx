@@ -26,6 +26,7 @@ import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import { localStorageItem } from "../../utils/LocalStorage";
 import { useContext } from "react";
 import AppContext from "../../../AppContext";
+import { usePageData } from "../../../../_metronic/layout/core";
 
 type Props = {
 	handleClose: () => void;
@@ -38,6 +39,7 @@ export default function DialogThemMoiSCYK({
     thongTinSCYK,
 	updatePageData,
 }: Props) {
+    const { setUpdateDataTiepNhan } = usePageData()
 	const { lang, intl } = useMultiLanguage();
 	const { setPageLoading } = useContext(AppContext);
 	const validationSchema = Yup.object().shape({
@@ -88,6 +90,7 @@ export default function DialogThemMoiSCYK({
                 : await addSCYK(thongTinSCYK);
             if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
                 updatePageData({});
+                setUpdateDataTiepNhan(prev => !prev)
                 handleClose();
                 toast.success(message);
             }

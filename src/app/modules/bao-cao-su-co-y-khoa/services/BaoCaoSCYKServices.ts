@@ -81,3 +81,7 @@ export const getDSPhongBan = () => {
     const url = API_PATH + `/api/v1/su-co/phong-ban`;
     return axios.get(url);
 }
+export const getDSTiepNhan = (searchObject: SearchObject) => {
+    const url = API_PATH + "/api/v1/tiep-nhan-su-co/page";
+    return axios.get(url, paramsConfig(searchObject));
+};

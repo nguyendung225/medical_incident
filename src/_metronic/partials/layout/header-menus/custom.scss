@@ -19,3 +19,20 @@
 .menu-sub:hover {
     display: block;
 };
+
+.noti-container {
+    position: relative;
+
+    .noti-popup {
+        top: 36px;
+        right: -200px;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+        position: absolute;
+        width: 320px;
+        max-height: 600px;
+        overflow-y: auto;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+}
