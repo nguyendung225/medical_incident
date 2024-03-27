@@ -11,9 +11,10 @@ export interface ISearchObject {
 	ToDate: string | null;
 }
 
-export interface IDashboardObject {
-	tongQuanBaoCao: ITongQuanBaoCao;
-	loaiDoiTuongTheoThang: ILoaiDoiTuongTheoThang[];
+export interface IPieChartObject {
+	name: string;
+	percent: number;
+	quantity: number;
 }
 
 export interface ITongQuanBaoCao {
@@ -38,4 +39,30 @@ export interface ILoaiDoiTuongTheoThang {
 	phanTramTrangThietBi: number;
 	thang: number;
 	nam: number;
+}
+
+export interface IHinhThucBaoCao {
+	tuNguyen: IPieChartObject;
+	batBuoc: IPieChartObject;
+}
+
+export interface ILoaiDoiTuong {
+	nguoiBenh: IPieChartObject;
+	nhanVienYTe: IPieChartObject;
+	nguoiNhaOrKhachTham: IPieChartObject;
+	trangThietBiOrCoSoHaTang: IPieChartObject;
+}
+
+export interface IMucDoTonThuong {
+	nhe: IPieChartObject;
+	trungBinh: IPieChartObject;
+	nang: IPieChartObject;
+}
+
+export interface IDashboardObject {
+	tongQuanBaoCao: ITongQuanBaoCao;
+	loaiDoiTuongTheoThang: ILoaiDoiTuongTheoThang[];
+	hinhThucBaoCao: IHinhThucBaoCao;
+	loaiDoiTuong: ILoaiDoiTuong;
+	mucDoTonThuong: IMucDoTonThuong;
 }

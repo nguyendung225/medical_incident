@@ -317,3 +317,22 @@ const handleResize = debounce((entries) => {
 }, 100);
 
 export const resizeObserver = new window.ResizeObserver(handleResize);
+
+export const convertToChartData = (data: any, color: string[]) => {
+  const chartData = Object.keys(data || {}).map((key, index) => {
+    return {
+      name: data[key].name,
+      value: data[key].quantity,
+      percent: data[key].percent,
+      itemStyle: {
+        color: color[index],
+      },
+      label: {
+        position: "inside",
+        show: !(data[key].percent === 0),
+        formatter: '{d}%'
+      }
+    };
+  });
+  return chartData
+}

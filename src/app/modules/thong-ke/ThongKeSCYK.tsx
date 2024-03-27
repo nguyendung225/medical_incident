@@ -8,13 +8,16 @@ import * as Yup from "yup";
 import { INIT_DASHBOARD_DATA, INIT_DASHBOARD_SEARCH_VALUE } from "./constants/constants";
 import { useContext, useEffect, useState } from "react";
 import { IDashboardObject, IPhongBan, ISearchObject } from "./models/ThongKeModels";
-import { searchLoaiDoiTuongTheoThangByParam, searchTongQuanBaoCaoByParam } from "./services/ThongKeServices";
+import { getDataThongKeHinhThucBaoCao, getDataThongKeLoaiDoiTuong, getDataThongKeMucDoTonThuong, getLoaiDoiTuongTheoThang, getTongQuanBaoCao } from "./services/ThongKeServices";
 import { toast } from "react-toastify";
 import AppContext from "../../AppContext";
 import ThongKeSCYKTheoThang from "./components/ThongKeSCYKTheoThang";
 import { localStorageItem } from "../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
 import { heightSelectMutil } from "../component/input-field/StyleComponent";
+import ThongKeHinhThucBaoCao from "./components/ThongKeHinhThucBaoCao";
+import ThongKeLoaiDoiTuong from "./components/ThongKeLoaiDoiTuong";
+import ThongKeMucDoTonThuong from "./components/ThongKeMucDoTonThuong";
 
 const ThongKeSCYK = () => {
     const { setPageLoading } = useContext(AppContext);
@@ -36,11 +39,18 @@ const ThongKeSCYK = () => {
                 ...searchObject,
                 ListDepartmentId: searchObject?.ListDepartment?.map((item) => item.id) || null,
             };
-            const tongQuanBaoCao = await searchTongQuanBaoCaoByParam(filtedSearchObj);
-            const loaiDoiTuongTheoThang = await searchLoaiDoiTuongTheoThangByParam(filtedSearchObj);
+            const tongQuanBaoCao = await getTongQuanBaoCao(filtedSearchObj);
+            const loaiDoiTuongTheoThang = await getLoaiDoiTuongTheoThang(filtedSearchObj);
+            const hinhThucBaoCao = await getDataThongKeHinhThucBaoCao(filtedSearchObj);
+            const loaiDoiTuong = await getDataThongKeLoaiDoiTuong(filtedSearchObj);
+            const mucDoTonThuong = await getDataThongKeMucDoTonThuong(filtedSearchObj);
+
             setThongKeSCYK({
                 tongQuanBaoCao: tongQuanBaoCao?.data?.data || INIT_DASHBOARD_DATA.tongQuanBaoCao,
-                loaiDoiTuongTheoThang: loaiDoiTuongTheoThang?.data?.data || INIT_DASHBOARD_DATA.loaiDoiTuongTheoThang
+                loaiDoiTuongTheoThang: loaiDoiTuongTheoThang?.data?.data || INIT_DASHBOARD_DATA.loaiDoiTuongTheoThang,
+                hinhThucBaoCao: hinhThucBaoCao?.data?.data || INIT_DASHBOARD_DATA.hinhThucBaoCao,
+                loaiDoiTuong: loaiDoiTuong?.data?.data || INIT_DASHBOARD_DATA.loaiDoiTuong,
+                mucDoTonThuong: mucDoTonThuong?.data?.data || INIT_DASHBOARD_DATA.mucDoTonThuong,
             })
             setPageLoading(false);
         } catch (error) {
@@ -149,7 +159,27 @@ const ThongKeSCYK = () => {
                         </div>
                     </Col>
                 )}
-                
+                {thongKeSCYK.hinhThucBaoCao && (
+                    <Col xs={4}>
+                        <div className="spaces pb-16 d-flex gap-10 height-100">
+                            <ThongKeHinhThucBaoCao hinhThucBaoCao={thongKeSCYK.hinhThucBaoCao} />
+                        </div>
+                    </Col>
+                )}
+                {thongKeSCYK.mucDoTonThuong && (
+                    <Col xs={4}>
+                        <div className="spaces pb-16 d-flex gap-10 height-100">
+                            <ThongKeMucDoTonThuong mucDoTonThuong={thongKeSCYK.mucDoTonThuong} />
+                        </div>
+                    </Col>
+                )}
+                {thongKeSCYK.loaiDoiTuong && (
+                    <Col xs={4}>
+                        <div className="spaces pb-16 d-flex gap-10 height-100">
+                            <ThongKeLoaiDoiTuong loaiDoiTuong={thongKeSCYK.loaiDoiTuong} />
+                        </div>
+                    </Col>
+                )}
             </Row>
         </>
 
