@@ -4,6 +4,8 @@ import Autocomplete from "../../component/input-field/Autocomplete";
 import LabelRequired from "../../component/LabelRequired";
 import { SearchObject } from "../models/BaoCaoSCYKModels";
 import { ISelectOption } from "../../models/models";
+import { localStorageItem } from "../../utils/LocalStorage";
+import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 
 type TProps = {
     handleClose: () => void,
@@ -24,10 +26,6 @@ const PHAN_LOAI_OPTIONS = [
     { name: "Nặng", code: "1" },
     { name: "Trung bình", code: "3" },
     { name: "Nhẹ", code: "2" },
-]
-
-const KHOA_PHONG_DIEU_TRI_OPTIONS = [
-    { name: "Tất cả", code: null },
 ]
 
 const AdvancedSearchDialog = ({ 
@@ -163,7 +161,7 @@ const AdvancedSearchDialog = ({
                             <Autocomplete
                                 className="spaces h-25 min-w-256"
                                 name="khoaPhongDieuTri"
-                                options={KHOA_PHONG_DIEU_TRI_OPTIONS}
+                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                 value={searchObj?.khoaPhongDieuTri}
                                 onChange={(value) => {
                                     handleChangeSelect("khoaPhongDieuTri", value)
@@ -175,7 +173,7 @@ const AdvancedSearchDialog = ({
             </Modal.Body>
             <Modal.Footer className="d-flex justify-content-center spaces py-10">
                 <Button className="button-primary" onClick={handleRemoveSearchParam}>
-                    Bỏ lọc
+                   Mặc định
                 </Button>
                 <Button className="button-primary" onClick={handleSumbit}>
                     Tìm kiếm

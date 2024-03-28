@@ -13,6 +13,7 @@ import {
     GENDER_OPTION,
     OPTION_HINH_THUC_BC,
     OPTION_MUC_DO_AH,
+    OPTION_PHAN_LOAI,
     OPTION_XAC_NHAN,
     OTHER_FIELD_LOAI_NBC,
     TT_NGUOI_THONG_BAO
@@ -282,10 +283,10 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
-													readOnly
+													disabled
 													className="spaces min-w-242"
                                                     name="benhNhan.name"
-                                                    value={values.benhNhan?.name}
+                                                    value={values.benhNhan?.name || ""}
 													type="text "
 												/>
 											</div>
@@ -295,7 +296,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
-													readOnly
+													disabled
 													className="spaces min-w-242"
                                                     name="benhNhan.soBenhAn"
                                                     value={values.benhNhan?.soBenhAn}
@@ -311,10 +312,10 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
-													readOnly
+													disabled
 													className="spaces min-w-242"
                                                     name="benhNhan.ngaySinh"
-                                                    value={values.benhNhan?.ngaySinh && moment(values.benhNhan?.ngaySinh).format('YYYY-MM-DD')}
+                                                    value={(values.benhNhan?.ngaySinh && moment(values.benhNhan?.ngaySinh).format('YYYY-MM-DD')) || ""}
 													type="date"
 													handleChange={handleChange}
 												/>
@@ -325,7 +326,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<Autocomplete
-													isReadOnly
+													isDisabled
 													className="spaces h-25 min-w-242"
 													name="gioiTinh"
                                                     value={values?.benhNhan?.gioiTinh}
@@ -338,7 +339,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<Autocomplete
-													isReadOnly
+													isDisabled
 													className="spaces h-25 min-w-242"
 													name="khoaPhong"
                                                     options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
@@ -513,7 +514,7 @@ export default function DialogThemMoiSCYK({
 															handleChange
 														}
 														radioItemList={
-															OPTION_XAC_NHAN
+															OPTION_PHAN_LOAI
 														}
 													/>
 												</div>

@@ -8,6 +8,8 @@ export interface NguoiThamDuXacMinh {
     donVi: string;
     donViId: string;
     isActive?: boolean;
+    tenChucVu?: string;
+    tenDonVi?: string
 }
 
 export interface IBienBanXacMinh {
@@ -55,5 +57,12 @@ export interface IBienBanXacMinh {
     phanLoaiSuCo: number;
     ngayTao: string;
     suCoResp?: MedicalIncidentInfo;
+    tenChucVuNguoiChuTri?: string
+    tenChucVuNguoiChungKien?: string
+    tenChucVuThanhVienDoan?: string
+    tenDonViNguoiChuTri?: string
+    tenDonViNguoiChungKien?: string
+    tenDonViThanhVienDoan?: string
+
 }
 

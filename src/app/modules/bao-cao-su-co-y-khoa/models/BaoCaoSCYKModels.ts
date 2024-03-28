@@ -5,6 +5,7 @@ import { IPhanTichScyk } from "../../phan-tich-scyk/models/PhanTichSCYKModels";
 export interface autocompleteOption {
   name: string,
   code: string,
+  id?: string,
 }
 
 export interface SearchObject {
@@ -80,6 +81,7 @@ export interface IBenhNhan {
   khoaPhongDieuTriId: null;
   name: string;
   ngaySinh: string;
+  soBenhAn?: string
   tenKhoaPhongDieuTri: string;
 }
 

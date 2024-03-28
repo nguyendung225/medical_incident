@@ -119,6 +119,7 @@ export const PHAN_TICH_SCYK_INFO_INIT: IPhanTichScyk = {
     tonHaiToChuc: [],
     tonHaiToChucKhacText: "",
     tenNguoiPhanTich: "",
+    tenChucDanhNguoiPhanTich: "",
     chucDanhNguoiPhanTich: "",
     gioNgayPhanTich: null,
     ngayPhanTich: "",

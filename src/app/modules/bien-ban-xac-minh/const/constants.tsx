@@ -1,4 +1,4 @@
-import { OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constants";
+import { OPTION_HINH_THUC_BC } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { convertGenderToString, convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
 
@@ -11,7 +11,7 @@ export const tableDSBienBanColumns = [
     {
         name: "TT",
         field: "name",
-        render: (row: any) => renderMedicalIncidentReportStatus(row?.trangThai)
+        render: (row: any) => renderMedicalIncidentReportStatus(row?.trangThaiXuLy)
     },
     {
         name: "Phân loại SCYK",
@@ -19,7 +19,7 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "140px"
         },
-        render: (row: any) => <span>{convertLabelByCode(OPTION_MUC_DO_AH, row?.suCoResp?.phanLoaiBanDau)}</span>
+        render: (row: any) => <span>{convertLabelByCode(OPTION_HINH_THUC_BC, row?.suCoResp?.hinhThuc)}</span>
     },
     {
         name: "Mã sự cố",
@@ -73,11 +73,11 @@ export const tableDSBienBanColumns = [
     },
     {
         name: "Khoa/phòng BN điều trị",
-        field: "tenKhoaPhong",
+        field: "tenKhoaPhongDieuTri",
         headerStyle: {
             minWidth: "200px"
         },
-        render: (row: any) => <span>{row?.suCoResp?.tenKhoaPhong}</span>
+        render: (row: any) => <span>{row?.tenKhoaPhongDieuTri}</span>
     },
 ]
 
