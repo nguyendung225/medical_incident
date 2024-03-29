@@ -25,11 +25,11 @@ const ThongKeSCYK = () => {
 
     const validationSchema = Yup.object().shape({
         FromDate: Yup.date()
-            .max(Yup.ref("ToDate"), "Từ ngày" + " không được lớn hơn đến ngày")
-            .max(new Date(), "Từ ngày" + " không được lớn hơn ngày hiện tại").notRequired(),
+            .max(Yup.ref("ToDate"), "Từ ngày không được lớn hơn đến ngày")
+            .max(new Date(), "Từ ngày không được lớn hơn ngày hiện tại").notRequired(),
         ToDate: Yup.date()
-            .min(Yup.ref("FromDate"), "Đến ngày" + " không được nhỏ hơn từ ngày")
-            .max(new Date(), "Đến ngày" + " không được lớn hơn ngày hiện tại").notRequired(),
+            .min(Yup.ref("FromDate"), "Đến ngày không được nhỏ hơn từ ngày")
+            .max(new Date(), "Đến ngày không được lớn hơn ngày hiện tại").notRequired(),
     });
 
     const fetchTongQuanBaoCao = async (searchObject: ISearchObject) => {
