@@ -20,6 +20,8 @@ import AppContext from "../../AppContext";
 import DropdownButton from "../component/button/DropdownButton";
 import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { tab } from "../models/tabModels";
+import { PHAN_TICH_SCYK_INFO_INIT } from "../phan-tich-scyk/constants/constants";
+import { initBienBanHop } from "../bien-ban-hop/const/constants";
 
 type Props = {};
 
@@ -138,14 +140,21 @@ const BienBanXacMinh = (props: Props) => {
     }, [indexRowSelected])
 
     useEffect(() => {
-        setTabList(getTabList(thongTinSCYK));
-        setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
-        setPhieuInList(getPhieuInList(thongTinSCYK));
+        const thongTinScykParams = {
+            suCoResp: thongTinSCYK?.suCoResp,
+            bienBanXacMinhResp: thongTinSCYK?.bienBanXacMinhResp,
+            phanTichResp: PHAN_TICH_SCYK_INFO_INIT,
+            bienBanHopResp: initBienBanHop,
+        }
+
+        setTabList(getTabList(thongTinScykParams));
+        setExportedFileList(getExportedFileList(thongTinScykParams, setPageLoading));
+        setPhieuInList(getPhieuInList(thongTinScykParams));
     }, [thongTinSCYK])
 
     return (
-        <div className="bien-ban-xm-container">
-            <div className="ds-bien-ban-xm">
+        <div className="page-container">
+            <div className="left-content-container">
                 <FilterSearchContainer 
                     title="Danh sách biên bản xác minh"
                     handleCreate={() => {
@@ -194,7 +203,7 @@ const BienBanXacMinh = (props: Props) => {
                     </div>
                 </div>
             </div>
-            <div className="tt-bien-ban-xm">
+            <div className="right-content-container">
                 <div className="tt-header">
                     <div className="title-wrapper">
                         <KTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
@@ -237,8 +246,8 @@ const BienBanXacMinh = (props: Props) => {
             {openThemMoiBienBan && (
                 <DialogThemMoiBienBan
                     thongTinBienBan={{
-                        ...thongTinSCYK.bienBanXacMinhResp,
-                        suCoResp: thongTinSCYK.suCoResp,
+                        ...thongTinSCYK?.bienBanXacMinhResp,
+                        suCoResp: thongTinSCYK?.suCoResp,
                     }}
                     updatePageData={updatePageData}
                     handleClose={handleCloseModal} 

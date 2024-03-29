@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 const API_PATH = process.env.REACT_APP_API_URL;
 export const fileUpload = (files: any, idFile?: any) => {
   let url = `${API_PATH}/api/v1/file-dinh-kem?id=${idFile}`;
@@ -59,5 +60,21 @@ export const downLoadFileById = (fileId: string) => {
     method: "GET",
     responseType: "blob",
   });
+};
+
+export const handleDownLoadFile = async (fileId: string, fileName: string) => {
+  try {
+      const res = await downLoadFileById(fileId);
+      const url = window.URL.createObjectURL(new Blob([res?.data], {
+          type: res.headers['content-type']
+      }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${fileName}`);
+      document.body.appendChild(link);
+      link.click();
+  } catch (error) {
+      toast.error("Lỗi hệ thống vui lòng thử lại");
+  }
 };
 

@@ -20,7 +20,8 @@ import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList 
 import { phanTichScykTableColumns } from "./constants/constants";
 import { tab } from "../models/tabModels";
 import DialogThemMoiPhanTich from './components/DialogThemMoiPhanTich';
-import { STATUS_REPORT_OPTION } from "../bien-ban-xac-minh/const/constants";
+import { STATUS_REPORT_OPTION, initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
+import { initBienBanHop } from "../bien-ban-hop/const/constants";
 
 type Props = {};
 
@@ -97,9 +98,16 @@ const PhanTichSCYK = (props: Props) => {
     }
 
     useEffect(() => {
-        setTabList(getTabList(thongTinSCYK));
-        setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
-        setPhieuInList(getPhieuInList(thongTinSCYK));
+        const thongTinScykParams = {
+            suCoResp: thongTinSCYK?.suCoResp,
+            bienBanXacMinhResp: initBienBanXacMinh,
+            phanTichResp: thongTinSCYK?.phanTichResp,
+            bienBanHopResp: initBienBanHop,
+        }
+
+        setTabList(getTabList(thongTinScykParams));
+        setExportedFileList(getExportedFileList(thongTinScykParams, setPageLoading));
+        setPhieuInList(getPhieuInList(thongTinScykParams));
     }, [thongTinSCYK])
 
     useEffect(() => {
@@ -107,8 +115,8 @@ const PhanTichSCYK = (props: Props) => {
     }, [indexRowSelected])
 
     return (
-        <div className="bao-cao-scyk-container">
-            <div className="ds-su-co-y-khoa">
+        <div className="page-container">
+            <div className="left-content-container">
                 <FilterSearchContainer
                     title="Danh sách phân tích sự cố y khoa"
                     handleChangeSearchObj={setSearchObj}
@@ -156,7 +164,7 @@ const PhanTichSCYK = (props: Props) => {
                     </div>
                 </div>
             </div>
-            <div className="tt-su-co-y-khoa">
+            <div className="right-content-container">
                 <div className="tt-header">
                     <div className="title-wrapper">
                         <KTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />

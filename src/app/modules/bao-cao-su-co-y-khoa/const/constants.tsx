@@ -14,6 +14,8 @@ import { exportWordFile as exportWordBaoCaoSCYK} from "../services/BaoCaoSCYKSer
 import { exportWord as exportWordBienBanXacMinh} from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
 import { exportWord as exportWordPhanTichSCYK } from "../../phan-tich-scyk/services/PhanTichSCYKServices";
 import { exportWord as exportWordBienBanHop} from "../../bien-ban-hop/services/BienBanHopServices";
+import { handleDownLoadFile } from "../../utils/FileServices";
+import moment from "moment";
 
 export const OPTION_MUC_DO_AH = [
     { name: "Nặng", code: 1 },
@@ -113,7 +115,7 @@ export const tableDSSuCoYKhoaColumns = [
         name: "Tên sự cố",
         field: "name",
         headerStyle: {
-            minWidth: "100px"
+            minWidth: "180px"
         },
         render: (row: any) => <span>{row?.name}</span>
     },
@@ -129,7 +131,7 @@ export const tableDSSuCoYKhoaColumns = [
         name: "Ngày báo cáo",
         field: "ngayBaoCao",
         headerStyle: {
-            minWidth: "120px"
+            minWidth: "140px"
         },
         render: (row: any) => <span>{formatDateToString(row?.ngayBaoCao)}</span>
     },
@@ -137,7 +139,7 @@ export const tableDSSuCoYKhoaColumns = [
         name: "Đối tượng xảy ra",
         field: "loaiDoiTuong",
         headerStyle: {
-            minWidth: "140px"
+            minWidth: "200px"
         },
         render: (row: any) => <span>{renderLoaiDoiTuong(row?.loaiDoiTuong)}</span>
     },
@@ -171,33 +173,104 @@ export const tableDSSuCoYKhoaColumns = [
     }
 ]
 
-export const dsTabThongTinSCYK = [
+export const tableLichSuCapNhatCulumns = [
     {
-        eventKey: "0",
-        title: "Báo cáo sự cố",
-        // component: <BaoCaoSCYKDetail />,
+        name: "STT",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
     },
     {
-        eventKey: "1",
-        title: "Biên bản xác minh",
-        component: <></>
+        name: "Thao tác",
+        field: "thaoTac",
+        headerStyle: {
+            minWidth: "140px"
+        },
+        render: (row: any) => (<>{row?.thaoTac}</>)
     },
     {
-        eventKey: "2",
-        title: "Phân tích SCYK",
-        component: <></>
+        name: "Người xử lý",
+        field: "nguoiXuLy",
+        headerStyle: {
+            minWidth: "140px"
+        },
+        render: (row: any) => (<>{row?.nguoiXuLy}</>)
     },
     {
-        eventKey: "3",
-        title: "Biên bản họp",
-        component: <></>
+        name: "Khoa phòng",
+        field: "khoaPhong",
+        headerStyle: {
+            minWidth: "140px",
+        },
+        cellStyle: {
+            textAlign: "left"
+        },
+        render: (row: any) => (<>{row?.khoaPhong}</>)
     },
     {
-        eventKey: "4",
-        title: "Tài liệu đính kèm",
-        component: <>Tài</>
+        name: "Thời gian",
+        field: "thoiGian",
+        headerStyle: {
+            minWidth: "140px"
+        },
+        render: (row: any) => (<>{moment(row?.thoiGian).format("DD/MM/YYYY HH:mm:ss")}</>)
     },
-];
+    {
+        name: "Chỉ đạo của phòng quản lý chất lượng",
+        field: "chiDaoCuaPhongQlcl",
+        headerStyle: {
+            minWidth: "200px",
+        },
+        cellStyle: {
+            textAlign: "left"
+        },
+        render: (row: any) => (<>{row?.chiDaoCuaPhongQlcl}</>)
+    },
+    {
+        name: "Ghi chú",
+        field: "ghiChu",
+        headerStyle: {
+            minWidth: "140px",
+        },
+        cellStyle: {
+            textAlign: "left"
+        },
+        render: (row: any) => (<>{row?.ghiChu}</>)
+    },
+]
+
+export const tableAttachedFilesCulumns = [
+    {
+        name: "STT",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
+    },
+    {
+        name: "Tên file",
+        field: "name",
+        headerStyle: {
+            minWidth: "200px"
+        },
+        render: (row: any) => (<>{row?.name}</>)
+    },
+    {
+        name: "Kích thước file",
+        field: "ncontentSizeame",
+        headerStyle: {
+            minWidth: "100px"
+        },
+        render: (row: any) => (<>{((row?.contentSize) / (1024 * 1024))?.toFixed(2)} Mb</>)
+    },
+    {
+        name: "",
+        field: "",
+        render: (row: any) => (
+            <i
+                className="bi bi-download text-primary cursor-pointer"
+                onClick={() => handleDownLoadFile(row?.id, row?.name)}
+            />
+        )
+    },
+]
 
 export const OPTION_XAC_NHAN = [
     { name: "Có", code: 1 },
@@ -473,7 +546,7 @@ export const getTabList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
         }
     ]
 
-    if (thongTinSCYK?.bienBanXacMinhResp) {
+    if (thongTinSCYK?.bienBanXacMinhResp?.id) {
         tabList.push({
             eventKey: "1",
             title: "Biên bản xác minh",
@@ -481,7 +554,7 @@ export const getTabList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
         })
     }
 
-    if (thongTinSCYK?.phanTichResp) {
+    if (thongTinSCYK?.phanTichResp?.id) {
         tabList.push({
             eventKey: "2",
             title: "Phân tích SCYK",
@@ -489,19 +562,13 @@ export const getTabList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
         })
     }
 
-    if (thongTinSCYK?.bienBanHopResp) {
+    if (thongTinSCYK?.bienBanHopResp?.id) {
         tabList.push({
             eventKey: "3",
             title: "Biên bản họp",
             component: <BienBanHopDetail thongTinBienBan={thongTinSCYK?.bienBanHopResp} />,
         })
     }
-
-    tabList.push({
-        eventKey: "4",
-        title: "Tài liệu đính kèm",
-        component: <div style={{height: "calc(100vh - 155px)", background: "#fff"}}>Tài liệu đính kèm</div>
-    })
 
     return tabList
 }
@@ -514,21 +581,21 @@ export const getPhieuInList = (thongTinSCYK: IMedicalIncidentDetailInfo) => {
         },
     ]
 
-    if (thongTinSCYK?.bienBanXacMinhResp) {
+    if (thongTinSCYK?.bienBanXacMinhResp?.id) {
         phieuInList.push({
             title: "Biên bản xác minh",
             handleClick: () => handlePrint("in-phieu-bien-ban-xac-minh"),
         })
     }
 
-    if (thongTinSCYK?.phanTichResp) {
+    if (thongTinSCYK?.phanTichResp?.id) {
         phieuInList.push({
             title: "Phân tích sự cố",
             handleClick: () => handlePrint("in-phieu-phan-tich-scyk"),
         })
     }
 
-    if (thongTinSCYK?.bienBanHopResp) {
+    if (thongTinSCYK?.bienBanHopResp?.id) {
         phieuInList.push({
             title: "Biên bản họp",
             handleClick: () => handlePrint("in-phieu-bien-ban-hop"),
@@ -562,7 +629,7 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
         
     ]
 
-    if(thongTinSCYK?.bienBanXacMinhResp) {
+    if(thongTinSCYK?.bienBanXacMinhResp?.id) {
         exportedFileList.push(
             {
                 title: "Biên bản xác minh.docx",
@@ -586,7 +653,7 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
         )
     }
 
-    if(thongTinSCYK?.phanTichResp) {
+    if(thongTinSCYK?.phanTichResp?.id) {
         exportedFileList.push(
             {
                 title: "Phân tích Scyk.docx",
@@ -610,7 +677,7 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
         )
     }
 
-    if(thongTinSCYK?.bienBanHopResp) {
+    if(thongTinSCYK?.bienBanHopResp?.id) {
         exportedFileList.push(
             {
                 title: "Biên bản họp.docx",

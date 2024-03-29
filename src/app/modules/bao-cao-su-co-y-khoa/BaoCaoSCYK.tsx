@@ -21,6 +21,7 @@ import DropdownButton from "../component/button/DropdownButton";
 import { tab } from "../models/tabModels";
 import KetLuanSCYKDialog from "./components/KetLuanDialog";
 import { usePageData } from "../../../_metronic/layout/core";
+import ThongTinKhacTab from "./components/ThongTinKhacTab";
 
 type Props = {};
 
@@ -39,6 +40,7 @@ const BaoCaoSCYK = (props: Props) => {
     const [openDialogTiepNhan, setOpenDialogTiepNhan] = useState(false)
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
     const [tabList, setTabList] = useState<tab[]>([]);
+    const [defaultActiveKey, setDefaultActiveKey] = useState<string>("1")
     const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
     const [openDialogKetLuan, setOpenDialogKetLuan] = useState(false)
@@ -83,6 +85,7 @@ const BaoCaoSCYK = (props: Props) => {
             setPageLoading(true);
             const res = await getScykInfoDetailById(scykId as string);
             setThongTinSCYK(res.data.data);
+            setDefaultActiveKey("0");
             setPageLoading(false);
         } catch (error) {
             setPageLoading(false);
@@ -125,7 +128,14 @@ const BaoCaoSCYK = (props: Props) => {
     }
 
     useEffect(() => {
-        setTabList(getTabList(thongTinSCYK));
+        setTabList([
+            ...getTabList(thongTinSCYK),
+            {
+                eventKey: "4",
+                title: "Thông tin khác",
+                component: <ThongTinKhacTab thongTinScyk={thongTinSCYK}/>
+            }
+        ]);
         setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
         setPhieuInList(getPhieuInList(thongTinSCYK));
     }, [thongTinSCYK])
@@ -139,8 +149,8 @@ const BaoCaoSCYK = (props: Props) => {
     }, [updateDataTiepNhan]);
 
     return (
-        <div className="bao-cao-scyk-container">
-            <div className="ds-su-co-y-khoa">
+        <div className="page-container">
+            <div className="left-content-container">
                 <FilterSearchContainer 
                     title="Danh sách báo cáo sự cố y khoa"
                     handleChangeSearchObj={setSearchObj}
@@ -217,7 +227,7 @@ const BaoCaoSCYK = (props: Props) => {
                     </div>
                 </div>
             </div>
-            <div className="tt-su-co-y-khoa">
+            <div className="right-content-container">
                 <div className="tt-header">
                     <div className="title-wrapper">
                         <KTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
@@ -244,15 +254,17 @@ const BaoCaoSCYK = (props: Props) => {
                         <Button
                             className="button-primary"
                             onClick={handleOpenUpdateModal}
-                        >
+                            >
                             Sửa
                         </Button>
-                        <Button
-                            className="button-primary"
-                            onClick={() => setShouldOpenConfirmDeleteDialog(true)}
-                        >
-                            Xóa
-                        </Button>
+                        {thongTinSCYK?.suCoResp?.trangThaiXuLy < MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN && (
+                            <Button
+                                className="button-primary"
+                                onClick={() => setShouldOpenConfirmDeleteDialog(true)}
+                            >
+                                Xóa
+                            </Button>
+                        )}
                         <DropdownButton 
                             title="Xuất file"
                             dropdownItems={exportedFileList}
@@ -264,7 +276,11 @@ const BaoCaoSCYK = (props: Props) => {
                     </div>
                 </div>
                 <div className="tt-tabs">
-                    <TabMenu danhsachTabs={tabList} />
+                    <TabMenu 
+                        danhsachTabs={tabList}
+                        defaultActiveKey={defaultActiveKey}
+                        setCurrentTab={setDefaultActiveKey}
+                    />
                 </div>
             </div>
 

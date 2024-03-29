@@ -1,8 +1,7 @@
-import React, { FC, FormEventHandler, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { tab } from "../../models/tabModels";
 import "./tabs.scss";
-import { TAB_PHAN_TICH_SCYK_DIALOG } from "../../phan-tich-scyk/constants/constants";
 
 type TabMenuProps = {
     danhsachTabs: tab[];
@@ -14,11 +13,11 @@ type TabMenuProps = {
 
 export const TabMenu: FC<TabMenuProps> = (props) => {
     const { danhsachTabs, setCurrentTab } = props;
-    const [activeTab, setActiveTab] = useState<string>(props?.defaultActiveKey || TAB_PHAN_TICH_SCYK_DIALOG.TAB_NHAN_VIEN_CHUYEN_TRACH);
+    const [activeTab, setActiveTab] = useState<string>("0");
     const [tabs, setTabs] = useState<tab[]>([]);
 
     useEffect(() => {
-      setActiveTab(props?.defaultActiveKey || TAB_PHAN_TICH_SCYK_DIALOG.TAB_NHAN_VIEN_CHUYEN_TRACH);
+      props?.defaultActiveKey && setActiveTab(props?.defaultActiveKey);
     }, [props?.defaultActiveKey]);
 
     useEffect(() => { 
