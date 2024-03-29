@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { RESPONSE_STATUS_CODE } from "../../utils/Constant";
 import TabMenu from "../../component/tabs/TabMenu";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IPhanTichScyk } from "../models/PhanTichSCYKModels";
 import TabNhanVienChuyenTrach from "./TabNhanVienChuyenTrach";
 import TabCapQuanLy from "./TabCapQuanLy";
@@ -14,6 +14,8 @@ import { STATUS_PHAN_TICH, TAB_PHAN_TICH_SCYK_DIALOG } from "../constants/consta
 import { fileUploadPhanTich } from "../../utils/FileServices";
 import { getListDeleteItem } from "../../utils/FunctionUtils";
 import { tab } from "../../models/tabModels";
+import { Assign, ObjectShape } from "yup/lib/object";
+import AppContext from "../../../AppContext";
 
 type Props = {
     handleClose: () => void;
@@ -22,28 +24,29 @@ type Props = {
 };
 
 const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }: Props) => {
+    const { setPageLoading } = useContext(AppContext);
     const [tabList, setTabList] = useState<tab[]>([]);
     const [activeTab, setActiveTab] = useState<string>("0");
     const [validationSchema, setValidationSchema] = useState<any>(Yup.object().shape({}));
 
-    const validationTabNhanVienChuyenTrach = Yup.object().shape({
-        suCoId: Yup.string().required("Bắt buộc chọn"),
-        moTa: Yup.string().required("Bắt buộc nhập"),
+    const validationTabNhanVienChuyenTrach = {
+        suCoId: Yup.string().nullable(false).required("Bắt buộc chọn"),
+        moTa: Yup.string().nullable(false).required("Bắt buộc nhập").typeError("Bắt buộc nhập"),
         fileDinhKems: Yup.array().when("toKhaiLietKe", {
             is: (toKhaiLietKe: boolean) => toKhaiLietKe,
             then: Yup.array().min(1, "Bắt buộc chọn"),
-        }),
-        dieuTriYLenh: Yup.string().required("Bắt buộc nhập"),
-        hanhDongXuLy: Yup.string().required("Bắt buộc nhập"),
-        deXuatKhuyenCaoPhongNgua: Yup.string().required("Bắt buộc nhập"),
-    });
+        }).nullable(),
+        dieuTriYLenh: Yup.string().nullable(false).required("Bắt buộc nhập").typeError("Bắt buộc nhập"),
+        hanhDongXuLy: Yup.string().nullable(false).required("Bắt buộc nhập").typeError("Bắt buộc nhập"),
+        deXuatKhuyenCaoPhongNgua: Yup.string().nullable(false).required("Bắt buộc nhập").typeError("Bắt buộc nhập"),
+    };
 
-    const validationTabCapQuanLy = Yup.object().shape({
-        moTaKetQuaPhatHien: Yup.string().required("Bắt buộc nhập"),
-        tenNguoiPhanTich: Yup.string().required("Bắt buộc nhập"),
-        chucDanhNguoiPhanTich: Yup.string().required("Bắt buộc nhập"),
-        gioNgayPhanTich: Yup.date().required("Bắt buộc chọn").nullable(),
-    });
+    const validationTabCapQuanLy = {
+        moTaKetQuaPhatHien: Yup.string().nullable(false).required("Bắt buộc nhập").typeError("Bắt buộc nhập"),
+        tenNguoiPhanTich: Yup.string().nullable(false).required("Bắt buộc nhập").typeError("Bắt buộc nhập"),
+        chucDanhNguoiPhanTich: Yup.string().nullable(false).required("Bắt buộc nhập").typeError("Bắt buộc nhập"),
+        gioNgayPhanTich: Yup.date().required("Bắt buộc nhập").typeError("Vui lòng nhập đúng định dạng").nullable(),
+    };
 
     const formatDataPhanTich = (values: IPhanTichScyk) => {
         return {
@@ -89,10 +92,13 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
     useEffect(() => {
         switch (activeTab) {
             case TAB_PHAN_TICH_SCYK_DIALOG.TAB_NHAN_VIEN_CHUYEN_TRACH:
-                setValidationSchema(validationTabNhanVienChuyenTrach);
+                setValidationSchema(Yup.object().shape(validationTabNhanVienChuyenTrach));
                 break;
             case TAB_PHAN_TICH_SCYK_DIALOG.TAB_CAP_QUAN_LY:
-                setValidationSchema(validationTabCapQuanLy);
+                setValidationSchema(Yup.object().shape({
+                    ...validationTabNhanVienChuyenTrach,
+                    ...validationTabCapQuanLy,
+                }));
                 break;
             default:
                 break;
@@ -106,18 +112,21 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
                 break;
             case TAB_PHAN_TICH_SCYK_DIALOG.TAB_CAP_QUAN_LY:
                 try {
+                    setPageLoading(true);
                     const { data: { code, message } } = thongTinPhanTich?.id
                         ? await updatePhanTich(formatDataPhanTich(values), thongTinPhanTich.id)
                         : await addPhanTich(formatDataPhanTich(values));
                     if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
-                        values.fileDinhKems.some((item: any) => item instanceof File) && await fileUploadPhanTich(values.fileDinhKems, thongTinPhanTich?.id)
+                        values.fileDinhKems && values.fileDinhKems.some((item: any) => item instanceof File) && await fileUploadPhanTich(values.fileDinhKems, thongTinPhanTich?.id)
                         const listIdDelete = getListDeleteItem(thongTinPhanTich?.fileDinhKems, values.fileDinhKems)
                         // listIdDelete.length > 0 && await deleteFilePhanTich(thongTinPhanTich?.id, listIdDelete)
                         updatePageData({});
+                        setPageLoading(false);
                         handleClose();
                         toast.success(message)
                     }
                 } catch (error) {
+                    setPageLoading(false);
                     toast.error("Lỗi hệ thống, vui lòng thử lại!");
                 }
                 break;
@@ -141,7 +150,7 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
                 {({
                     handleSubmit,
                     setFieldValue,
-                    validateForm,
+                    errors,
                 }) => {
                     return (
                         <form onSubmit={handleSubmit}>

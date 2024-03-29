@@ -106,7 +106,8 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 									onChange={(e) => {
 										setFieldValue("toKhaiLietKe", e.target.checked);
 									}}
-                                    checked={values.toKhaiLietKe}
+									checked={values?.fileDinhKems?.length > 0 || values.toKhaiLietKe}
+									disabled={values?.fileDinhKems?.length > 0}
 								>
 									Tờ khai liệt kê
 								</Checkbox>
@@ -119,7 +120,11 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 										label="Tải tệp đính kèm"
 										className="spaces min-w-140 fw-600"
 									/>
-									<FileInfo numberFile={values?.fileDinhKems.length} handleOpenDialogUpload={() => setOpenFileDialog(true)} error={errors?.fileDinhKems} />
+									<FileInfo 
+										numberFile={values?.fileDinhKems?.length || 0}
+										handleOpenDialogUpload={() => setOpenFileDialog(true)} 
+										error={errors?.fileDinhKems} 
+									/>
 								</div>
 							</Col>
 						)}
