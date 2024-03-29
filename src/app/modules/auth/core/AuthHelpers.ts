@@ -105,7 +105,7 @@ const logoutAuth = () => {
   localStorageItem.remove(KEY_LOCALSTORAGE.TOKEN_EXPIRATION)
   localStorageItem.remove(KEY_LOCALSTORAGE.DEPARTMENT)
   localStorageItem.remove(KEY_LOCALSTORAGE.ROOM)
-  window.location.href = `${process.env.REACT_APP_SSO_LOGOUT_URL}?redirect_uri=${process.env.REACT_APP_SSO_AUTHORIZE_ENDPOINT}%3Fresponse_type%3D${process.env.REACT_APP_SSO_RESPONSE_TYPE}%26scope%3D${process.env.REACT_APP_SSO_SCOPE}%26redirect_uri%3D${process.env.REACT_APP_SSO_REDIRECT_URI_MEDICAL}%26client_id%3D${process.env.REACT_APP_SSO_CLIENT_SECRET_MEDICAL}`;
+  window.location.href = `${process.env.REACT_APP_SSO_LOGOUT_URL}?redirect_uri=${process.env.REACT_APP_SSO_AUTHORIZE_ENDPOINT}%3Fresponse_type%3D${process.env.REACT_APP_SSO_RESPONSE_TYPE}%26scope%3D${process.env.REACT_APP_SSO_SCOPE}%26client_id=${process.env.REACT_APP_SSO_CLIENT_ID}%26redirect_uri%3D${process.env.REACT_APP_SSO_REDIRECT_URI}`;
 }
 
 const handleError = (error: AxiosError<ResponseModel>): Promise<AxiosError<ResponseModel>> => {

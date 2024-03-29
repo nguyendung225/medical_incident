@@ -104,3 +104,12 @@ export interface IKetLuanSCYK {
     tenKhoaPhong?: string;
     ghiChu: string;
 }
+
+export interface IUpdateHistoryList {
+  chiDaoCuaPhongQlcl: string;
+  ghiChu: string;
+  khoaPhong: string;
+  nguoiXuLy: string;
+  thaoTac: string;
+  thoiGian: string;
+}

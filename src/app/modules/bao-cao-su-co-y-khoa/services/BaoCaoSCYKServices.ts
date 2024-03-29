@@ -85,3 +85,8 @@ export const getDSTiepNhan = (searchObject: SearchObject) => {
     const url = API_PATH + "/api/v1/tiep-nhan-su-co/page";
     return axios.get(url, paramsConfig(searchObject));
 };
+
+export const getUpdateHistoryList = (suCoid: string) => {
+    const url = API_PATH + `/api/v1/lich-su/${suCoid}`;
+    return axios.get(url);
+}

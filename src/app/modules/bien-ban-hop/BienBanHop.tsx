@@ -8,7 +8,7 @@ import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSear
 import { getTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import { STATUS_REPORT_OPTION, tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
+import { STATUS_REPORT_OPTION, initBienBanXacMinh, tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
 import DropdownButton from "../component/button/DropdownButton";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
@@ -21,6 +21,7 @@ import { searchByPage } from "./services/BienBanHopServices";
 import { tab } from "../models/tabModels";
 import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
 import { localStorageItem } from "../utils/LocalStorage";
+import { PHAN_TICH_SCYK_INFO_INIT } from "../phan-tich-scyk/constants/constants";
 
 type Props = {};
 
@@ -119,14 +120,21 @@ const BienBanHop = (props: Props) => {
     }, [indexRowSelected])
 
     useEffect(() => {
-        setTabList(getTabList(thongTinSCYK));
-        setExportedFileList(getExportedFileList(thongTinSCYK, setPageLoading));
-        setPhieuInList(getPhieuInList(thongTinSCYK));
+        const thongTinScykParams = {
+            suCoResp: thongTinSCYK?.suCoResp,
+            bienBanXacMinhResp: initBienBanXacMinh,
+            phanTichResp: PHAN_TICH_SCYK_INFO_INIT,
+            bienBanHopResp: thongTinSCYK?.bienBanHopResp,
+        }
+
+        setTabList(getTabList(thongTinScykParams));
+        setExportedFileList(getExportedFileList(thongTinScykParams, setPageLoading));
+        setPhieuInList(getPhieuInList(thongTinScykParams));
     }, [thongTinSCYK])
 
     return (
-        <div className="bien-ban-xm-container">
-            <div className="ds-bien-ban-xm">
+        <div className="page-container">
+            <div className="left-content-container">
                 <FilterSearchContainer
                     title="Danh sách biên bản họp"
                     handleCreate={() => {
@@ -175,7 +183,7 @@ const BienBanHop = (props: Props) => {
                     </div>
                 </div>
             </div>
-            <div className="tt-bien-ban-xm">
+            <div className="right-content-container">
                 <div className="tt-header">
                     <div className="title-wrapper">
                         <KTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
