@@ -86,25 +86,21 @@ const KetLuanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                             <Autocomplete
                                                 onChange={(selectedOption) => {
                                                     setValues({
-                                                        ...values, nguoiKetLuanId: selectedOption.id,
-                                                        maChucVu: selectedOption.maChucVu,
-                                                        tenChucVu: selectedOption.tenChucVu,
-                                                        tenKhoaPhong: selectedOption.tenPhong,
-                                                        maKhoaPhong: selectedOption.phongId
+                                                        ...values, nguoiKetLuanId: selectedOption?.id,
+                                                        maChucVu: selectedOption?.maChucVu,
+                                                        tenChucVu: selectedOption?.tenChucVu,
+                                                        tenKhoaPhong: selectedOption?.tenPhong,
+                                                        maKhoaPhong: selectedOption?.phongId
                                                     })
                                                 }}
                                                 getOptionLabel={(option) => option.fullName}
-
                                                 className="spaces h-25 width-100"
                                                 name="chuTriObj"
                                                 searchObject={{}}
                                                 options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_NHAN_VIEN)}
                                                 value={values.nguoiKetLuanId}
                                                 errors={errors?.nguoiKetLuanId}
-                                                touched={
-                                                    touched?.nguoiKetLuanId
-                                                }
-
+                                                touched={touched?.nguoiKetLuanId}
                                             />
                                         </div>
                                     </Col>
@@ -116,6 +112,7 @@ const KetLuanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                             />
                                             <Autocomplete
                                                 isReadOnly
+                                                isDisabled
                                                 className="spaces h-25 width-100"
                                                 options={[]}
                                                 value={{
@@ -133,6 +130,7 @@ const KetLuanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                             />
                                             <Autocomplete
                                                 isReadOnly
+                                                isDisabled
                                                 className="spaces h-25 width-100"
                                                 options={[]}
                                                 value={{

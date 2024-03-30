@@ -35,7 +35,7 @@ const BaoCaoSCYKDetail = ({ thongTinSCYK, thongTinBenhNhan }: TProps) => {
                     })}
                     <div style={printStyles.contentTitle}>Thông tin người bệnh</div>
                     <div><span style={printStyles.lable}>Họ và tên: </span>{thongTinBenhNhan?.name}</div>
-                    <div><span style={printStyles.lable}>Số bệnh án: </span> {thongTinBenhNhan?.code}</div>
+                    <div><span style={printStyles.lable}>Sổ bệnh án: </span> {thongTinBenhNhan?.soBenhAn}</div>
                     <div><span style={printStyles.lable}>Ngày sinh: </span> {thongTinBenhNhan?.ngaySinh && moment(thongTinBenhNhan?.ngaySinh).format("DD/MM/YYYY")}</div>
                     <div>
                         <span style={printStyles.lable}>Giới tính: </span> {thongTinBenhNhan?.gioiTinh && convertGenderToString(thongTinBenhNhan?.gioiTinh)}      
@@ -70,9 +70,18 @@ const BaoCaoSCYKDetail = ({ thongTinSCYK, thongTinBenhNhan }: TProps) => {
                 <div style={printStyles.width._48persent}><span style={printStyles.lable}>Ngày xảy ra sự cố: </span>{moment(thongTinSCYK?.ngayXayRa).format("DD/MM/YYYY")}</div>
                 <div style={printStyles.width._48persent}><span style={printStyles.lable}>Thời gian: </span>{thongTinSCYK?.thoiGianXayRa}</div>
             </div>
-            <div><span style={printStyles.lable}>Mô tả ngắn gọn về sự cố: </span>{thongTinSCYK?.moTa}</div>
-            <div><span style={printStyles.lable}>Đề xuất giải pháp ban đầu: </span>{thongTinSCYK?.deXuat}</div>
-            <div><span style={printStyles.lable}>Điều trị/xử lí ban đầu đã được thực hiện: </span> {thongTinSCYK?.dieuTriBanDau}</div>
+            <div>
+                <span style={printStyles.lable}>Mô tả ngắn gọn về sự cố: </span>
+                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.moTa.replace(/\n/g, "<br>") }} />
+            </div>
+            <div>
+                <span style={printStyles.lable}>Đề xuất giải pháp ban đầu: </span>
+                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.deXuat.replace(/\n/g, "<br>") }} />
+            </div>
+            <div>
+                <span style={printStyles.lable}>Điều trị/xử lí ban đầu đã được thực hiện: </span> 
+                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.dieuTriBanDau.replace(/\n/g, "<br>") }} />
+            </div>
             <div style={printStyles.d_flex_j_between}>
                 <div style={printStyles.width._48persent}>
                     <div>

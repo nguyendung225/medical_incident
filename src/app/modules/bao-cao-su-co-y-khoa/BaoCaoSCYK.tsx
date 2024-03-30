@@ -51,7 +51,7 @@ const BaoCaoSCYK = (props: Props) => {
             trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
             hinhThuc: searchObj?.hinhThuc?.code,
             phanLoai: searchObj?.phanLoai?.code,
-            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.code,
+            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.id,
         });
     }
 
@@ -65,7 +65,6 @@ const BaoCaoSCYK = (props: Props) => {
             const { data } = await searchByPage(searchData);
             data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.id);
             await setDsBaoCaoSCYK(data?.data?.data);
-            setIndexRowSelected(0);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -110,12 +109,12 @@ const BaoCaoSCYK = (props: Props) => {
     };
 
     const handleOpenUpdateModal = async () => {
-        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
+        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id || 0);
         setOpenDialogThemMoiSCYK(true);
     }
 
     const handleCloseModal = async () => {
-        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
+        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id || 0);
         setOpenDialogThemMoiSCYK(false);
     }
 
@@ -141,7 +140,7 @@ const BaoCaoSCYK = (props: Props) => {
     }, [thongTinSCYK])
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id || 0);
     }, [indexRowSelected])
 
     useEffect(() => {
@@ -233,8 +232,8 @@ const BaoCaoSCYK = (props: Props) => {
                         <KTSVG path={"/media/svg/icons/info-square.svg"} svgClassName="spaces w-14 h-14 mr-10" />
                         <span className="title">Thông tin sự cố y khoa</span>
                     </div>
-                    <div className="d-flex spaces gap-10">
-                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN || thongTinSCYK.bienBanHopResp) &&
+                    <div className="d-flex spaces gap-10"> 
+                        {(!(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_KET_LUAN) && (thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN || thongTinSCYK.bienBanHopResp)) &&
                             <Button
                                 className="button-primary"
                                 onClick={() => setOpenDialogKetLuan(true)}
@@ -242,8 +241,7 @@ const BaoCaoSCYK = (props: Props) => {
                                 Kết luận
                             </Button>
                         }
-                        {
-                            (thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN) &&
+                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN) &&
                             <Button
                                 className="button-primary"
                                 onClick={() => setOpenDialogTiepNhan(true)}
@@ -251,20 +249,22 @@ const BaoCaoSCYK = (props: Props) => {
                                 Tiếp nhận
                             </Button>
                         }
-                        <Button
-                            className="button-primary"
-                            onClick={handleOpenUpdateModal}
-                            >
-                            Sửa
-                        </Button>
                         {thongTinSCYK?.suCoResp?.trangThaiXuLy < MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN && (
+                            <Button
+                                className="button-primary"
+                                onClick={handleOpenUpdateModal}
+                                >
+                                Sửa
+                            </Button>
+                        )}
+                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT) &&
                             <Button
                                 className="button-primary"
                                 onClick={() => setShouldOpenConfirmDeleteDialog(true)}
                             >
                                 Xóa
                             </Button>
-                        )}
+                        }
                         <DropdownButton 
                             title="Xuất file"
                             dropdownItems={exportedFileList}

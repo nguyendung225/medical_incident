@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Col, Row } from "react-bootstrap";
 import ThongKeTongQuanBCSuCo from "./components/ThongKeTongQuanBCSuCo";
 import LabelRequired from "../component/LabelRequired";
@@ -7,7 +8,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { INIT_DASHBOARD_DATA, INIT_DASHBOARD_SEARCH_VALUE } from "./constants/constants";
 import { useContext, useEffect, useState } from "react";
-import { IDashboardObject, IPhongBan, ISearchObject } from "./models/ThongKeModels";
+import { IDashboardObject, ISearchObject } from "./models/ThongKeModels";
 import { getDataThongKeHinhThucBaoCao, getDataThongKeLoaiDoiTuong, getDataThongKeMucDoTonThuong, getLoaiDoiTuongTheoThang, getTongQuanBaoCao } from "./services/ThongKeServices";
 import { toast } from "react-toastify";
 import AppContext from "../../AppContext";

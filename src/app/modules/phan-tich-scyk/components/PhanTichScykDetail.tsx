@@ -335,11 +335,13 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
             <div style={printStyles.d_flex}>
                 <div style={printStyles.width._48persent}>
                     <span style={printStyles.fontWeight.bold}>Chức danh: </span>
-                    <span>{phanTichScyk?.chucDanhNguoiPhanTich}</span>
+                    <span>{phanTichScyk?.tenChucDanhNguoiPhanTich}</span>
                 </div>
                 <div style={printStyles.width._48persent}>
-                    <span style={printStyles.fontWeight.bold}>Ngày: </span>  <span> {moment(phanTichScyk?.ngayPhanTich).format("DD/MM/YYYY")} </span>
+                    <span style={printStyles.fontWeight.bold}>Ngày: </span>  
+                    <span> {moment(phanTichScyk?.ngayPhanTich).format("DD/MM/YYYY")} </span>
                     <span style={printStyles.fontWeight.bold}>Giờ: </span>
+                    <span>{phanTichScyk?.gioPhanTich}</span>
                 </div>
             </div>
             <div style={printStyles.marginTop._20px}>

@@ -45,10 +45,10 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					<div style={printStyles.width._60persent}>
 						{" "}
 						Chức vụ:{" "}
-						<span style={printStyles.content_text}>{thongTinBienBan?.maChucVuNguoiChuTri}</span>
+						<span style={printStyles.content_text}>{thongTinBienBan?.tenNguoiChuTri}</span>
 					</div>
 					thuộc Đơn vị:{" "}
-					<span style={printStyles.content_text}>{thongTinBienBan?.donViNguoiChuTri}</span>{" "}
+					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViNguoiChuTri}</span>{" "}
 					chủ trì xác minh sự cố y khoa.
 				</div>
 				<div style={printStyles.d_flex_wrap}>
@@ -61,10 +61,10 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					<div style={printStyles.width._60persent}>
 						{" "}
 						Chức vụ:{" "}
-						<span style={printStyles.content_text}>{thongTinBienBan?.maChucVuThanhVienDoan}</span>
+						<span style={printStyles.content_text}>{thongTinBienBan?.tenChucVuThanhVienDoan}</span>
 					</div>
 					thuộc Đơn vị:{" "}
-					<span style={printStyles.content_text}>{thongTinBienBan?.donViThanhVienDoan}</span>{" "}
+					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViThanhVienDoan}</span>{" "}
 					thành viên đoàn xác minh sự cố y khoa.
 				</div>
 				<div style={printStyles.d_flex_wrap}>
@@ -77,10 +77,10 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					<div style={printStyles.width._60persent}>
 						{" "}
 						Chức vụ:{" "}
-						<span style={printStyles.content_text}>{thongTinBienBan?.maChucVuNguoiChungKien}</span>
+						<span style={printStyles.content_text}>{thongTinBienBan?.tenChucVuNguoiChungKien}</span>
 					</div>
 					thuộc Đơn vị:{" "}
-					<span style={printStyles.content_text}>{thongTinBienBan?.donViNguoiChungKien}</span>{" "}
+					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViNguoiChungKien}</span>{" "}
 					là người chứng kiến.
 				</div>
 
@@ -92,10 +92,10 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 						Ông/bà:{" "}
 						<span style={printStyles.content_text}>{nguoiThamDu.name}</span>{" "}
 						Chức vụ:{" "}
-						<span style={printStyles.content_text}>{nguoiThamDu.maChucVu}</span> thuộc
+						<span style={printStyles.content_text}>{nguoiThamDu.tenChucVu}</span> thuộc
 						Đơn vị:{" "}
 						<span style={printStyles.content_text}>
-							{nguoiThamDu.donVi}
+							{nguoiThamDu.tenDonVi}
 						</span>
 					</div>
 				))}
@@ -112,6 +112,9 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				>
 					KẾT QUẢ XÁC MINH
 				</div>
+                <div>
+                {thongTinBienBan?.ketQua}
+                </div>
 				<div>
 					Biên bản kết thúc vào hồi{" "}
 					<span style={printStyles.content_text}>{timeKetThuc.time}</span>{" "}
