@@ -216,7 +216,7 @@ const TabCapQuanLy = () => {
 						<Col xs={4}>
 							<div className="d-flex">
 								<LabelRequired
-									label="Giờ / Ngày"
+									label="Ngày / giờ"
 									className="spaces min-w-100 fw-500"
 								/>
 								<TextField
