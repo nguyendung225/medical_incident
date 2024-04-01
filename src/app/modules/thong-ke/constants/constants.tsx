@@ -3,7 +3,7 @@ import { IDashboardObject, ISearchObject, ITongQuanBaoCao } from "../models/Thon
 export const INIT_DASHBOARD_SEARCH_VALUE: ISearchObject = {
     ListDepartmentId: null,
     ListDepartment: null,
-    FromDate: new Date(new Date().getFullYear(), 0, 2).toISOString().split('T')[0],
+    FromDate: new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString().split('T')[0],
     ToDate: new Date().toISOString().split('T')[0],
 };
 

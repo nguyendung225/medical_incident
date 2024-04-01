@@ -38,6 +38,7 @@ interface IProps {
   totalPages?: number;
   totalElements?: number;
   numberOfElements?: number;
+  sumUpData?: any;
   buttonAdd?: boolean;
   buttonExportExcel?: boolean;
   handleExportExcel?: (row: any) => void;
@@ -56,6 +57,7 @@ interface IProps {
   columnsTotal?: IColumnsTotal[];
   id: string;
   fixedColumnsCount?: number;
+  height?: string;
 }
 
 function TableGrouping(props: IProps) {
@@ -66,6 +68,7 @@ function TableGrouping(props: IProps) {
     totalPages,
     numberOfElements,
     buttonAdd,
+    sumUpData,
     buttonExportExcel,
     handleExportExcel,
     handleOpenDialog,
@@ -81,7 +84,8 @@ function TableGrouping(props: IProps) {
     showTotalRow,
     columnsTotal,
     id,
-    fixedColumnsCount
+    fixedColumnsCount,
+    height,
   } = props;
 
   const { lang } = useMultiLanguage();
@@ -116,6 +120,10 @@ function TableGrouping(props: IProps) {
     return total || {};
   };
 
+  const styles: object = {
+    height: height || "auto",
+  };
+
   return (
     <TableGroupingContext.Provider value={dataContext}>
       <div className={className || ""}>
@@ -145,7 +153,7 @@ function TableGrouping(props: IProps) {
           </div>
         )}
 
-        <div className={`table-responsive customs-collapse-row m-0 table-group`}>
+        <div className={`table-responsive customs-collapse-row m-0 table-group`} style={styles}>
           <table className="table-row-dashed dataTable table w-100">
             <TableHeader
               columns={columns}
@@ -155,15 +163,27 @@ function TableGrouping(props: IProps) {
             <tbody className="bg-white">
               {data?.length > 0 ? (
                 isSingleRow ? (
-                  <TableBodySingle
-                    columns={columnsConvert}
-                    data={data}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                    handleDoubleClick={handleDoubleClick}
-                    fixedColumnsCount={getTotalColumnsWithSticky(columns, fixedColumnsCount)}
-                    tableId={id}
-                  />
+                  <>
+                    <TableBodySingle
+                      columns={columnsConvert}
+                      data={data}
+                      page={page}
+                      rowsPerPage={rowsPerPage}
+                      handleDoubleClick={handleDoubleClick}
+                      fixedColumnsCount={getTotalColumnsWithSticky(columns, fixedColumnsCount)}
+                      tableId={id}
+                    />
+                    {sumUpData && <tr>
+                      {Object.keys(sumUpData).map((key, index) => <>
+                        <td
+                          className="text-center border"
+                          colSpan={index === 0 ? 2 : 1}
+                        >
+                          {sumUpData[key]}
+                        </td>
+                      </>)}
+                    </tr>}
+                  </>
                 ) : (
                   <>
                     {data?.map((item, index) => (

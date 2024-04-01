@@ -1,10 +1,14 @@
 import axios from "axios";
 import { ISearchObject } from "../models/ThongKeModels";
+import QueryString from "qs";
 
 const API_PATH = process.env.REACT_APP_API_URL;
 
-export const paramsConfig = (searchObject: object) => {
-    const config = { params: searchObject };
+export const paramsConfig = (searchObject: ISearchObject) => {
+    let config = {
+        params: searchObject,
+        paramsSerializer: searchObject.ListDepartmentId ? (searchObject: ISearchObject) => QueryString.stringify(searchObject) : undefined,
+    };
     return config;
 };
 

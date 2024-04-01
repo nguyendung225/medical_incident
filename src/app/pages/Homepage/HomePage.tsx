@@ -160,7 +160,7 @@ export function HomePage() {
             </Col>
             <Col xs={4}>
               <LinkButton
-                linkTo={"/bien-ban-hop"}
+                linkTo={"/bao-cao-thong-ke"}
                 iconPath="/media/svg/icons/bookmark-fill.svg"
                 text={"Báo cáo cục"}
                 modulePermission={MODULE.HO_SO}

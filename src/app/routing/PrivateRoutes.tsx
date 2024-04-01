@@ -12,6 +12,7 @@ import BienBanXacMinh from "../modules/bien-ban-xac-minh/BienBanXacMinh";
 import PhanTichSCYK from "../modules/phan-tich-scyk/PhanTichSCYK";
 import BienBanHop from "../modules/bien-ban-hop/BienBanHop";
 import ThongKeSCYK from "../modules/thong-ke/ThongKeSCYK";
+import BaoCaoThongKe from "../modules/bao-cao-thong-ke/BaoCaoThongKe";
 
 interface PrivateRouteProps {
   auth: string;
@@ -50,6 +51,7 @@ const PrivateRoutes = () => {
         <Route path="/bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BienBanXacMinh} redirect="/bien-ban-xac-minh" />} />
         <Route path="/bien-ban-hop" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BienBanHop} redirect="/bien-ban-xac-minh" />} />
         <Route path="/phan-tich-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={PhanTichSCYK} redirect="/phan-tich-scyk" />} />
+        <Route path="/bao-cao-thong-ke" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoThongKe} redirect="/phan-tich-scyk" />} />
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>
     </Routes>
