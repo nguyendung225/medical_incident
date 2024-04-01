@@ -22,6 +22,8 @@ export interface SearchObject {
   hinhThuc?: autocompleteOption;
   phanLoai?: autocompleteOption;
   khoaPhongDieuTri?: autocompleteOption;
+  tuNgay?: string;
+  denNgay?: string;
 }
 
 export interface MedicalIncidentInfo {

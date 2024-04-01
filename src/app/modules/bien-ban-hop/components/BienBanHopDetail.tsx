@@ -1,6 +1,6 @@
 import moment from "moment";
-import { printStyles } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { IBienBanHop } from "../model/BienBanHopModel";
+import { printStyles } from "../../utils/Constant";
 
 type TProps = {
     thongTinBienBan: IBienBanHop;

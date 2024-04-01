@@ -1,5 +1,5 @@
 import moment from "moment";
-import { OPTION_XAC_NHAN, printStyles } from "../../bao-cao-su-co-y-khoa/const/constants";
+import { OPTION_XAC_NHAN } from "../../bao-cao-su-co-y-khoa/const/constants";
 import {
     HANH_VI_OPTIONS,
     HA_TANG_CO_SO_OPTIONS,
@@ -21,6 +21,7 @@ import {
 } from "../constants/constants";
 import { IPhanTichScyk } from "../models/PhanTichSCYKModels";
 import { MedicalIncidentInfo } from "../../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
+import { printStyles } from "../../utils/Constant";
 
 type TProps = {
     phanTichScyk: IPhanTichScyk,

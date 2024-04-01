@@ -330,3 +330,140 @@ export const MEDICAL_INCIDENT_REPORT_STATUS =  {
     DA_BAO_CAO: 7,
     DA_KET_LUAN: 8
 }
+
+export const printStyles = {
+	box_square: {
+		display: "inline-block",
+		border: "1px solid #333",
+		width: "15px",
+		height: "15px",
+		margin: "0 1px",
+		position: "relative" as "relative",
+	},
+	checked: {
+		position: "absolute" as "absolute",
+		top: "-3px",
+		left: "1px",
+	},
+	d_none: {
+		display: "none",
+	},
+	d_flex: {
+		display: "flex",
+	},
+	d_flex_align_center: {
+		display: "flex",
+		alignItems: "center",
+	},
+	d_flex_wrap: {
+		display: "flex",
+		flexWrap: "wrap" as "wrap",
+	},
+	d_flex_j_between: {
+		display: "flex",
+		justifyContent: "space-between",
+	},
+	d_flex_j_center: {
+		display: "flex",
+		justifyContent: "center",
+	},
+	width: {
+		_30persent: {
+			width: "30%",
+		},
+		_40persent: {
+			width: "40%",
+		},
+		_48persent: {
+			width: "48%",
+		},
+		_60persent: {
+			width: "60%",
+		},
+	},
+    marginLeft: {
+        _10px: {
+            marginLeft: "10px",
+        },
+        _180px: {
+            marginLeft: "180px",
+        },
+    },
+	marginTop: {
+		_0px: {
+			marginTop: "0",
+		},
+		_10px: {
+			marginTop: "10px",
+		},
+        _20px: {
+			marginTop: "20px",
+		},
+		_80px: {
+			marginTop: "80px",
+		},
+	},
+	marginBottom: {
+		_0px: {
+			marginBottom: "0",
+		},
+		_10px: {
+			marginBottom: "10px",
+		},
+		_80px: {
+			marginBottom: "80px",
+		},
+	},
+	fontSize: {
+		_15px: {
+			fontSize: "15px",
+		}
+	},
+	fontWeight: {
+		bold: {
+			fontWeight: "bold",
+		},
+		normal: {
+			fontWeight: "normal",
+		},
+	},
+	font_italic: {
+		fontStyle: "italic",
+	},
+	lable: {
+		fontWeight: "bold",
+		marginTop: "10px",
+	},
+	container: {
+		background: "white",
+		padding: "10px",
+		marginTop: "3px",
+	},
+	text_center: {
+		textAlign: "center" as "center",
+	},
+	header: {
+		fontWeight: "bold",
+		textAlign: "center" as "center",
+	},
+	content_text: {
+		padding: "0 2px",
+	},
+	contentTitle: {
+		fontWeight: "700",
+		marginTop: "4px",
+		color: "#1a5e83",
+	},
+	header_title: {
+		fontWeight: "bold",
+		textAlign: "center" as "center",
+		fontSize: "15px",
+		marginBottom: "15px",
+	},
+    formTitle: {
+        textAlign: "center" as "center",
+        fontSize: "15px",
+        fontWeight: "600",
+        marginBottom: "20px"
+    }
+};

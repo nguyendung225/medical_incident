@@ -78,7 +78,11 @@ export const phanTichScykTableColumns = [
         headerStyle: {
             minWidth: "200px"
         },
-        render: (row: any) => <span>{row?.suCoResp?.tenKhoaPhong}</span>
+        render: (row: any) => (
+            row?.suCoResp?.benhNhan && (
+                <span className="text-uppercase">{row?.suCoResp?.benhNhan?.tenKhoaPhongDieuTri}</span>
+            )
+        )
     },
 ]
 

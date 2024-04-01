@@ -60,7 +60,6 @@ const PhanTichSCYK = (props: Props) => {
             const { data } = await searchByPage(searchData);
             data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.suCoId);
             await setPhanTichScykList(data?.data?.data);
-            setIndexRowSelected(0);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -88,17 +87,18 @@ const PhanTichSCYK = (props: Props) => {
     }
 
     const handleOpenUpdateModal = async () => {
-        !thongTinSCYK?.phanTichResp.id && await getThongTinSCYK(phanTichScykList[indexRowSelected]?.suCoId);
+        !thongTinSCYK?.phanTichResp.id && await getThongTinSCYK(phanTichScykList[indexRowSelected || 0]?.suCoId);
         setShouldOpenDialogThemMoiPhanTichSCYK(true);
     }
 
     const handleCloseModal = async () => {
-        !thongTinSCYK?.phanTichResp.id && await getThongTinSCYK(phanTichScykList[indexRowSelected]?.suCoId);
+        !thongTinSCYK?.phanTichResp.id && await getThongTinSCYK(phanTichScykList[indexRowSelected || 0]?.suCoId);
         setShouldOpenDialogThemMoiPhanTichSCYK(false);
     }
 
     useEffect(() => {
         const thongTinScykParams = {
+            benhNhanResp: thongTinSCYK?.benhNhanResp,
             suCoResp: thongTinSCYK?.suCoResp,
             bienBanXacMinhResp: initBienBanXacMinh,
             phanTichResp: thongTinSCYK?.phanTichResp,
@@ -111,7 +111,7 @@ const PhanTichSCYK = (props: Props) => {
     }, [thongTinSCYK])
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(phanTichScykList[indexRowSelected]?.suCoId || "");
+        !isNaN(indexRowSelected) && getThongTinSCYK(phanTichScykList[indexRowSelected || 0]?.suCoId);
     }, [indexRowSelected])
 
     return (
@@ -127,6 +127,7 @@ const PhanTichSCYK = (props: Props) => {
                     searchObj={searchObj}
                     handleSearch={handleSearch}
                     statusOptions={STATUS_REPORT_OPTION}
+                    timeReportLable="Ngày phân tích"
                 />
                 <div>
                     <TableCustom

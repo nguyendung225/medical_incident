@@ -6,6 +6,9 @@ import { SearchObject } from "../models/BaoCaoSCYKModels";
 import { ISelectOption } from "../../models/models";
 import { localStorageItem } from "../../utils/LocalStorage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
+import { Form, Formik } from "formik";
+import { SEARCH_OBJECT_INIT } from "../const/constants";
+import * as Yup from "yup";
 
 type TProps = {
     handleClose: () => void,
@@ -13,6 +16,7 @@ type TProps = {
     searchObj: SearchObject,
     handleChangeSearchObj: (searchObj: SearchObject) => void,
     statusOptions: ISelectOption[],
+    timeReportLable: string,
 }
 
 const HINH_THUC_OPTIONS = [
@@ -28,37 +32,26 @@ const PHAN_LOAI_OPTIONS = [
     { name: "Nhẹ", code: "2" },
 ]
 
-const AdvancedSearchDialog = ({ 
-    handleClose, 
-    handleSearch, 
+const AdvancedSearchDialog = ({
+    handleClose,
+    handleSearch,
     searchObj,
     handleChangeSearchObj,
     statusOptions,
+    timeReportLable
 }: TProps) => {
-    const handleSumbit = () => {
+    const validationSchema = Yup.object().shape({
+        tuNgay: Yup.date()
+            .max(Yup.ref("denNgay"), "Từ ngày không được lớn hơn đến ngày")
+            .max(new Date(), "Từ ngày không được lớn hơn ngày hiện tại"),
+        denNgay: Yup.date()
+            .min(Yup.ref("tuNgay"), "Đến ngày không được nhỏ hơn từ ngày")
+            .max(new Date(), "Đến ngày không được lớn hơn ngày hiện tại"),
+    });
+
+    const handleSubmit = () => {
         handleClose();
         handleSearch();
-    }
-
-    const handleChange = (e: any) => {
-        handleChangeSearchObj({
-            ...searchObj,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    const handleChangeSelect = (name: string, value: any) => {
-        handleChangeSearchObj({
-            ...searchObj,
-            [name]: value
-        })
-    }
-
-    const handleRemoveSearchParam = () => {
-        handleChangeSearchObj({
-            pageNumber: 0,
-            pageSize: 0,
-        })
     }
 
     return (
@@ -74,111 +67,147 @@ const AdvancedSearchDialog = ({
                     Tìm kiếm năng cao
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body className="spaces p-10">
-                <Row>
-                    <Col xs={6} sm={6} md={12} lg={12}>
-                        <div className="d-flex align-items-center">
-                            <TextValidator
-                                className="d-flex"
-                                classLable="spaces min-w-120"
-                                lable={"Thời gian báo cáo"}
-                                name="ngayBaoCaoStart"
-                                type="date"
-                                value={searchObj?.ngayBaoCaoStart || ""}
-                                onChange={handleChange}
-                            />
-                            <span className="spaces mx-5">-</span>
-                            <TextValidator
-                                className="d-flex spaces gap-10"
-                                name="ngayBaoCaoEnd"
-                                type="date"
-                                value={searchObj?.ngayBaoCaoEnd || ""}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-                <Row className="spaces my-16">
-                    <Col xs={6} sm={6} md={6} lg={6}>
-                        <div className="d-flex">
-                            <LabelRequired
-                                label="Trạng thái"
-                                className="spaces min-w-120 fw-500"
-                            />
-                            <Autocomplete
-                                className="spaces h-25 min-w-256"
-                                name="trangThaiXuLy"
-                                options={statusOptions}
-                                value={searchObj?.trangThaiXuLy}
-                                onChange={(value) => {
-                                    handleChangeSelect("trangThaiXuLy", value)
-                                }}
-                            />
-                        </div>
-                    </Col>
-                    <Col xs={6} sm={6} md={6} lg={6}>
-                        <div className="d-flex">
-                            <LabelRequired
-                                label="Hình thức báo cáo"
-                                className="spaces min-w-120 fw-500"
-                            />
-                            <Autocomplete
-                                className="spaces h-25 min-w-256"
-                                name="hinhThuc"
-                                options={HINH_THUC_OPTIONS}
-                                value={searchObj?.hinhThuc}
-                                onChange={(value) => {
-                                    handleChangeSelect("hinhThuc", value)
-                                }}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={6} sm={6} md={6} lg={6}>
-                        <div className="d-flex">
-                            <LabelRequired
-                                label="Phân loại sự cố"
-                                className="spaces min-w-120 fw-500"
-                            />
-                            <Autocomplete
-                                className="spaces h-25 min-w-256"
-                                name="phanLoai"
-                                options={PHAN_LOAI_OPTIONS}
-                                value={searchObj?.phanLoai}
-                                onChange={(value) => {
-                                    handleChangeSelect("phanLoai", value)
-                                }}
-                            />
-                        </div>
-                    </Col>
-                    <Col xs={6} sm={6} md={6} lg={6}>
-                        <div className="d-flex">
-                            <LabelRequired
-                                label="Khoa / Phòng"
-                                className="spaces min-w-120 fw-500"
-                            />
-                            <Autocomplete
-                                className="spaces h-25 min-w-256"
-                                name="khoaPhongDieuTri"
-                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
-                                value={searchObj?.khoaPhongDieuTri}
-                                onChange={(value) => {
-                                    handleChangeSelect("khoaPhongDieuTri", value)
-                                }}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-            </Modal.Body>
-            <Modal.Footer className="d-flex justify-content-center spaces py-10">
-                <Button className="button-primary" onClick={handleRemoveSearchParam}>
-                   Mặc định
-                </Button>
-                <Button className="button-primary" onClick={handleSumbit}>
-                    Tìm kiếm
-                </Button>
-            </Modal.Footer>
+            <Formik
+                initialValues={searchObj}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+            >
+                {({
+                    values,
+                    errors,
+                    touched,
+                    setFieldValue,
+                    setValues
+                }) => {
+
+                    const handleChange = (name: string, value: any) => {
+                        setFieldValue(name, value);
+                        handleChangeSearchObj({
+                            ...searchObj,
+                            [name]: value
+                        })
+                    }
+
+                    const handleRemoveSearchParam = () => {
+                        setValues(SEARCH_OBJECT_INIT);
+                        handleChangeSearchObj(SEARCH_OBJECT_INIT);
+                    }
+
+                    return (
+                        <Form>
+                            <Modal.Body className="spaces p-10">
+                                <Row>
+                                    <Col xs={6} sm={6} md={12} lg={12}>
+                                        <div className="d-flex align-items-center">
+                                            <TextValidator
+                                                className="d-flex"
+                                                classLable="spaces min-w-120"
+                                                lable={timeReportLable}
+                                                name="tuNgay"
+                                                type="date"
+                                                value={values?.tuNgay || ""}
+                                                onChange={(e: any) => handleChange("tuNgay", e.target.value)}
+                                                errors={errors?.tuNgay}
+                                                touched={touched?.tuNgay}
+                                            />
+                                            <span className="spaces mx-5">-</span>
+                                            <TextValidator
+                                                className="d-flex spaces gap-10"
+                                                name="denNgay"
+                                                type="date"
+                                                value={values?.denNgay || ""}
+                                                onChange={(e: any) => handleChange("denNgay", e.target.value)}
+                                                errors={errors?.denNgay}
+                                                touched={touched?.denNgay}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row className="spaces my-16">
+                                    <Col xs={6} sm={6} md={6} lg={6}>
+                                        <div className="d-flex">
+                                            <LabelRequired
+                                                label="Trạng thái"
+                                                className="spaces min-w-120 fw-500"
+                                            />
+                                            <Autocomplete
+                                                className="spaces h-25 min-w-256"
+                                                name="trangThaiXuLy"
+                                                options={statusOptions}
+                                                value={values?.trangThaiXuLy}
+                                                onChange={(value) => {
+                                                    handleChange("trangThaiXuLy", value)
+                                                }}
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Col xs={6} sm={6} md={6} lg={6}>
+                                        <div className="d-flex">
+                                            <LabelRequired
+                                                label="Hình thức báo cáo"
+                                                className="spaces min-w-120 fw-500"
+                                            />
+                                            <Autocomplete
+                                                className="spaces h-25 min-w-256"
+                                                name="hinhThuc"
+                                                options={HINH_THUC_OPTIONS}
+                                                value={values?.hinhThuc}
+                                                onChange={(value) => {
+                                                    handleChange("hinhThuc", value)
+                                                }}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col xs={6} sm={6} md={6} lg={6}>
+                                        <div className="d-flex">
+                                            <LabelRequired
+                                                label="Phân loại sự cố"
+                                                className="spaces min-w-120 fw-500"
+                                            />
+                                            <Autocomplete
+                                                className="spaces h-25 min-w-256"
+                                                name="phanLoai"
+                                                options={PHAN_LOAI_OPTIONS}
+                                                value={values?.phanLoai}
+                                                onChange={(value) => {
+                                                    handleChange("phanLoai", value)
+                                                }}
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Col xs={6} sm={6} md={6} lg={6}>
+                                        <div className="d-flex">
+                                            <LabelRequired
+                                                label="Khoa / Phòng"
+                                                className="spaces min-w-120 fw-500"
+                                            />
+                                            <Autocomplete
+                                                className="spaces h-25 min-w-256"
+                                                name="khoaPhongDieuTri"
+                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
+                                                value={values?.khoaPhongDieuTri}
+                                                onChange={(value) => {
+                                                    handleChange("khoaPhongDieuTri", value)
+                                                }}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Modal.Body>
+                            <Modal.Footer className="d-flex justify-content-center spaces py-10">
+                                <Button className="button-primary" onClick={handleRemoveSearchParam}>
+                                    Mặc định
+                                </Button>
+                                <Button className="button-primary" type="submit">
+                                    Tìm kiếm
+                                </Button>
+                            </Modal.Footer>
+                        </Form>
+                    )
+                }}
+            </Formik>
         </Modal>
     )
 }

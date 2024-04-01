@@ -13,6 +13,7 @@ type TProps = {
     searchObj: SearchObject,
     handleChangeSearchObj: Dispatch<SetStateAction<SearchObject>>,
     statusOptions: ISelectOption[],
+    timeReportLable: string,
 }
 
 const FilterSearchContainer = ({
@@ -21,7 +22,8 @@ const FilterSearchContainer = ({
     title,
     searchObj,
     handleChangeSearchObj,
-    statusOptions
+    statusOptions,
+    timeReportLable
 }: TProps) => {
     const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
 
@@ -67,6 +69,7 @@ const FilterSearchContainer = ({
                     searchObj={searchObj}
                     handleChangeSearchObj={(searchData: SearchObject) => handleChangeSearchObj(searchData)}
                     statusOptions={statusOptions}
+                    timeReportLable={timeReportLable}
                 />
             )}
         </>
