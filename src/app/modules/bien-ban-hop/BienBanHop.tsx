@@ -8,7 +8,7 @@ import FilterSearchContainer from "../bao-cao-su-co-y-khoa/components/FilterSear
 import { getTabList, SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList } from "../bao-cao-su-co-y-khoa/const/constants";
 import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import { STATUS_REPORT_OPTION, initBienBanXacMinh, tableDSBienBanColumns } from "../bien-ban-xac-minh/const/constants";
+import { STATUS_REPORT_OPTION, initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
 import DropdownButton from "../component/button/DropdownButton";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
@@ -22,6 +22,7 @@ import { tab } from "../models/tabModels";
 import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
 import { localStorageItem } from "../utils/LocalStorage";
 import { PHAN_TICH_SCYK_INFO_INIT } from "../phan-tich-scyk/constants/constants";
+import { tableDSBienBanHopColumns } from "./const/constants";
 
 type Props = {};
 
@@ -60,7 +61,6 @@ const BienBanHop = (props: Props) => {
             const { data } = await searchByPage(searchData);
             data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.suCoId);
             setDsBienBan(data?.data?.data);
-            setIndexRowSelected(0);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -106,21 +106,22 @@ const BienBanHop = (props: Props) => {
     }
 
     const handleOpenUpdateModal = async () => {
-        !thongTinSCYK?.bienBanHopResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId);
+        !thongTinSCYK?.bienBanHopResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected || 0]?.suCoId);
         setOpenThemMoiBienBan(true);
     }
 
     const handleCloseModal = async () => {
-        !thongTinSCYK?.bienBanHopResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId);
+        !thongTinSCYK?.bienBanHopResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected || 0]?.suCoId);
         setOpenThemMoiBienBan(false);
     }
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoId || "");
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBienBan[indexRowSelected || 0]?.suCoId);
     }, [indexRowSelected])
 
     useEffect(() => {
         const thongTinScykParams = {
+            benhNhanResp: thongTinSCYK?.benhNhanResp,
             suCoResp: thongTinSCYK?.suCoResp,
             bienBanXacMinhResp: initBienBanXacMinh,
             phanTichResp: PHAN_TICH_SCYK_INFO_INIT,
@@ -145,12 +146,13 @@ const BienBanHop = (props: Props) => {
                     handleChangeSearchObj={setSearchObj}
                     handleSearch={handleSearch}
                     statusOptions={STATUS_REPORT_OPTION}
+                    timeReportLable="Thời gian họp"
                 />
                 <div>
                     <TableCustom
                         height={"calc(100vh - 255px)"}
                         id="profile2"
-                        columns={tableDSBienBanColumns}
+                        columns={tableDSBienBanHopColumns}
                         data={dsBienBan}
                         dataChecked={[thongTinSCYK?.bienBanHopResp]}
                         buttonAdd={false}

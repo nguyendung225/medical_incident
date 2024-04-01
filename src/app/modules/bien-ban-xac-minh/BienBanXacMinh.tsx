@@ -62,7 +62,6 @@ const BienBanXacMinh = (props: Props) => {
             const { data } = await searchByPage(searchData);
             data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.suCoResp?.id);
             await setDsBienBan(data?.data?.data);
-            setIndexRowSelected(0);
             setConfigTable({
                 pageNumber: data.data.pageNumber,
                 pageSize: data.data.pageNumber,
@@ -126,21 +125,22 @@ const BienBanXacMinh = (props: Props) => {
     };
 
     const handleOpenUpdateModal = async () => {
-        !thongTinSCYK?.bienBanXacMinhResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoResp?.id || "")
+        !thongTinSCYK?.bienBanXacMinhResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected || 0]?.suCoResp?.id || "")
         setOpenThemMoiBienBan(true);
     }
 
     const handleCloseModal = async () => {
-        !thongTinSCYK?.bienBanXacMinhResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoResp?.id || "")
+        !thongTinSCYK?.bienBanXacMinhResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected || 0]?.suCoResp?.id || "")
         setOpenThemMoiBienBan(false);
     }
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(dsBienBan[indexRowSelected]?.suCoResp?.id || "")
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBienBan[indexRowSelected || 0]?.suCoResp?.id || "")
     }, [indexRowSelected])
 
     useEffect(() => {
         const thongTinScykParams = {
+            benhNhanResp: thongTinSCYK?.benhNhanResp,
             suCoResp: thongTinSCYK?.suCoResp,
             bienBanXacMinhResp: thongTinSCYK?.bienBanXacMinhResp,
             phanTichResp: PHAN_TICH_SCYK_INFO_INIT,
@@ -165,6 +165,7 @@ const BienBanXacMinh = (props: Props) => {
                     handleChangeSearchObj={setSearchObj}
                     handleSearch={handleSearch}
                     statusOptions={STATUS_REPORT_OPTION}
+                    timeReportLable="Ngày xác minh"
                 />
                 <div>
                     <TableCustom

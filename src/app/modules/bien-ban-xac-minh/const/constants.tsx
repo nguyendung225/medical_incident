@@ -11,7 +11,7 @@ export const tableDSBienBanColumns = [
     {
         name: "TT",
         field: "name",
-        render: (row: any) => renderMedicalIncidentReportStatus(row?.trangThaiXuLy)
+        render: (row: any) => renderMedicalIncidentReportStatus(row?.trangThai)
     },
     {
         name: "Phân loại SCYK",

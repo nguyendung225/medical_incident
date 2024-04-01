@@ -7,9 +7,9 @@ import {
     OPTION_PHAN_LOAI, 
     OPTION_XAC_NHAN, 
     TT_NGUOI_THONG_BAO, 
-    printStyles 
 } from "../const/constants";
 import { convertGenderToString } from "../../utils/FormatUtils";
+import { printStyles } from "../../utils/Constant";
 
 type TProps = {
     thongTinSCYK: MedicalIncidentInfo;

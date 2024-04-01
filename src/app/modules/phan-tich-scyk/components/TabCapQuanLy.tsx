@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Col, Row } from "react-bootstrap";
 import LabelRequired from "../../component/LabelRequired";
 import TextField from "../../component/TextField";
@@ -206,9 +207,9 @@ const TabCapQuanLy = () => {
                                     className="spaces h-25 width-100"
                                     name="chucDanhNguoiPhanTich"
                                     options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
-                                    value={values.chucDanhNguoiPhanTich}
+                                    value={values?.chucDanhNguoiPhanTich}
                                     onChange={(option) => {
-										setFieldValue("chucDanhNguoiPhanTich",option.id);
+										setFieldValue("chucDanhNguoiPhanTich", option?.id);
 									}}
                                 />
 							</div>

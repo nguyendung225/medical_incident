@@ -144,7 +144,7 @@ const DialogThemMoiBienBanHop = ({
                                                 onChange={(selectedOption) =>
                                                     setFieldValue(
                                                         "departmentId",
-                                                        selectedOption.id
+                                                        selectedOption?.id
                                                     )
                                                 }
                                                 value={
@@ -198,7 +198,7 @@ const DialogThemMoiBienBanHop = ({
                                                 onChange={(
                                                     selectedOption
                                                 ) =>
-                                                    setValues({ ...values, suCoId: selectedOption.id })
+                                                    setValues({ ...values, suCoId: selectedOption?.id })
                                                 }
                                                 getOptionLabel={(option) => option.code}
                                                 className="spaces h-25 width-100"
@@ -289,9 +289,9 @@ const DialogThemMoiBienBanHop = ({
                                                     selectedOption
                                                 ) =>
                                                     setValues({
-                                                        ...values, chuTriId: selectedOption.id,
-                                                        chucDanhChuTriId: selectedOption.maChucDanh,
-                                                        chucVuChuTriId: selectedOption.maChucVu
+                                                        ...values, chuTriId: selectedOption?.id,
+                                                        chucDanhChuTriId: selectedOption?.maChucDanh,
+                                                        chucVuChuTriId: selectedOption?.maChucVu
                                                     })
                                                 }
                                                 getOptionLabel={(option) => option.fullName}
@@ -349,9 +349,9 @@ const DialogThemMoiBienBanHop = ({
                                                     selectedOption
                                                 ) =>
                                                     setValues({
-                                                        ...values, thuKyId: selectedOption.id,
-                                                        chucDanhThuKyId: selectedOption.maChucDanh,
-                                                        chucVuThuKyId: selectedOption.maChucVu
+                                                        ...values, thuKyId: selectedOption?.id,
+                                                        chucDanhThuKyId: selectedOption?.maChucDanh,
+                                                        chucVuThuKyId: selectedOption?.maChucVu
                                                     })
                                                 }
                                                 getOptionLabel={(option) => option.fullName}
@@ -440,9 +440,9 @@ const DialogThemMoiBienBanHop = ({
                                                     selectedOption
                                                 ) =>
                                                     setValues({
-                                                        ...values, nguoiTrinhBayId: selectedOption.id,
-                                                        chucDanhNguoiTrinhBayId: selectedOption.maChucDanh,
-                                                        chucVuNguoiTrinhBayId: selectedOption.maChucVu
+                                                        ...values, nguoiTrinhBayId: selectedOption?.id,
+                                                        chucDanhNguoiTrinhBayId: selectedOption?.maChucDanh,
+                                                        chucVuNguoiTrinhBayId: selectedOption?.maChucVu
                                                     })
                                                 }
                                                 getOptionLabel={(option) => option.fullName}

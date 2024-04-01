@@ -1,4 +1,4 @@
-import { printStyles } from "../../bao-cao-su-co-y-khoa/const/constants";
+import { printStyles } from "../../utils/Constant";
 import { seperateTime } from "../../utils/FormatUtils";
 import { IBienBanXacMinh } from "../models/BienBanXacMinhModel";
 

@@ -109,12 +109,12 @@ const BaoCaoSCYK = (props: Props) => {
     };
 
     const handleOpenUpdateModal = async () => {
-        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id || 0);
+        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected || 0]?.id);
         setOpenDialogThemMoiSCYK(true);
     }
 
     const handleCloseModal = async () => {
-        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id || 0);
+        !thongTinSCYK?.suCoResp?.id && await getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected || 0]?.id);
         setOpenDialogThemMoiSCYK(false);
     }
 
@@ -140,7 +140,7 @@ const BaoCaoSCYK = (props: Props) => {
     }, [thongTinSCYK])
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id || 0);
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected || 0]?.id);
     }, [indexRowSelected])
 
     useEffect(() => {
@@ -160,6 +160,7 @@ const BaoCaoSCYK = (props: Props) => {
                     searchObj={searchObj}
                     handleSearch={handleSearch}
                     statusOptions={TRANG_THAI_OPTIONS}
+                    timeReportLable="Thời gian báo cáo"
                 />
                 <div>
                     <TableCustom
