@@ -53,7 +53,7 @@ const SoTheoDoiSCYK = ({ searchObj }: TProps) => {
                 </Col>
                 <Col xs={12}>
                     <TableGrouping
-                        height={"calc(100vh - 240px)"}
+                        height={"calc(100vh - 275px)"}
                         columns={soTheoDoiScykTableColumns}
                         data={soTheoDoiScykList}
                         buttonExportExcel={true}

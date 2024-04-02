@@ -35,19 +35,25 @@ const ThongTinKhacTab = ({ thongTinScyk }: TProps) => {
         <div className="orther-info-tab-container">
             <div>
                 <div className="main-content-title">1. Lịch sử cập nhật trạng thái</div>
-                <TableCustom
-                    height={attachedFiles?.length > 0 ? "calc(60vh - 255px)" : "calc(100vh - 255px)"}
-                    id="lich-su-cap-nhat"
-                    columns={tableLichSuCapNhatCulumns}
-                    data={updateHistoryList || []}
-                    buttonAdd={false}
-                    buttonExportExcel={false}
-                    notDelete={false}
-                    justFilter={true}
-                    fixedColumnsCount={0}
-                    noPagination={true}
-                    updatePageData={() => { }}
-                />
+                {updateHistoryList ? (
+                    <TableCustom
+                        height={attachedFiles?.length > 0 ? "calc(60vh - 255px)" : "calc(100vh - 255px)"}
+                        id="lich-su-cap-nhat"
+                        columns={tableLichSuCapNhatCulumns}
+                        data={updateHistoryList || []}
+                        buttonAdd={false}
+                        buttonExportExcel={false}
+                        notDelete={false}
+                        justFilter={true}
+                        fixedColumnsCount={0}
+                        noPagination={true}
+                        updatePageData={() => { }}
+                    />
+                ) : (
+                    <div className="d-flex text-center">
+                        Chưa có lịch sử cập nhật trạng thái
+                    </div>
+                )}
             </div>
             {attachedFiles?.length > 0 && (
                 <div>

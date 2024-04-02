@@ -18,7 +18,8 @@ type TProps = {
 
 const BaoCaoSCYKDetail = ({ thongTinSCYK, thongTinBenhNhan }: TProps) => {
     return (
-        <div style={printStyles.container} id="in-phieu-bao-cao-scyk">
+        thongTinSCYK?.id ?
+        (<div style={printStyles.container} id="in-phieu-bao-cao-scyk">
             <div style={printStyles.formTitle}>PHIẾU BÁO CÁO SỰ CỐ Y KHOA</div>
             <div style={printStyles.d_flex_j_between}>
                 <div style={printStyles.width._48persent}>
@@ -210,6 +211,11 @@ const BaoCaoSCYKDetail = ({ thongTinSCYK, thongTinBenhNhan }: TProps) => {
                 </div>
             </div>
         </div>
+        ) : (
+            <div style={printStyles.container}>
+                <div style={printStyles.text_center}>Chưa có thông tin báo cáo sự cố y khoa</div>
+            </div>
+        )
     )
 }
 

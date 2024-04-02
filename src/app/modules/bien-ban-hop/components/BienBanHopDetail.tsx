@@ -8,7 +8,8 @@ type TProps = {
 
 const BienBanHopDetail = ({ thongTinBienBan }: TProps) => {
     return (
-        <div style={printStyles.container} id="in-phieu-bien-ban-hop">
+        thongTinBienBan?.id ?
+        (<div style={printStyles.container} id="in-phieu-bien-ban-hop">
             <div style={printStyles.text_center} >
                 <div>
                     BỆNH VIỆN QUÂN Y 103
@@ -143,6 +144,11 @@ const BienBanHopDetail = ({ thongTinBienBan }: TProps) => {
                 </div>
             </div>
         </div>
+        ) : (
+			<div style={printStyles.container}>
+				<div style={printStyles.text_center}>Chưa có thông tin báo cáo sự cố y khoa</div>
+			</div>
+		)
     );
 };
 

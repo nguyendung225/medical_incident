@@ -10,7 +10,8 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 	const timeXacMinh = seperateTime(thongTinBienBan?.ngayGioXacMinh);
 	const timeKetThuc = seperateTime(thongTinBienBan?.ngayGioKetThuc);
 	return (
-		<div style={printStyles.container} id="in-phieu-bien-ban-xac-minh">
+		thongTinBienBan?.id ?
+		(<div style={printStyles.container} id="in-phieu-bien-ban-xac-minh">
 			<div style={printStyles.header}>
 				CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
 				<p>Độc lập - Tự do - Hạnh phúc</p>
@@ -219,6 +220,11 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				</div>
 			</div>
 		</div>
+		) : (
+			<div style={printStyles.container}>
+				<div style={printStyles.text_center}>Chưa có thông tin biên bản xác minh sự cố y khoa</div>
+			</div>
+		)
 	);
 };
 

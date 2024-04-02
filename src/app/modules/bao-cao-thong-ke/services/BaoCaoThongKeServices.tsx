@@ -23,7 +23,7 @@ export const exportThongKeDoiTuong = (searchObject: ISearchObj) => {
         url: url,
         method: "GET",
         responseType: "blob",
-       ...paramsConfig(searchObject),
+        ...paramsConfig(searchObject),
     });
 };
 
