@@ -75,7 +75,7 @@ const renderHinhThucBaoCao = (hinhThucCode: number) => {
     return hinhThuc && hinhThuc[0]?.name;
 }
 
-const renderLoaiDoiTuong = (loaiDoiTuong: string[]) => {
+export const renderLoaiDoiTuong = (loaiDoiTuong: string[]) => {
     const doiTruongList: string[] = [];
     DOI_TUONG_XAY_RA_SC.forEach(doiTuong => {
         if(loaiDoiTuong?.includes(doiTuong.code))  
@@ -354,28 +354,6 @@ export const InitThongTinSCYK: MedicalIncidentInfo = {
     orgId: "",
     tenBenhNhan: ""
 };
-
-export const DV_BAO_CAO = [
-	{
-		code: '00000000-0000-0000-0000-000000000000',
-		name: "Đơn vị 1",
-	},
-	{
-		code: '00000000-0000-0000-0000-000000000001',
-		name: "Đơn vị 2",
-	},
-];
-
-export const KHOA_PHONG = [
-	{
-		code: '00000000-0000-0000-0000-000000000000',
-		name: "Đơn vị 1",
-	},
-	{
-		code: '00000000-0000-0000-0000-000000000001',
-		name: "Đơn vị 2",
-	},
-];
 
 export const initTiepNhan: ITiepNhan = {
     khoaPhongXuLy: "",

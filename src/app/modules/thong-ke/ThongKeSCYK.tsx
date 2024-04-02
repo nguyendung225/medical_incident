@@ -53,10 +53,10 @@ const ThongKeSCYK = () => {
                 loaiDoiTuong: loaiDoiTuong?.data?.data || INIT_DASHBOARD_DATA.loaiDoiTuong,
                 mucDoTonThuong: mucDoTonThuong?.data?.data || INIT_DASHBOARD_DATA.mucDoTonThuong,
             })
-            setPageLoading(false);
         } catch (error) {
-            setPageLoading(false);
             toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        } finally {
+            setPageLoading(false);
         }
     };
     useEffect(() => {

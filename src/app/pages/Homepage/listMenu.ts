@@ -67,8 +67,8 @@ export const allMenu: TMenu[] = [
         ability: PERMISSION_ABILITY.VIEW,
       },
       {
-        title: "Báo cáo",
-        to: "/bao-cao",
+        title: "Báo cáo thống kê",
+        to: "/bao-cao-thong-ke",
         hasBullet: false,
         icon: "/media/svg/icons/bookmark-fill.svg",
         permission: PERMISSIONS.EMPLOYEE,
