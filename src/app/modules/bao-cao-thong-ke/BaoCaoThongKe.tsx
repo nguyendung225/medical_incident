@@ -5,6 +5,8 @@ import { INIT_SEARCH_OBJECT, TYPE_OF_REPORT_CODE } from "./constants/constants";
 import TabMenu from "../component/tabs/TabMenu";
 import BaoCaoTheoDoiTuongXayRa from "./components/BaoCaoTheoDoiTuongXayRa";
 import SoTheoDoiSCYK from "./components/SoTheoDoiSCYK";
+import BaoCaoTheoThang from "./components/BaoCaoTheoThang";
+import BaoCaoTheoMucDoTonThuong from "./components/BaoCaoTheoMucDoTonThuong";
 
 const BaoCaoThongKe = () => {
     const [searchObj, setSearchObj] = useState<ISearchObj>(INIT_SEARCH_OBJECT)
@@ -19,6 +21,16 @@ const BaoCaoThongKe = () => {
             eventKey: TYPE_OF_REPORT_CODE.MEDICAL_INCIDENT_MONITORING_BOOK,
             title: "Sổ theo dõi sự cố y khoa",
             component: <SoTheoDoiSCYK searchObj={searchObj} />
+        },
+        {
+            eventKey: TYPE_OF_REPORT_CODE.MEDICAL_INCIDENT_MONITORING_BOOK,
+            title: "Báo cáo scyk theo tháng",
+            component: <BaoCaoTheoThang searchObj={searchObj} />
+        },
+        {
+            eventKey: TYPE_OF_REPORT_CODE.MEDICAL_INCIDENT_MONITORING_BOOK,
+            title: "Báo cáo scyk theo mức độ tổn thương",
+            component: <BaoCaoTheoMucDoTonThuong searchObj={searchObj} />
         }
     ]
 
