@@ -18,6 +18,10 @@ export interface IThongKeTheoDoiTuongXayRa {
     baoCaoTheoKhoaPhongs?: IDonViBaoCao[],
     baoCaoTheoDonVi?: IDonViBaoCao
 };
+export interface IThongKeTheoMucDoTT {
+    mucDoTonThuongTheoKhoaPhongs?: IDonViBaoCao[],
+    mucDoTonThuongTheoDonVi?: IDonViBaoCao
+};
 
 export interface IDonViBaoCao {
     tenDonVi: string;

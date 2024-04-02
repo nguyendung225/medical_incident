@@ -186,3 +186,141 @@ export const baoCaoSCYKTheoDoiTuongTableColumns: IColumns[] = [
         ]
     },
 ];
+
+
+export const TKMucDoTonThuongColumns: IColumns[] = [
+    {
+        name: "STT",
+        field: "",
+        render: (row: any, stt: number) => <div>{stt + 1}</div>
+    },
+    {
+        name: "Khoa/Phòng",
+        field: "ten",
+        cellStyle: {
+            textAlign: "left"
+        },
+    },
+    {
+        name: "Tổng số SCYK",
+        field: "",
+        render: (row: any, stt: number) => <div>{
+            row?.soLuongNang + row?.soLuongNhe + row?.soLuongTrungBinh
+        }</div>
+
+    },
+    {
+        name: "Trong đó",
+        field: "",
+        child: [
+            {
+                name: "Mức độ nhẹ",
+                field: "soLuongNhe",
+            },
+            {
+                name: "Mức độ trung bình",
+                field: "soLuongTrungBinh",
+            },
+            {
+                name: "Mức độ nặng",
+                field: "soLuongNang",
+            },
+        ]
+    },
+];
+
+export const thongKeTheoThangColumns: IColumns[] = [
+    {
+        name: "STT",
+        field: "",
+        render: (row: any, index: number, stt: number) => <span>{stt}</span>
+    },
+    {
+        name: "Khoa Phòng",
+        cellStyle: {
+            textAlign: "left"
+        },
+        field: "tenKhoaPhong",
+
+    },
+    {
+        name: "Tổng số SCYK",
+        field: "tongSoSuCoYKhoa",
+    },
+    {
+        name: "Tháng 1",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[0].total}</span>
+    },
+    {
+        name: "Tháng 2",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[1].total}</span>
+    },
+    {
+        name: "Tháng 3",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[2].total}</span>
+    },
+    {
+        name: "Tháng 4",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[3].total}</span>
+    },
+    {
+        name: "Tháng 5",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[4].total}</span>
+    },
+    {
+        name: "Tháng 6",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[5].total}</span>
+    },
+    {
+        name: "Tháng 7",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[6].total}</span>
+    },
+    {
+        name: "Tháng 8",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[7].total}</span>
+    },
+    {
+        name: "Tháng 9",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[8].total}</span>
+    },
+    {
+        name: "Tháng 10",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[9].total}</span>
+    },
+    {
+        name: "Tháng 11",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[10].total}</span>
+    },
+    {
+        name: "Tháng 12",
+        field: "",
+        render: (row: any) => <span>{row.suCoTheoThangs?.[11].total}</span>
+    },
+]
+
+export const convertSumUpData = (data: any = {}) => {
+    const convertData: any = {}
+    Object.keys(data).forEach((key) => {
+        if (typeof data[key] !== 'object') {
+            convertData[key] = data[key]
+        }
+        else if (Array.isArray(data[key])) {
+            data[key].forEach((item: any) => {
+                convertData[`thang${item?.month}`] = item?.total
+            })
+
+        }
+    })
+    return convertData
+}
