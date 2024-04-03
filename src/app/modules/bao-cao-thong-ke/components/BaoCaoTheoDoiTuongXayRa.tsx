@@ -65,7 +65,7 @@ const BaoCaoTheoDoiTuongXayRa = ({ searchObj }: TProps) => {
                 </Col>
                 <Col xs={12}>
                     <TableGrouping
-                        height={"calc(100vh - 240px)"}
+                        height={"calc(100vh - 275px)"}
                         columns={baoCaoSCYKTheoDoiTuongTableColumns}
                         sumUpData={reportTableData?.baoCaoTheoDonVi}
                         data={reportTableData?.baoCaoTheoKhoaPhongs || []}

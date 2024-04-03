@@ -31,7 +31,8 @@ type TProps = {
 const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
 
     return (
-        <div style={printStyles.container} id="in-phieu-phan-tich-scyk">
+        phanTichScyk?.id ?
+        (<div style={printStyles.container} id="in-phieu-phan-tich-scyk">
             <div style={printStyles.formTitle}>PHIẾU TÌM HIỂU VÀ PHÂN TÍCH SỰ CỐ</div>
             <div style={printStyles.fontWeight.bold}>Số báo cáo/Mã số sự cố: {thongTinScyk?.code}</div>
             <div style={printStyles.contentTitle}>A. Dành cho nhân viên chuyên trách</div>
@@ -351,6 +352,11 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                 <div>[3] Tổn thương nặng là tồn thương đòi hỏi phải cấp cứu hoặc can thiệp điều trị lớn, gây mất chức năng vĩnh viễn hoặc gây tử vong.</div>
             </div>
         </div>
+        ) : (
+            <div style={printStyles.container}>
+                <div style={printStyles.text_center}>Chưa có thông tin báo cáo sự cố y khoa</div>
+            </div>
+        )
     )
 }
 
