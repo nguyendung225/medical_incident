@@ -90,7 +90,7 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
 
   const combinedClassName = clsx(
     props?.className ? props.className : "w-100",
-    clsx(props.className, props.errors && props.touched && "ac-is-invalid", "autocomplete-custom radius")
+    clsx(props.className, props.errors && "ac-is-invalid", "autocomplete-custom radius")
   );
 
   const getValue = () => {
@@ -179,7 +179,7 @@ const Autocomplete: FC<AutoCompleteProps> = (props: AutoCompleteProps) => {
   };
 
   const renderTooltip = (props: any) => (
-    ( (props?.errors && props?.touched)) ? <Tooltip id="button-tooltip">
+    ( (props?.errors)) ? <Tooltip id="button-tooltip">
         <div className="text-danger">{props?.errors}</div>
       
     </Tooltip>:<div></div>

@@ -167,8 +167,8 @@ export const renderMedicalIncidentReportStatus = (reportStatus: number) => {
     }
 }
 
-export const convertLabelByCode = (options: any, code: number) => {
-    return options?.find((option: any) => option.code === code)?.name
+export const convertLabelByCode = (options: any, code: number | string = "") => {
+        return options?.find((option: any) => option.code === code || option.id === code)?.name
 }
 
 export function seperateTime(stringDate: string) {

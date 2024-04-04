@@ -75,7 +75,7 @@ export interface UserModel {
 export interface ResponseModel {
   apiSubErrors: null | string
   code: number
-  data: object
+  data: any
   message: string
   timestamp: string
   total: number

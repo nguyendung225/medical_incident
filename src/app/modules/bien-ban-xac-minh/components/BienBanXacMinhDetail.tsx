@@ -21,15 +21,15 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					BIÊN BẢN XÁC MINH SỰ CỐ Y KHOA
 				</div>
 				<div>
-					Hồi{" "}
-					<span style={printStyles.content_text}>{timeXacMinh.time}</span>{" "}
-					giờ ngày{" "}
-					<span style={printStyles.content_text}>{timeXacMinh.day}</span>{" "}
-					tháng{" "}
-					<span style={printStyles.content_text}>{timeXacMinh.month}</span>{" "}
-					năm{" "}
-					<span style={printStyles.content_text}>{timeXacMinh.year}</span>{" "}
-					tại{" "}
+					Hồi
+					<span style={printStyles.content_text}>{timeXacMinh.time}</span>
+					giờ ngày
+					<span style={printStyles.content_text}>{timeXacMinh.day}</span>
+					tháng
+					<span style={printStyles.content_text}>{timeXacMinh.month}</span>
+					năm
+					<span style={printStyles.content_text}>{timeXacMinh.year}</span>
+					tại
 					<span style={printStyles.content_text}>
 						{thongTinBienBan?.noiXacMinh}
 					</span>
@@ -38,50 +38,50 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				<div style={{ ...printStyles.contentTitle }}>Chúng tôi gồm :</div>
 				<div style={printStyles.d_flex_wrap}>
 					<div style={printStyles.width._40persent}>
-						<span>Ông/bà:</span>{" "}
+						<span>Ông/bà:</span>
 						<span style={printStyles.content_text}>
 							{thongTinBienBan?.tenNguoiChuTri}
 						</span>
 					</div>
 					<div style={printStyles.width._60persent}>
-						{" "}
-						Chức vụ:{" "}
-						<span style={printStyles.content_text}>{thongTinBienBan?.tenNguoiChuTri}</span>
+						
+						Chức vụ:
+						<span style={printStyles.content_text}>{thongTinBienBan?.tenChucVuNguoiChuTri}</span>
 					</div>
-					thuộc Đơn vị:{" "}
-					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViNguoiChuTri}</span>{" "}
-					chủ trì xác minh sự cố y khoa.
+					thuộc đơn vị
+					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViNguoiChuTri}</span>
+					là chủ trì xác minh sự cố y khoa.
 				</div>
 				<div style={printStyles.d_flex_wrap}>
 					<div style={printStyles.width._40persent}>
-						<span>Ông/bà:</span>{" "}
+						<span>Ông/bà:</span>
 						<span style={printStyles.content_text}>
 							{thongTinBienBan?.tenThanhVienDoan}
 						</span>
 					</div>
 					<div style={printStyles.width._60persent}>
-						{" "}
-						Chức vụ:{" "}
+						
+						Chức vụ:
 						<span style={printStyles.content_text}>{thongTinBienBan?.tenChucVuThanhVienDoan}</span>
 					</div>
-					thuộc Đơn vị:{" "}
-					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViThanhVienDoan}</span>{" "}
-					thành viên đoàn xác minh sự cố y khoa.
+					thuộc đơn vị
+					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViThanhVienDoan}</span>
+					là thành viên đoàn xác minh sự cố y khoa.
 				</div>
 				<div style={printStyles.d_flex_wrap}>
 					<div style={printStyles.width._40persent}>
-						<span>Ông/bà:</span>{" "}
+						<span>Ông/bà:</span>
 						<span style={printStyles.content_text}>
 							{thongTinBienBan?.tenNguoiChungKien}
 						</span>
 					</div>
 					<div style={printStyles.width._60persent}>
-						{" "}
-						Chức vụ:{" "}
+						
+						Chức vụ:
 						<span style={printStyles.content_text}>{thongTinBienBan?.tenChucVuNguoiChungKien}</span>
 					</div>
-					thuộc Đơn vị:{" "}
-					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViNguoiChungKien}</span>{" "}
+					thuộc đơn vị
+					<span style={printStyles.content_text}>{thongTinBienBan?.tenDonViNguoiChungKien}</span>
 					là người chứng kiến.
 				</div>
 
@@ -90,11 +90,11 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 				</div>
 				{thongTinBienBan?.nguoiThamDus?.map((nguoiThamDu) => (
 					<div>
-						Ông/bà:{" "}
-						<span style={printStyles.content_text}>{nguoiThamDu.name}</span>{" "}
-						Chức vụ:{" "}
+						Ông/bà:
+						<span style={printStyles.content_text}>{nguoiThamDu.name}</span>
+						Chức vụ:
 						<span style={printStyles.content_text}>{nguoiThamDu.tenChucVu}</span> thuộc
-						Đơn vị:{" "}
+						Đơn vị:
 						<span style={printStyles.content_text}>
 							{nguoiThamDu.tenDonVi}
 						</span>
@@ -117,13 +117,13 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
                 {thongTinBienBan?.ketQua}
                 </div>
 				<div>
-					Biên bản kết thúc vào hồi{" "}
-					<span style={printStyles.content_text}>{timeKetThuc.time}</span>{" "}
-					giờ ngày{" "}
-					<span style={printStyles.content_text}>{timeKetThuc.day}</span>{" "}
-					tháng{" "}
-					<span style={printStyles.content_text}>{timeKetThuc.month}</span>{" "}
-					năm{" "}
+					Biên bản kết thúc vào hồi
+					<span style={printStyles.content_text}>{timeKetThuc.time}</span>
+					giờ ngày
+					<span style={printStyles.content_text}>{timeKetThuc.day}</span>
+					tháng
+					<span style={printStyles.content_text}>{timeKetThuc.month}</span>
+					năm
 					<span style={printStyles.content_text}>{timeKetThuc.year}</span>
 				</div>
 				<div style={{ ...printStyles.contentTitle }}>
@@ -135,14 +135,14 @@ const BienBanXacMinhDetail = ({ thongTinBienBan }: TProps) => {
 					</span>
 				</div>
 				<div>
-					Biên bản này gồm có{" "}
+					Biên bản này gồm có
 					<span style={printStyles.content_text}>
 						{thongTinBienBan?.soTrang}
-					</span>{" "}
-					trang, được lập thành{" "}
+					</span>
+					trang, được lập thành
 					<span style={printStyles.content_text}>
 						{thongTinBienBan?.soBan}
-					</span>{" "}
+					</span>
 					bản có nội dung và giá trị pháp lý như nhau. Biên bản này
 					được đọc cho những người có tên phía trên nghe, công nhận
 					đúng sự việc và cùng ký tên xác nhận dưới đây

@@ -12,7 +12,7 @@ import { STATUS_REPORT_OPTION, initBienBanXacMinh } from "../bien-ban-xac-minh/c
 import DropdownButton from "../component/button/DropdownButton";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
-import { TYPE } from "../utils/Constant";
+import { MEDICAL_INCIDENT_REPORT_STATUS, TYPE } from "../utils/Constant";
 import { convertBooleanToNumber, seperateTime } from "../utils/FormatUtils";
 import "./BienBanHop.scss";
 import DialogThemMoiBienBanHop from "./components/DialogThemMoiBienBanHop";
@@ -192,12 +192,14 @@ const BienBanHop = (props: Props) => {
                         <span className="title">Thông tin biên bản họp</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        <Button
-                            className="button-primary"
-                            onClick={handleOpenUpdateModal}
-                        >
-                            Sửa
-                        </Button>
+                        {
+                            thongTinSCYK?.bienBanHopResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && <Button
+                                className="button-primary"
+                                onClick={handleOpenUpdateModal}
+                            >
+                                Sửa
+                            </Button>
+                        }
                         <DropdownButton
                             title="Xuất file"
                             dropdownItems={exportedFileList}

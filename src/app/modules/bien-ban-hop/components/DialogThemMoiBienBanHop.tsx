@@ -20,6 +20,7 @@ import FileInfo from "../../component/FileUpload/FileInfo";
 import { deleteFileBienBanHop } from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import { localStorageItem } from "../../utils/LocalStorage";
+import { convertLabelByCode } from "../../utils/FormatUtils";
 
 type Props = {
     handleClose: () => void;
@@ -312,13 +313,11 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Chức danh"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <Autocomplete
-                                                isDisabled
-                                                className="spaces h-25 width-100"
+                                              <TextField
+                                                disabled
                                                 name="chucDanhChuTriId"
-                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
-                                                value={values.chucDanhChuTriId}
-
+                                                type="text"
+                                                value={values.chuTriId ? convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH), values.chucDanhChuTriId) : ""}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24">
@@ -326,13 +325,11 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Chức vụ"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <Autocomplete
-                                                isDisabled
-                                                className="spaces h-25 width-100"
+                                            <TextField
+                                                disabled
                                                 name="chucVuChuTriId"
-                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
-                                                value={values.chucVuChuTriId}
-
+                                                type="text"
+                                                value={values.chuTriId ? convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU), values.chucVuChuTriId) : ""}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24" />
@@ -372,13 +369,11 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Chức danh"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <Autocomplete
-                                                isDisabled
-                                                className="spaces h-25 width-100"
+                                             <TextField
+                                                disabled
                                                 name="chucDanhThuKyId"
-                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
-                                                value={values.chucDanhThuKyId}
-
+                                                type="text"
+                                                value={values?.thuKyId ? convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH), values.chucDanhThuKyId) : ""}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24">
@@ -386,12 +381,11 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Chức vụ"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <Autocomplete
-                                                isDisabled
-                                                className="spaces h-25 width-100"
+                                            <TextField
+                                                disabled
                                                 name="chucVuThuKyId"
-                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
-                                                value={values.chucVuThuKyId}
+                                                type="text"
+                                                value={values.thuKyId ? convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU), values.chucVuThuKyId) : ""}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24" />
@@ -461,13 +455,11 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Chức danh"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <Autocomplete
-                                                isDisabled
-                                                className="spaces h-25 width-100"
+                                             <TextField
+                                                disabled
                                                 name="chucDanhNguoiTrinhBayId"
-                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
-                                                value={values.chucDanhNguoiTrinhBayId}
-
+                                                type="text"
+                                                value={values.nguoiTrinhBayId ? convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH), values.chucDanhNguoiTrinhBayId) : ""}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24">
@@ -475,12 +467,11 @@ const DialogThemMoiBienBanHop = ({
                                                 label="Chức vụ"
                                                 className="spaces min-w-80 fw-500"
                                             />
-                                            <Autocomplete
-                                                isDisabled
-                                                className="spaces h-25 width-100"
+                                            <TextField
+                                                disabled
                                                 name="chucVuNguoiTrinhBayId"
-                                                options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU)}
-                                                value={values.chucVuNguoiTrinhBayId}
+                                                type="text"
+                                                value={values.nguoiTrinhBayId ? convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_VU), values.chucVuNguoiTrinhBayId) : ""}
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24" />

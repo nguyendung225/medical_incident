@@ -50,7 +50,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 									onChange={(
 										selectedOption
 									) =>
-										setValues({ ...values, suCoId: selectedOption.id, tenSuCo: selectedOption.name })
+										setValues({ ...values, suCoId: selectedOption?.id, tenSuCo: selectedOption?.name })
 									}
 									getOptionLabel={(option) => option.code}
 									className="spaces h-25 width-100"
@@ -80,6 +80,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 									className="spaces h-25 width-100"
 									type="text"
 									name="tenSuCo"
+                                    value={values.suCoId ? values?.tenSuCo : ""}
 								/>
 							</div>
 						</Col>

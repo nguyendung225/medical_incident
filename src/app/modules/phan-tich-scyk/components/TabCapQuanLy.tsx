@@ -234,9 +234,13 @@ const TabCapQuanLy = () => {
 					</Row>
 				</Col>
 				<Col xs={12}>
-					<div>(1) Tổn thương nhẹ là</div>
-					<div>(2) Tổn thương trung bình là</div>
-					<div>(3) Tổn thương nặng là</div>
+                    <div>(1) Tổn thương nhẹ là tổn thương tự hồi phục hoặc không cần can thiệp điều trị</div>
+                    <div>(2) Tổn thương trung bình là tổn thương đòi hỏi can thiệp điều trị, kéo dài thời gian năm viên,
+                        ảnh hưởng đến chức năng lâu dài.
+                    </div>
+                    <div>(3) Tổn thương nặng là tổn thương đòi hỏi phải cấp cứu hoặc can thiệp điều trị lớn, gây mất chức năng vĩnh viễn hoặc gây tử vong
+
+                    </div>
 				</Col>
 			</Row>
 		</>

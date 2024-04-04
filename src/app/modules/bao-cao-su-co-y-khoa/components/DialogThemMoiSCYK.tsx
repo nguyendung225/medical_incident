@@ -28,6 +28,7 @@ import { localStorageItem } from "../../utils/LocalStorage";
 import { useContext } from "react";
 import AppContext from "../../../AppContext";
 import { usePageData } from "../../../../_metronic/layout/core";
+import { convertLabelByCode } from "../../utils/FormatUtils";
 
 type Props = {
 	handleClose: () => void;
@@ -321,31 +322,31 @@ export default function DialogThemMoiSCYK({
 												/>
 											</div>
 											<div className="d-flex">
-												<LabelRequired
-													label="Giới tính"
-													className="spaces min-w-140 fw-500"
-												/>
-												<Autocomplete
-													isDisabled
-													className="spaces h-25 min-w-242"
-													name="gioiTinh"
-                                                    value={values?.benhNhan?.gioiTinh}
-													options={GENDER_OPTION}
-												/>
+                                                <LabelRequired
+                                                    label="Giới tính"
+                                                    className="spaces min-w-140 fw-500"
+                                                />
+                                                <TextField
+                                                    disabled
+                                                    className="spaces min-w-242"
+                                                    type="text"
+                                                    name="gioiTinh"
+                                                    value={convertLabelByCode(GENDER_OPTION, values?.benhNhan?.gioiTinh) || ""}
+                                                />
 											</div>
-											<div className="d-flex">
-												<LabelRequired
-													label="Khoa/Phòng"
-													className="spaces min-w-140 fw-500"
-												/>
-												<Autocomplete
-													isDisabled
-													className="spaces h-25 min-w-242"
-													name="khoaPhong"
-                                                    options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
-													value={values?.benhNhan?.khoaPhongDieuTriId}
-												/>
-											</div>
+                                            <div className="d-flex">
+                                                <LabelRequired
+                                                    label="Khoa/Phòng"
+                                                    className="spaces min-w-140 fw-500"
+                                                />
+                                                <TextField
+                                                    disabled
+                                                    className="spaces min-w-242"
+                                                    name="khoaphong"
+                                                    type="text"
+                                                    value={convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN), values?.benhNhan?.khoaPhongDieuTriId) || ""}
+                                                />
+                                            </div>
 										</div>
 									</div>
 									<div className="doi-tuong-xay-ra-su-co">

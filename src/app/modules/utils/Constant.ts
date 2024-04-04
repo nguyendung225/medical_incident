@@ -465,5 +465,10 @@ export const printStyles = {
         fontSize: "15px",
         fontWeight: "600",
         marginBottom: "20px"
+    },
+    border: {
+        top_gray: {
+            borderTop: "1px solid #333"
+        }
     }
 };
