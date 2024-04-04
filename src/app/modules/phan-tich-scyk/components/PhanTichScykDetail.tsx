@@ -234,7 +234,7 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                 </div>
             </div>
             <div style={printStyles.contentTitle}>B. Dành cho cấp quản lý</div>
-            <div style={printStyles.contentTitle}>I. Dánh giá của trưởng nhóm chuyên gia</div>
+            <div style={printStyles.contentTitle}>I. Đánh giá của trưởng nhóm chuyên gia</div>
             <div style={printStyles.fontWeight.bold}>Mô tả kết quả phát hiện được (không lặp lại các mô tả sự cố)</div>
             <div>{phanTichScyk?.moTaKetQuaPhatHien}</div>
             <div style={printStyles.fontWeight.bold}>Đã thảo luận đưa khuyến cáo/hướng xử lý với người báo cáo</div>
@@ -260,8 +260,8 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                 ))}
             </div>
             <div style={printStyles.contentTitle}>II. Đánh giá mức độ tổn thương</div>
-            <div style={printStyles.d_flex}>
-                <div style={printStyles.width._60persent}>
+            <div style={printStyles.d_flex_j_between}>
+                <div style={printStyles.width._48persent}>
                     <div style={printStyles.fontWeight.bold}>Trên người bệnh</div>
                     <div style={printStyles.d_flex}>
                         <div style={printStyles.width._60persent}>1. Chưa xảy ra (NC0)</div>
@@ -314,7 +314,7 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                         </div>
                     </div>
                 </div>
-                <div style={printStyles.width._40persent}>
+                <div style={printStyles.width._48persent}>
                     <div style={printStyles.fontWeight.bold}>Trên tổ chức</div>
                     {MUC_DO_TON_THUONG_TREN_TO_CHUC_OPTIONS.map(item => (
                         <div style={printStyles.d_flex_align_center}>
@@ -326,7 +326,7 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                     ))}
                 </div>
             </div>
-            <div style={printStyles.d_flex}>
+            <div style={printStyles.d_flex_j_between}>
                 <div style={printStyles.width._48persent}>
                     <span style={printStyles.fontWeight.bold}>Tên: </span> <span> {phanTichScyk?.tenNguoiPhanTich}</span>
                 </div>
@@ -334,7 +334,7 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                     <span style={printStyles.fontWeight.bold}>Ký tên: </span>
                 </div>
             </div>
-            <div style={printStyles.d_flex}>
+            <div style={printStyles.d_flex_j_between}>
                 <div style={printStyles.width._48persent}>
                     <span style={printStyles.fontWeight.bold}>Chức danh: </span>
                     <span>{phanTichScyk?.tenChucDanhNguoiPhanTich}</span>
@@ -346,7 +346,8 @@ const PhanTichsScykDetail = ({ phanTichScyk, thongTinScyk }: TProps) => {
                     <span>{phanTichScyk?.gioPhanTich}</span>
                 </div>
             </div>
-            <div style={printStyles.marginTop._20px}>
+            <div style={{ ...printStyles.marginTop._20px }}>
+                <div style={{ ...printStyles.width._48persent, ...printStyles.border.top_gray,...printStyles.marginBottom._10px }}></div>
                 <div>[1] Tốn thương nhẹ là tổn thượng tự hồi phục hoặc không cần can thiệp điều trị</div>
                 <div>[2] Tồn thương trung bình là tổn thương đòi hỏi can thiệp điều trị, kéo dài thời gian nằm viện, ảnh hưởng đến chức năng lâu dài.</div>
                 <div>[3] Tổn thương nặng là tồn thương đòi hỏi phải cấp cứu hoặc can thiệp điều trị lớn, gây mất chức năng vĩnh viễn hoặc gây tử vong.</div>

@@ -66,7 +66,7 @@ export const TRANG_THAI_OPTIONS = [
 ]
 
 const renderPhanLoaiBaoCao = (phanLoaiCode: number) => {
-    const phanLoaiBaoCao = OPTION_HINH_THUC_BC.filter((mucDo) => mucDo.code === phanLoaiCode);
+    const phanLoaiBaoCao = OPTION_MUC_DO_AH.filter((mucDo) => mucDo.code === phanLoaiCode);
     return phanLoaiBaoCao && phanLoaiBaoCao[0]?.name;
 }
 
@@ -101,7 +101,7 @@ export const tableDSSuCoYKhoaColumns = [
         headerStyle: {
             minWidth: "140px"
         },
-        render: (row: any) => renderPhanLoaiBaoCao(row?.hinhThuc)
+        render: (row: any) => renderPhanLoaiBaoCao(row?.danhGiaBanDau)
     },
     {
         name: "Mã sự cố",

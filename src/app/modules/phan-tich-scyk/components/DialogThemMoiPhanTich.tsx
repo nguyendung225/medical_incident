@@ -191,7 +191,7 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
                                                     )
                                                 }}
                                             >
-                                                Lưu
+                                                Nộp
                                             </Button>
                                         </>
                                 }

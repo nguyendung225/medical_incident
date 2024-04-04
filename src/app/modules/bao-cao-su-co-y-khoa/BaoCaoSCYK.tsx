@@ -250,7 +250,7 @@ const BaoCaoSCYK = (props: Props) => {
                                 Tiếp nhận
                             </Button>
                         }
-                        {thongTinSCYK?.suCoResp?.trangThaiXuLy < MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN && (
+                        {thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && (
                             <Button
                                 className="button-primary"
                                 onClick={handleOpenUpdateModal}

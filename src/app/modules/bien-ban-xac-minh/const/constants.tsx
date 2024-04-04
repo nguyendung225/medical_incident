@@ -1,4 +1,4 @@
-import { OPTION_HINH_THUC_BC } from "../../bao-cao-su-co-y-khoa/const/constants";
+import { OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { convertGenderToString, convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
 
@@ -19,7 +19,7 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "140px"
         },
-        render: (row: any) => <span>{convertLabelByCode(OPTION_HINH_THUC_BC, row?.suCoResp?.hinhThuc)}</span>
+        render: (row: any) => <span>{convertLabelByCode(OPTION_MUC_DO_AH, row?.suCoResp?.danhGiaBanDau)}</span>
     },
     {
         name: "Mã sự cố",

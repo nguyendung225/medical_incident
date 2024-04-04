@@ -8,7 +8,7 @@ import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/s
 import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
-import { RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
+import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import "./BienBanXacMinh.scss";
 import { STATUS_REPORT_OPTION, tableDSBienBanColumns } from "./const/constants";
 import { IBienBanXacMinh } from "./models/BienBanXacMinhModel";
@@ -46,9 +46,9 @@ const BienBanXacMinh = (props: Props) => {
         updatePageData({
             ...searchObj,
             trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
-            hinhThuc: searchObj?.phanLoai?.code,
+            hinhThuc: searchObj?.hinhThuc?.code,
             phanLoai: searchObj?.phanLoai?.code,
-            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.code,
+            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.id,
         });
     }
 
@@ -83,9 +83,7 @@ const BienBanXacMinh = (props: Props) => {
         formatData.hoiXacMinh = timeXacMinh.time
         formatData.ngayXacMinh = timeXacMinh.date
         formatData.hoiKetThuc = timeKetThuc.time
-        formatData.ngayKetThuc = timeKetThuc.day?.toString()
-        formatData.thangKetThuc = timeKetThuc.month?.toString()
-        formatData.namKetThuc = timeKetThuc.year?.toString()
+        formatData.ngayKetThuc = timeKetThuc.date?.toString()
         formatData.isNguoiChuTriKy = convertBooleanToNumber(formatData.isNguoiChuTriKy)
         formatData.isNguoiChungKienKy = convertBooleanToNumber(formatData.isNguoiChungKienKy)
         formatData.isNguoiLapKy = convertBooleanToNumber(formatData.isNguoiLapKy)
@@ -211,12 +209,15 @@ const BienBanXacMinh = (props: Props) => {
                         <span className="title">Thông tin biên bản xác minh</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        <Button
+                        
+                        {thongTinSCYK.bienBanXacMinhResp.trangThai === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && (<Button
                             className="button-primary"
                             onClick={handleOpenUpdateModal}
                         >
                             Sửa
-                        </Button>
+                        </Button>)
+                        }
+
                         <DropdownButton 
                             title="Xuất file"
                             dropdownItems={exportedFileList}

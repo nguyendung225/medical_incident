@@ -6,7 +6,7 @@ import "./PhanTichSCYK.scss";
 import { useState } from "react";
 import { KTSVG } from "../../../_metronic/helpers";
 import TableCustom from "../component/table/table-custom/TableCustom";
-import { TYPE } from "../utils/Constant";
+import { MEDICAL_INCIDENT_REPORT_STATUS, TYPE } from "../utils/Constant";
 import TabMenu from "../component/tabs/TabMenu";
 import { toast } from "react-toastify";
 import AppContext from "../../AppContext";
@@ -20,7 +20,7 @@ import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList 
 import { phanTichScykTableColumns } from "./constants/constants";
 import { tab } from "../models/tabModels";
 import DialogThemMoiPhanTich from './components/DialogThemMoiPhanTich';
-import { STATUS_REPORT_OPTION, initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
+import { STATUS_BIEN_BAN, STATUS_REPORT_OPTION, initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
 import { initBienBanHop } from "../bien-ban-hop/const/constants";
 
 type Props = {};
@@ -44,9 +44,9 @@ const PhanTichSCYK = (props: Props) => {
         updatePageData({
             ...searchObj,
             trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
-            hinhThuc: searchObj?.phanLoai?.code,
+            hinhThuc: searchObj?.hinhThuc?.code,
             phanLoai: searchObj?.phanLoai?.code,
-            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.code,
+            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.id,
         });
     }
 
@@ -172,14 +172,16 @@ const PhanTichSCYK = (props: Props) => {
                         <span className="title">Thông tin sự cố y khoa</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        <Button
-                            className="button-primary"
-                            onClick={handleOpenUpdateModal}
-                        >
-                            Sửa
-                        </Button>
+                        {
+                            thongTinSCYK?.phanTichResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && <Button
+                                className="button-primary"
+                                onClick={handleOpenUpdateModal}
+                            >
+                                Sửa
+                            </Button>
+                        }
                         <DropdownButton
-                            title="In phiếu"
+                            title="Xuất file"
                             dropdownItems={exportedFileList}
                         />
                         <DropdownButton

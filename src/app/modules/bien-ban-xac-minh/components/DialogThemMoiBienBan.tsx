@@ -11,6 +11,7 @@ import { IBienBanXacMinh } from "../models/BienBanXacMinhModel";
 import { addBienBan, getListSuCoChuaXacMinh, updateBienBan } from "../services/BienBanXacMinhServices";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import { localStorageItem } from "../../utils/LocalStorage";
+import moment from "moment";
 
 type Props = {
     handleClose: () => void;
@@ -38,24 +39,28 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
         isNguoiThamDuKy: Yup.number().required("Bắt buộc chọn").nullable(),
         hoiXacMinh: Yup.string().required("Bắt buộc nhập"),
         ngayXacMinh: Yup.date().required("Bắt buộc nhập").max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại'),
+        ngayKetThuc: Yup.date().required("Bắt buộc nhập").max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại'),
         noiXacMinh: Yup.string().required("Bắt buộc nhập"),
-        hoiKetThuc: Yup.string().required("Bắt buộc nhập"),
-        // namKetThuc: Yup.string().required("Bắt buộc nhập"),
-        // ngayKetThuc: Yup.string().required("Bắt buộc nhập"),
-        // thangKetThuc: Yup.string().required("Bắt buộc nhập"),
         soTrang: Yup.string().required("Bắt buộc nhập").nullable().test('is-integer', 'Vui lòng nhập một số nguyên', (value) => /^\d+$/.test(value || "")
         ),
         soBan: Yup.string().required("Bắt buộc nhập").nullable().test('is-integer', 'Vui lòng nhập một số nguyên', (value) => /^\d+$/.test(value || "")
         ),
-        ngayKetThuc: Yup.string()
-        .matches(/^(0?[1-9]|[12][0-9]|3[01])$/, 'Ngày không hợp lệ') // Pattern để kiểm tra ngày từ 1 đến 31
-        .required('Ngày không được để trống'),
-        thangKetThuc: Yup.string()
-        .matches(/^(0?[1-9]|1[0-2])$/, 'Tháng không hợp lệ') // Pattern để kiểm tra tháng từ 1 đến 12
-        .required('Tháng không được để trống'),
-        namKetThuc: Yup.string()
-        .matches(/^(19|20)\d{2}$/, 'Năm không hợp lệ') // Pattern để kiểm tra năm từ 1900 đến 2099
-        .required('Năm không được để trống'),
+        hoiKetThuc: Yup.string().when(['ngayXacMinh', 'ngayKetThuc'], {
+            is: (ngayXacMinh: any, ngayKetThuc: any) => {
+                return moment(ngayXacMinh).isSame(ngayKetThuc, 'day');
+            },
+            then: Yup.string().required('Giờ kết thúc là bắt buộc').test({
+                name: 'compareGioBatDauGioKetThuc',
+                message: 'Giờ kết thúc phải lớn hơn giờ xác minh nếu diễn ra cùng ngày',
+                test: function (hoiKetThuc) {
+                    const { hoiXacMinh } = this.parent;
+                    const gioBatDauObj = moment(hoiXacMinh, 'HH:mm');
+                    const hoiKetThucObj = moment(hoiKetThuc, 'HH:mm');
+                    return hoiKetThucObj.isAfter(gioBatDauObj);
+                },
+            }),
+            otherwise: Yup.string().required('Giờ kết thúc là bắt buộc'),
+        }),
         nguoiThamDus: Yup.array().of(
             Yup.object().shape({
               name: Yup.string().required('Vui lòng nhập tên'),
@@ -69,7 +74,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
     const formatDataBienBan = (data: IBienBanXacMinh) => {
         const formatData = { ...data }
         formatData.ngayGioXacMinh = `${data.ngayXacMinh}T${data.hoiXacMinh}`
-        formatData.ngayGioKetThuc = `${data.namKetThuc}-${data.thangKetThuc?.padStart(2, '0')}-${data.ngayKetThuc?.padStart(2, '0')}T${data.hoiKetThuc}`
+        formatData.ngayGioKetThuc = `${formatData.ngayKetThuc}T${formatData.hoiKetThuc}`
         formatData.isNguoiChuTriKy = Boolean(data.isNguoiChuTriKy)
         formatData.isNguoiChungKienKy = Boolean(data.isNguoiChungKienKy)
         formatData.isNguoiLapKy = Boolean(data.isNguoiLapKy)
@@ -150,7 +155,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             onChange={(
                                                                 selectedOption
                                                             ) =>
-                                                                setValues({ ...values, suCoId: selectedOption.id, tenSuCo: selectedOption.name })
+                                                                setValues({ ...values, suCoId: selectedOption?.id, tenSuCo: selectedOption?.name })
                                                             }
                                                             getOptionLabel={(option) => option.code}
                                                             className="spaces h-25 width-100"
@@ -179,8 +184,9 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                         />
                                                         <TextField
                                                             disabled
-                                                            name="tenSuCo"
+                                                            value={values.suCoId ? values.tenSuCo : ""}
                                                             type="text"
+                                                            name="tenSuCo"
                                                             className="spaces width-100"
                                                         />
                                                     </div>
@@ -595,86 +601,63 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                 />
                                             </div>
                                         </Col>
+                                
+                                        <Col xs={12}>
+                                            <div className="text-primary spaces my-4">
+                                                Ý kiến những người tham gia xác
+                                                minh
+                                            </div>
+                                        </Col>
+                                        <Col xs={12}>
+                                        <div className="spaces pl-75">
+                                            <TextField
+                                                className="spaces width-100 my-8"
+                                                name="yKien"
+                                                type="text"
+                                                as="textarea"
+                                                rows={2}
+                                                
+                                            />
+                                         </div>
+                                        </Col>
                                         <Col xs={12}>
                                             <div className="text-primary mb-2 mt-1">
                                                 Biên bản kết thúc
                                             </div>
                                         </Col>
-                                        <div className="group-row">
-                                            <Row >
-                                                <Col xs={3}>
-                                                    <div className="d-flex">
-                                                        <LabelRequired
-                                                            label="Hồi"
-                                                            className="spaces min-w-60 fw-500"
-                                                        />
-                                                        <TextField
-                                                            className="spaces width-100"
-                                                            name="hoiKetThuc"
-                                                            type="time"
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col xs={3}>
-                                                    <div className="d-flex">
-                                                        <LabelRequired
-                                                            label="Ngày"
-                                                            className="spaces min-w-60 fw-500"
-                                                        />
-                                                        <TextField
-                                                            className="spaces width-100"
-                                                            name="ngayKetThuc"
-                                                            type="text"
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col xs={3}>
-                                                    <div className="d-flex">
-                                                        <LabelRequired
-                                                            label="Tháng"
-                                                            className="spaces min-w-60 fw-500"
-                                                        />
-                                                        <TextField
-                                                            className="spaces width-100"
-                                                            name="thangKetThuc"
-                                                            type="text"
-                                                        />
-                                                    </div>
-                                                </Col>
-                                                <Col xs={3}>
-                                                    <div className="d-flex spaces mb-10">
-                                                        <LabelRequired
-                                                            label="Năm"
-                                                            className="spaces min-w-60 fw-500"
-                                                        />
-                                                        <TextField
-                                                            className="spaces width-100"
-                                                            name="namKetThuc"
-                                                            type="text"
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </div>
-
                                         <Col xs={3}>
-                                            <div className="text-primary spaces my-8">
-                                                Ý kiến những người tham gia xác
-                                                minh
+                                            <div className="d-flex spaces">
+                                                <LabelRequired
+                                                    isRequired
+                                                    label="Hồi"
+                                                    className="spaces min-w-75 fw-500"
+                                                />
+                                                <TextField
+                                                    className="spaces"
+                                                    name="hoiKetThuc"
+                                                    type="time"
+                                                />
                                             </div>
                                         </Col>
-                                        <Col xs={9}>
-                                            <TextField
-                                                className="spaces width-100 my-8"
-                                                name="yKien"
-                                                type="text"
-                                            />
+                                        <Col xs={3}>
+                                            <div className="d-flex spaces">
+                                                <LabelRequired
+                                                    isRequired
+                                                    label="Ngày kết thúc"
+                                                    className="spaces min-w-100 fw-500"
+                                                />
+                                                <TextField
+                                                    className="spaces"
+                                                    name="ngayKetThuc"
+                                                    type="date"
+                                                />
+                                            </div>
                                         </Col>
                                         <Col xs={3}>
-                                            <div className="d-flex spaces mt-10">
+                                            <div className="d-flex spaces">
                                                 <LabelRequired
                                                     label="Biên bản gồm"
-                                                    className="spaces min-w-78 fw-500"
+                                                    className="spaces min-w-100 fw-500"
                                                 />
                                                 <TextField
                                                     className="spaces width-100"
@@ -685,10 +668,10 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                             </div>
                                         </Col>
                                         <Col xs={3}>
-                                            <div className="d-flex spaces mt-10">
+                                            <div className="d-flex spaces">
                                                 <LabelRequired
                                                     label="Lập thành"
-                                                    className="spaces min-w-80 fw-500"
+                                                    className="spaces min-w-100 fw-500"
                                                 />
                                                 <TextField
                                                     className="spaces width-100"
@@ -697,7 +680,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                     placeHolder="Số bản"
                                                 />
                                             </div>
-                                        </Col>
+                                        </Col> 
                                     </Row>
                                     <Row>
                                         <Col xs={12}>
@@ -857,12 +840,6 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                             <Modal.Footer className="d-flex justify-content-center">
                                 <Button
                                     className="button-primary"
-                                    onClick={handleClose}
-                                >
-                                    Hủy
-                                </Button>
-                                <Button
-                                    className="button-primary"
                                     onClick={() => {
                                         setFieldValue("trangThai", STATUS_BIEN_BAN.LUU_NHAP)
                                     }}
@@ -877,7 +854,13 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                         setFieldValue("trangThai", STATUS_BIEN_BAN.DA_XAC_MINH)
                                     }}
                                 >
-                                    Lưu
+                                    Nộp
+                                </Button>
+                                <Button
+                                    className="button-primary"
+                                    onClick={handleClose}
+                                >
+                                    Hủy
                                 </Button>
                             </Modal.Footer>
                         </form>
