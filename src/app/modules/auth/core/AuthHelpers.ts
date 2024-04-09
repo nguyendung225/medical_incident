@@ -20,10 +20,9 @@ const getAuth = (): AuthModel | undefined => {
 
   try {
     const auth: AuthModel = JSON.parse(lsValue) as AuthModel
-    if (auth) {
-      // You can easily check auth_token expiration also
-      return auth
-    }
+    if (auth && (auth.expires_date_out < (new Date()).getTime())) return undefined;
+
+    return auth;
   } catch (error) {
     console.error('AUTH LOCAL STORAGE PARSE ERROR', error)
   }
@@ -34,6 +33,8 @@ const setAuth = (auth: AuthModel) => {
     return
   }
   try {
+    const newDate = new Date();
+    auth.expires_date_out = newDate.setSeconds(newDate.getSeconds() + auth.expires_in);
     const lsValue = JSON.stringify(auth)
     localStorage.setItem(AUTH_LOCAL_STORAGE_KEY, lsValue)
   } catch (error) {
@@ -110,7 +111,6 @@ const logoutAuth = () => {
 
 const handleError = (error: AxiosError<ResponseModel>): Promise<AxiosError<ResponseModel>> => {
   const { isAxiosError, response } = error
-
   if (isAxiosError) {
     switch (response?.status) {
       case RESPONSE_STATUS_CODE.UNAUTHORIZED:

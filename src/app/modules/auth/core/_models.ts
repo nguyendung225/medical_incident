@@ -6,6 +6,7 @@ export interface AuthModel {
   expires_in: number
   scope?: string
   jti?: string
+  expires_date_out?: any
 }
 
 export interface UserAddressModel {
