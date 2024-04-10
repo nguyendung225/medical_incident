@@ -91,17 +91,19 @@ const BienBanHop = (props: Props) => {
     }
 
     const getThongTinSCYK = async (scykId: any) => {
-        try {
-            setPageLoading(true);
-            const { data: { data } } = await getScykInfoDetailById(scykId as string);
-            setThongTinSCYK({
-                ...data,
-                bienBanHopResp: formatDataBienBan(data?.bienBanHopResp),
-            });
-            setPageLoading(false);
-        } catch (error) {
-            setPageLoading(false);
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        if (scykId) {
+            try {
+                setPageLoading(true);
+                const { data: { data } } = await getScykInfoDetailById(scykId as string);
+                setThongTinSCYK({
+                    ...data,
+                    bienBanHopResp: formatDataBienBan(data?.bienBanHopResp),
+                });
+                setPageLoading(false);
+            } catch (error) {
+                setPageLoading(false);
+                toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            }
         }
     }
 

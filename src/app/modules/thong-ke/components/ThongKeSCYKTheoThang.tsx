@@ -20,7 +20,7 @@ const ThongKeSCYKTheoThang = (props: ISCYKTheoThangProps) => {
                 xAxis: {
                     name: '(Tháng)',
                     type: "category",
-                    data: thongKeTheoThang.map((item) => item.thang + '/' + item.nam),
+                    data: thongKeTheoThang.map((item:any) => item.month + '/' + item.year),
                     axisLabel: {
                         fontSize: 13,
                     },

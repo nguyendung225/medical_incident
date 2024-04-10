@@ -857,7 +857,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                     Nộp
                                 </Button>
                                 <Button
-                                    className="button-primary"
+                                    className="button-gray"
                                     onClick={handleClose}
                                 >
                                     Hủy

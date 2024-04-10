@@ -75,14 +75,16 @@ const PhanTichSCYK = (props: Props) => {
     };
 
     const getThongTinSCYK = async (scykId: any) => {
-        try {
-            setPageLoading(true);
-            const res = await getScykInfoDetailById(scykId as string);
-            setThongTinSCYK(res.data.data);
-            setPageLoading(false);
-        } catch (error) {
-            setPageLoading(false);
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        if (scykId) {
+            try {
+                setPageLoading(true);
+                const res = await getScykInfoDetailById(scykId as string);
+                setThongTinSCYK(res.data.data);
+                setPageLoading(false);
+            } catch (error) {
+                setPageLoading(false);
+                toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            }
         }
     }
 

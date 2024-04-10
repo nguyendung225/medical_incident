@@ -80,15 +80,17 @@ const BaoCaoSCYK = (props: Props) => {
     };
 
     const getThongTinSCYK = async (scykId: any) => {
-        try {
-            setPageLoading(true);
-            const res = await getScykInfoDetailById(scykId as string);
-            setThongTinSCYK(res.data.data);
-            setDefaultActiveKey("0");
-            setPageLoading(false);
-        } catch (error) {
-            setPageLoading(false);
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        if (scykId) {
+            try {
+                setPageLoading(true);
+                const res = await getScykInfoDetailById(scykId as string);
+                setThongTinSCYK(res.data.data);
+                setDefaultActiveKey("0");
+                setPageLoading(false);
+            } catch (error) {
+                setPageLoading(false);
+                toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            }
         }
     }
 
