@@ -14,6 +14,7 @@ type TProps = {
     handleChangeSearchObj: Dispatch<SetStateAction<SearchObject>>,
     statusOptions: ISelectOption[],
     timeReportLable: string,
+    hasAddNew?: boolean,
 }
 
 const FilterSearchContainer = ({
@@ -23,7 +24,8 @@ const FilterSearchContainer = ({
     searchObj,
     handleChangeSearchObj,
     statusOptions,
-    timeReportLable
+    timeReportLable,
+    hasAddNew = true,
 }: TProps) => {
     const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
 
@@ -36,12 +38,14 @@ const FilterSearchContainer = ({
                         {title}
                     </span>
                 </div>
-                <Button
-                    className="button-primary"
-                    onClick={handleCreate}
-                >
-                    <i className="bi bi-plus m-0"></i>Thêm mới
-                </Button>
+                {hasAddNew && (
+                    <Button
+                        className="button-primary"
+                        onClick={handleCreate}
+                    >
+                        <i className="bi bi-plus m-0"></i>Thêm mới
+                    </Button>
+                )}
             </div>
             <div className="ds-search-box">
                 <div className="box-search">

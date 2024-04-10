@@ -16,6 +16,7 @@ import { WithChildren } from '../../../../_metronic/helpers'
 import { AUTHORIZE_REQUEST, KEY_LOCALSTORAGE } from './_consts'
 import { localStorageItem } from '../../utils/LocalStorage'
 import jwt_decode from "jwt-decode";
+import { headerConstant } from '../../../../_metronic/layout/components/header/header-menus/constant'
 
 type AuthContextProps = {
   auth: AuthModel | undefined
@@ -65,6 +66,14 @@ const AuthProvider: FC<WithChildren> = ({ children }) => {
   )
 }
 
+const setAuthoritiesToLocalStorage = (tokenDecode: any) => {
+  const permissionObj: { [key: string]: boolean; } = {};
+  for (const permission of tokenDecode?.authorities || tokenDecode?.scope) {
+    permissionObj[permission] = true;
+  }
+  localStorage.setItem(headerConstant.AUTHORITIES, JSON.stringify(permissionObj));
+}
+
 const AuthInit: FC<WithChildren> = ({ children }) => {
   const { auth, saveAuth } = useAuth()
   const didRequest = useRef(false)
@@ -79,6 +88,7 @@ const AuthInit: FC<WithChildren> = ({ children }) => {
           if (tokenDecode) {
             localStorageItem.set(KEY_LOCALSTORAGE.ACCESS_TOKEN_DECODE, tokenDecode)
             authHelper.setSubMenu()
+            setAuthoritiesToLocalStorage(tokenDecode);
           }
         }
       } catch (error) {

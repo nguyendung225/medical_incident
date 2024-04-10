@@ -46,12 +46,12 @@ const PrivateRoutes = () => {
         <Route path="auth/*" element={<Navigate to="quan-ly-ca-benh" />} />
         {/* Pages */}
         <Route path="menu-test" element={<MenuTestPage />} />
-        <Route path="/thong-ke-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={ThongKeSCYK} redirect="/thong-ke-scyk" />} />
-        <Route path="/ds-bao-cao-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoSCYK} redirect="/ds-bao-cao-scyk" />} />
-        <Route path="/bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BienBanXacMinh} redirect="/bien-ban-xac-minh" />} />
-        <Route path="/bien-ban-hop" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BienBanHop} redirect="/bien-ban-xac-minh" />} />
-        <Route path="/phan-tich-scyk" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={PhanTichSCYK} redirect="/phan-tich-scyk" />} />
-        <Route path="/bao-cao-thong-ke" element={<PrivateRoute auth={PERMISSIONS.TONG_QUAN} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoThongKe} redirect="/phan-tich-scyk" />} />
+        <Route path="/thong-ke-scyk" element={<PrivateRoute auth={PERMISSIONS.THONG_KE} ability={PERMISSION_ABILITY.VIEW} component={ThongKeSCYK} redirect="/thong-ke-scyk" />} />
+        <Route path="/ds-bao-cao-scyk" element={<PrivateRoute auth={PERMISSIONS.SU_CO} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoSCYK} redirect="/ds-bao-cao-scyk" />} />
+        <Route path="/bien-ban-xac-minh" element={<PrivateRoute auth={PERMISSIONS.BIEN_BAN_XAC_MINH} ability={PERMISSION_ABILITY.VIEW} component={BienBanXacMinh} redirect="/bien-ban-xac-minh" />} />
+        <Route path="/bien-ban-hop" element={<PrivateRoute auth={PERMISSIONS.BIEN_BAN_HOP} ability={PERMISSION_ABILITY.VIEW} component={BienBanHop} redirect="/bien-ban-xac-minh" />} />
+        <Route path="/phan-tich-scyk" element={<PrivateRoute auth={PERMISSIONS.PHAN_TICH} ability={PERMISSION_ABILITY.VIEW} component={PhanTichSCYK} redirect="/phan-tich-scyk" />} />
+        <Route path="/bao-cao-thong-ke" element={<PrivateRoute auth={PERMISSIONS.BAO_CAO} ability={PERMISSION_ABILITY.VIEW} component={BaoCaoThongKe} redirect="/phan-tich-scyk" />} />
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>
     </Routes>

@@ -23,15 +23,15 @@ export const allMenu: TMenu[] = [
     title: "Quản lý ca bệnh",
     to: "/ds-bao-cao-scyk",
     name: "ds-bao-cao-scyk",
-    permission: PERMISSIONS.MODULE,
-    ability: MODULE.HO_SO,
+    permission: PERMISSIONS.SU_CO,
+    ability: PERMISSION_ABILITY.VIEW,
     subMenu: [
       {
         title: "Thống kê SCYK",
         to: "/thong-ke-scyk",
         hasBullet: false,
         icon: "/media/svg/icons/statistic.svg",
-        permission: PERMISSIONS.EMPLOYEE,
+        permission: PERMISSIONS.THONG_KE,
         ability: PERMISSION_ABILITY.VIEW,
       },
       {
@@ -39,7 +39,7 @@ export const allMenu: TMenu[] = [
         to: "/ds-bao-cao-scyk",
         hasBullet: false,
         icon: "/media/svg/icons/warning-fill.svg",
-        permission: PERMISSIONS.EMPLOYEE,
+        permission: PERMISSIONS.SU_CO,
         ability: PERMISSION_ABILITY.VIEW,
       },
       {
@@ -47,7 +47,7 @@ export const allMenu: TMenu[] = [
         to: "/bien-ban-xac-minh",
         hasBullet: false,
         icon: "/media/svg/icons/file-earmark-check-fill.svg",
-        permission: PERMISSIONS.EMPLOYEE,
+        permission: PERMISSIONS.BIEN_BAN_XAC_MINH,
         ability: PERMISSION_ABILITY.VIEW,
       },
       {
@@ -55,7 +55,7 @@ export const allMenu: TMenu[] = [
         to: "/phan-tich-scyk",
         hasBullet: false,
         icon: "/media/svg/icons/info-square-fill.svg",
-        permission: PERMISSIONS.EMPLOYEE,
+        permission: PERMISSIONS.PHAN_TICH,
         ability: PERMISSION_ABILITY.VIEW,
       },
       {
@@ -63,7 +63,7 @@ export const allMenu: TMenu[] = [
         to: "/bien-ban-hop",
         hasBullet: false,
         icon: "/media/svg/icons/folder-fill.svg",
-        permission: PERMISSIONS.EMPLOYEE,
+        permission: PERMISSIONS.BIEN_BAN_HOP,
         ability: PERMISSION_ABILITY.VIEW,
       },
       {
@@ -71,7 +71,7 @@ export const allMenu: TMenu[] = [
         to: "/bao-cao-thong-ke",
         hasBullet: false,
         icon: "/media/svg/icons/bookmark-fill.svg",
-        permission: PERMISSIONS.EMPLOYEE,
+        permission: PERMISSIONS.BAO_CAO,
         ability: PERMISSION_ABILITY.VIEW,
       },
     ]
