@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { KTSVG } from "../../../_metronic/helpers";
 import { IDropdownButton, IMedicalIncidentDetailInfo, SearchObject } from "../bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels";
 import { deleteSCYKById, getScykInfoDetailById } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
-import ConfirmDialog from "../component/confirm-dialog/ConfirmDialog";
 import TableCustom from "../component/table/table-custom/TableCustom";
 import TabMenu from "../component/tabs/TabMenu";
 import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
@@ -22,6 +21,8 @@ import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList 
 import { tab } from "../models/tabModels";
 import { PHAN_TICH_SCYK_INFO_INIT } from "../phan-tich-scyk/constants/constants";
 import { initBienBanHop } from "../bien-ban-hop/const/constants";
+import { hasAuthority } from "../utils/FunctionUtils";
+import { PERMISSIONS, PERMISSION_ABILITY } from "../../Constant";
 
 type Props = {};
 
@@ -36,7 +37,6 @@ const BienBanXacMinh = (props: Props) => {
     const [thongTinSCYK, setThongTinSCYK] =
         useState<IMedicalIncidentDetailInfo>(SCYK_DETAIL_INFO_INIT);
     const [configTable, setConfigTable] = useState<any>({});
-    const [shouldOpenConfirmDeleteDialog, setShouldOpenConfirmDeleteDialog] = useState(false)
     const [indexRowSelected, setIndexRowSelected] = useState<any>(undefined);
     const [tabList, setTabList] = useState<tab[]>([]);
     const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
@@ -108,22 +108,6 @@ const BienBanXacMinh = (props: Props) => {
         }
     }
 
-    const handleDeleteBienBan = async () => {
-        try {
-            if (thongTinSCYK?.bienBanXacMinhResp?.id) {
-                const res = await deleteSCYKById(thongTinSCYK?.bienBanXacMinhResp?.id)
-                if (res?.data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
-                    toast.success(res.data?.message)
-                    setShouldOpenConfirmDeleteDialog(false)
-                    setThongTinSCYK(SCYK_DETAIL_INFO_INIT)
-                    updatePageData({});
-                }
-            }
-        } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
-        }
-    };
-
     const handleOpenUpdateModal = async () => {
         !thongTinSCYK?.bienBanXacMinhResp?.id && await getThongTinSCYK(dsBienBan[indexRowSelected || 0]?.suCoResp?.id || "")
         setOpenThemMoiBienBan(true);
@@ -166,6 +150,7 @@ const BienBanXacMinh = (props: Props) => {
                     handleSearch={handleSearch}
                     statusOptions={STATUS_REPORT_OPTION}
                     timeReportLable="Ngày xác minh"
+                    hasAddNew={hasAuthority(PERMISSIONS.BIEN_BAN_XAC_MINH, PERMISSION_ABILITY.CREATE)}
                 />
                 <div>
                     <TableCustom
@@ -212,13 +197,16 @@ const BienBanXacMinh = (props: Props) => {
                     </div>
                     <div className="d-flex spaces gap-10">
                         
-                        {thongTinSCYK.bienBanXacMinhResp.trangThai === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && (<Button
-                            className="button-primary"
-                            onClick={handleOpenUpdateModal}
-                        >
-                            Sửa
-                        </Button>)
-                        }
+                        {thongTinSCYK.bienBanXacMinhResp.trangThai === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT
+                        && hasAuthority(PERMISSIONS.BIEN_BAN_XAC_MINH, PERMISSION_ABILITY.UPDATE)
+                        && (
+                            <Button
+                                className="button-primary"
+                                onClick={handleOpenUpdateModal}
+                            >
+                                Sửa
+                            </Button>
+                        )}
 
                         <DropdownButton 
                             title="Xuất file"
@@ -234,18 +222,6 @@ const BienBanXacMinh = (props: Props) => {
                     <TabMenu danhsachTabs={tabList} />
                 </div>
             </div>
-
-            {shouldOpenConfirmDeleteDialog && (
-                <ConfirmDialog
-                    show={shouldOpenConfirmDeleteDialog}
-                    title={"Xác nhận xóa"}
-                    message={"Bạn có muốn xóa không ?"}
-                    yes={"Xác nhận"}
-                    onYesClick={handleDeleteBienBan}
-                    cancel={"Hủy"}
-                    onCancelClick={() => setShouldOpenConfirmDeleteDialog(false)}
-                />
-            )}
 
             {openThemMoiBienBan && (
                 <DialogThemMoiBienBan

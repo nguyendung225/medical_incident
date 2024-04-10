@@ -20,8 +20,10 @@ import { SCYK_DETAIL_INFO_INIT, getExportedFileList, getPhieuInList, getTabList 
 import { phanTichScykTableColumns } from "./constants/constants";
 import { tab } from "../models/tabModels";
 import DialogThemMoiPhanTich from './components/DialogThemMoiPhanTich';
-import { STATUS_BIEN_BAN, STATUS_REPORT_OPTION, initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
+import { STATUS_REPORT_OPTION, initBienBanXacMinh } from "../bien-ban-xac-minh/const/constants";
 import { initBienBanHop } from "../bien-ban-hop/const/constants";
+import { hasAuthority } from "../utils/FunctionUtils";
+import { PERMISSIONS, PERMISSION_ABILITY } from "../../Constant";
 
 type Props = {};
 
@@ -130,6 +132,7 @@ const PhanTichSCYK = (props: Props) => {
                     handleSearch={handleSearch}
                     statusOptions={STATUS_REPORT_OPTION}
                     timeReportLable="Ngày phân tích"
+                    hasAddNew={hasAuthority(PERMISSIONS.PHAN_TICH, PERMISSION_ABILITY.CREATE)}
                 />
                 <div>
                     <TableCustom
@@ -174,14 +177,16 @@ const PhanTichSCYK = (props: Props) => {
                         <span className="title">Thông tin sự cố y khoa</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        {
-                            thongTinSCYK?.phanTichResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && <Button
+                        {thongTinSCYK?.phanTichResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT 
+                        && hasAuthority(PERMISSIONS.PHAN_TICH, PERMISSION_ABILITY.UPDATE)
+                        && (
+                            <Button
                                 className="button-primary"
                                 onClick={handleOpenUpdateModal}
                             >
                                 Sửa
                             </Button>
-                        }
+                        )}
                         <DropdownButton
                             title="Xuất file"
                             dropdownItems={exportedFileList}

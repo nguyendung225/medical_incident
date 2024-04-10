@@ -23,6 +23,8 @@ import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
 import { localStorageItem } from "../utils/LocalStorage";
 import { PHAN_TICH_SCYK_INFO_INIT } from "../phan-tich-scyk/constants/constants";
 import { tableDSBienBanHopColumns } from "./const/constants";
+import { hasAuthority } from "../utils/FunctionUtils";
+import { PERMISSIONS, PERMISSION_ABILITY } from "../../Constant";
 
 type Props = {};
 
@@ -149,6 +151,7 @@ const BienBanHop = (props: Props) => {
                     handleSearch={handleSearch}
                     statusOptions={STATUS_REPORT_OPTION}
                     timeReportLable="Thời gian họp"
+                    hasAddNew={hasAuthority(PERMISSIONS.BIEN_BAN_HOP, PERMISSION_ABILITY.CREATE)}
                 />
                 <div>
                     <TableCustom
@@ -194,14 +197,16 @@ const BienBanHop = (props: Props) => {
                         <span className="title">Thông tin biên bản họp</span>
                     </div>
                     <div className="d-flex spaces gap-10">
-                        {
-                            thongTinSCYK?.bienBanHopResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && <Button
+                        {thongTinSCYK?.bienBanHopResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT 
+                        && hasAuthority(PERMISSIONS.BIEN_BAN_HOP, PERMISSION_ABILITY.UPDATE)
+                        && (
+                            <Button
                                 className="button-primary"
                                 onClick={handleOpenUpdateModal}
                             >
                                 Sửa
                             </Button>
-                        }
+                        )}
                         <DropdownButton
                             title="Xuất file"
                             dropdownItems={exportedFileList}

@@ -114,7 +114,7 @@ export const checkMenuByPermissions = (): TMenu[] => {
   const checkedMenu: TMenu[] = [];
   allMenu.forEach((menu) => {
     const filteredSubMenu: TSubMenu[] = [];
-    if (hasAuthority(menu.permission, menu.ability, TYPE.MODULE)) {
+    if (hasAuthority(menu.permission, menu.ability)) {
       menu.subMenu.forEach((subMenu) => {
         if (hasAuthority(subMenu.permission, subMenu.ability)) {
           filteredSubMenu.push(subMenu);
@@ -127,8 +127,8 @@ export const checkMenuByPermissions = (): TMenu[] => {
       checkedMenu.push(checkedMenuItems);
     }
   });
-  // return checkedMenu; //khi có phân quyền sẽ check
-  return allMenu;
+  return checkedMenu; //khi có phân quyền sẽ check
+  // return allMenu;
 };
 
 export const convertTextPrice = (value: string) => {

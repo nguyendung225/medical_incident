@@ -22,6 +22,8 @@ import { tab } from "../models/tabModels";
 import KetLuanSCYKDialog from "./components/KetLuanDialog";
 import { usePageData } from "../../../_metronic/layout/core";
 import ThongTinKhacTab from "./components/ThongTinKhacTab";
+import { hasAuthority } from "../utils/FunctionUtils";
+import { PERMISSIONS, PERMISSION_ABILITY } from "../../Constant";
 
 type Props = {};
 
@@ -163,6 +165,7 @@ const BaoCaoSCYK = (props: Props) => {
                     handleSearch={handleSearch}
                     statusOptions={TRANG_THAI_OPTIONS}
                     timeReportLable="Thời gian báo cáo"
+                    hasAddNew={hasAuthority(PERMISSIONS.SU_CO, PERMISSION_ABILITY.CREATE)}
                 />
                 <div>
                     <TableCustom
@@ -252,7 +255,9 @@ const BaoCaoSCYK = (props: Props) => {
                                 Tiếp nhận
                             </Button>
                         }
-                        {thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT && (
+                        {thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT 
+                        && hasAuthority(PERMISSIONS.SU_CO, PERMISSION_ABILITY.UPDATE)
+                        && (
                             <Button
                                 className="button-primary"
                                 onClick={handleOpenUpdateModal}
@@ -260,7 +265,9 @@ const BaoCaoSCYK = (props: Props) => {
                                 Sửa
                             </Button>
                         )}
-                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT) &&
+                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DRAFT)
+                        && hasAuthority(PERMISSIONS.SU_CO, PERMISSION_ABILITY.DELETE)
+                        &&
                             <Button
                                 className="button-primary"
                                 onClick={() => setShouldOpenConfirmDeleteDialog(true)}
