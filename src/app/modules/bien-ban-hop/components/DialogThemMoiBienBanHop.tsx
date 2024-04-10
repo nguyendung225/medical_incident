@@ -664,12 +664,6 @@ const DialogThemMoiBienBanHop = ({
                             <Modal.Footer className="d-flex justify-content-center">
                                 <Button
                                     className="button-primary"
-                                    onClick={handleClose}
-                                >
-                                    Hủy
-                                </Button>
-                                <Button
-                                    className="button-primary"
                                     onClick={() => {
                                         setFieldValue(
                                             "trangThaiXuly",
@@ -690,7 +684,13 @@ const DialogThemMoiBienBanHop = ({
                                         );
                                     }}
                                 >
-                                    Lưu
+                                    Nộp
+                                </Button>
+                                <Button
+                                    className="button-gray"
+                                    onClick={handleClose}
+                                >
+                                    Hủy
                                 </Button>
                             </Modal.Footer>
                             {

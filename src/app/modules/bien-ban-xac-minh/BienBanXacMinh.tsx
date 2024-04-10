@@ -95,14 +95,16 @@ const BienBanXacMinh = (props: Props) => {
     }
 
     const getThongTinSCYK = async (scykId: string) => {
-        try {
-            const { data: { data } } = await getScykInfoDetailById(scykId as string);
-            setThongTinSCYK({
-                ...data,
-                bienBanXacMinhResp: formatDataBienBan(data?.bienBanXacMinhResp)
-            });
-        } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+        if (scykId) {
+            try {
+                const { data: { data } } = await getScykInfoDetailById(scykId as string);
+                setThongTinSCYK({
+                    ...data,
+                    bienBanXacMinhResp: formatDataBienBan(data?.bienBanXacMinhResp)
+                });
+            } catch (error) {
+                toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            }
         }
     }
 
