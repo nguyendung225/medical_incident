@@ -63,22 +63,22 @@ export const ketLuanSCYK = (data: IKetLuanSCYK) => {
 };
 
 export const getDSChucVu = () => {
-    const url = API_PATH + `/api/v1/su-co/chuc-vu`;
+    const url = API_PATH + `/api/v1/storage/chuc-vu`;
     return axios.get(url);
 }
 
 export const getDSChucDanh = () => {
-    const url = API_PATH + `/api/v1/su-co/chuc-danh`;
+    const url = API_PATH + `/api/v1/storage/chuc-danh`;
     return axios.get(url);
 }
 
 export const getDSBenhNhan = () => {
-    const url = API_PATH + `/api/v1/su-co/benh-nhan`;
+    const url = API_PATH + `/api/v1/storage/benh-nhan`;
     return axios.get(url);
 }
 
 export const getDSPhongBan = () => {
-    const url = API_PATH + `/api/v1/su-co/phong-ban`;
+    const url = API_PATH + `/api/v1/storage/phong-ban`;
     return axios.get(url);
 }
 export const getDSTiepNhan = (searchObject: SearchObject) => {

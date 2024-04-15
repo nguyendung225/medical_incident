@@ -24,7 +24,7 @@ export const updateBienBan = (data: IBienBanHop, id: string) => {
 };
 
 export const getListNhanVien = () => {
-    const url = API_PATH + "/api/v1/bien-ban-hop/nhan-vien";
+    const url = API_PATH + "/api/v1/storage/nhan-vien";
     return axios.get(url);
 };
 
