@@ -30,7 +30,8 @@ export enum TYPE {
     PASSWORD= "password",
     EXCEL = "EXCEL",
     WORD = "WORD",
-    PDF = "PDF"
+    PDF = "PDF",
+    IMAGE_PNG = "image/png",
 }
 
 export enum EXTENSIONS {
@@ -380,6 +381,9 @@ export const printStyles = {
 		_60persent: {
 			width: "60%",
 		},
+        _100persent: {
+            width: "100%",
+        }
 	},
     marginLeft: {
         _10px: {
@@ -470,5 +474,11 @@ export const printStyles = {
         top_gray: {
             borderTop: "1px solid #333"
         }
+    },
+    imageContainer: {
+        display: "flex",
+        flexWrap: "wrap" as "wrap",
+        justifyContent: "space-between",
+        gap: "10px",
     }
 };

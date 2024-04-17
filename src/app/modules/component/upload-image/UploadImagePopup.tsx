@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Container, Modal } from "react-bootstrap";
 import "../style.scss"
+import { toast } from "react-toastify";
 
 type Props = {
     open: boolean
@@ -8,8 +9,8 @@ type Props = {
     handleUpdate: (state: any) => void
 };
 
-interface IUploadImage {
-    files: [];
+export interface IUploadImage {
+    files: any[];
     isEmpty: boolean;
     src: any;
     formData: string;
@@ -17,41 +18,48 @@ interface IUploadImage {
 
 const UploadImagePopup = (props: Props) => {
     let { open, handleClose, handleUpdate } = props
-    const [state, setState] = useState<IUploadImage>({
-        files: [],
-        isEmpty: true,
-        src: null,
-        formData: "",
-    })
+    const [state, setState] = useState<IUploadImage[]>([])
 
     const handleFileSelect = (e: any) => {
         if (e.target.files && e.target.files.length > 0) {
-            let files = [...e.target.files];
-            fileReaderImage(files)
+            const files = [...e.target.files];
+            files.forEach((file: any) => {
+                fileReaderImage([file]);
+            })
         }
     };
 
     const fileReaderImage = (files: any) => {
         const reader = new FileReader();
-        reader.addEventListener("load", () =>
-            setState({
-                ...state,
-                src: reader.result,
-                isEmpty: false,
-                files: files
+        reader.addEventListener("load", () => 
+            setState((prevState) => {
+                return [
+                    ...prevState,
+                    {
+                        files: files,
+                        isEmpty: false,
+                        src: reader.result,
+                        formData: ""
+                    }
+                ]
             })
-        );
+        )
         reader.readAsDataURL(files[0]);
+    }
+
+    const HandleSaveImageFile = () => {
+        if (state.length > 0) {
+            handleUpdate(state);
+            handleClose();
+            setState([]);
+        } else {
+            toast.error("Vui lòng chọn ảnh!");
+        }
     }
 
     return (
         <Container>
-            <Modal
-                show={open || false}
-                centered
-                className='dialog-nhap-ket-qua upload'
-
-            >
+            <Modal show={open} centered className="modal_custom" onHide={handleClose}>
                 <Modal.Header className='header-modal p-4'>
                     <Modal.Title>
                         Tải lên
@@ -60,16 +68,21 @@ const UploadImagePopup = (props: Props) => {
                 <Modal.Body className='dialog-body p-4'>
                     <div className="upload-form">
                         <div>
-                            {state?.isEmpty ? (
-                                <div className={`upload-drop-box flex flex-center flex-middle`}>
-                                    <span>Drop your files here</span>
-                                </div>
-                            ) : (state.src && (
-                                <div className="flex flex-center flex-middle  ">
-                                    <img src={state.src} className="img" alt="" />
-                                </div>
-                            ))}
-                            <div className="flex flex-wrap mt-2">
+                            {(state?.length > 0)
+                                ? (
+                                    state?.map(item => (
+                                        <div className="flex flex-center flex-middle">
+                                            <img src={item?.src} className="img w-100" alt="" />
+                                        </div>
+                                    ))
+                                )
+                                : (
+                                    <div className={`upload-drop-box flex flex-center flex-middle`}>
+                                        <span>Drop your files here</span>
+                                    </div>
+                                )
+                            }
+                            <div className="flex flex-wrap mt-2 justify-content-center cursor-pointer">
                                 <label htmlFor="upload-single-file" className="upload-single btn-navy">
                                     <div className="flex flex-middle">
                                         <i className="bi bi-cloud-arrow-up-fill"></i>
@@ -82,17 +95,17 @@ const UploadImagePopup = (props: Props) => {
                                     id="upload-single-file"
                                     type="file"
                                     accept="image/*"
+                                    multiple
                                 />
                             </div>
                         </div>
-
                     </div>
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-center p-4">
                     <Button
                         className='btn-navy min-w-80px'
                         size="sm"
-                        onClick={() => handleUpdate(state)}
+                        onClick={HandleSaveImageFile}
                     >
                         Lưu
                     </Button>

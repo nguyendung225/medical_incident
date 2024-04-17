@@ -73,15 +73,25 @@ const BaoCaoSCYKDetail = ({ thongTinSCYK, thongTinBenhNhan }: TProps) => {
             </div>
             <div>
                 <span style={printStyles.lable}>Mô tả ngắn gọn về sự cố: </span>
-                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.moTa.replace(/\n/g, "<br>") }} />
+                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.moTa?.replace(/\n/g, "<br>") }} />
+            </div>
+            <div>
+                <span style={printStyles.lable}>Hình ảnh sự cố: </span> {!thongTinSCYK.files && "Không có"}
+                <div style={printStyles.imageContainer}>
+                    {thongTinSCYK.files && thongTinSCYK.files.length > 0 && thongTinSCYK.files?.map((file: any) => (
+                        <div style={printStyles.width._48persent}>
+                            <img style={printStyles.width._100persent} src={process.env.REACT_APP_API_URL + `/api/v1/storage/image?id=${file?.id}`} alt=""/>
+                        </div>
+                    ))}
+                </div>
             </div>
             <div>
                 <span style={printStyles.lable}>Đề xuất giải pháp ban đầu: </span>
-                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.deXuat.replace(/\n/g, "<br>") }} />
+                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.deXuat?.replace(/\n/g, "<br>") }} />
             </div>
             <div>
                 <span style={printStyles.lable}>Điều trị/xử lí ban đầu đã được thực hiện: </span> 
-                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.dieuTriBanDau.replace(/\n/g, "<br>") }} />
+                <div style={printStyles.marginLeft._10px} dangerouslySetInnerHTML={{ __html: thongTinSCYK?.dieuTriBanDau?.replace(/\n/g, "<br>") }} />
             </div>
             <div style={printStyles.d_flex_j_between}>
                 <div style={printStyles.width._48persent}>

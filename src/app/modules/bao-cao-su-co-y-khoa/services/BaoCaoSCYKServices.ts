@@ -1,5 +1,6 @@
 import axios from "axios";
 import { IKetLuanSCYK, ITiepNhan, MedicalIncidentInfo, SearchObject } from "../models/BaoCaoSCYKModels";
+import { IUploadImage } from "../../component/upload-image/UploadImagePopup";
 
 const API_PATH = process.env.REACT_APP_API_URL;
 
@@ -89,4 +90,46 @@ export const getDSTiepNhan = (searchObject: SearchObject) => {
 export const getUpdateHistoryList = (suCoid: string) => {
     const url = API_PATH + `/api/v1/lich-su/${suCoid}`;
     return axios.get(url);
+}
+
+export const upLoadImageListSCYK = (imageList: IUploadImage[], suCoId: string) => {
+    const url = `${API_PATH}/api/v1/su-co/file-dinh-kem/${suCoId}`;
+    let formData = new FormData();
+    imageList.forEach((imageFile: IUploadImage) => {
+        if (imageFile.files[0] instanceof File) {
+            formData.append("files", imageFile.files[0]);
+        }
+    });
+    const config = {
+        headers: { "Content-Type": "multipart/form-data" },
+    };
+    return axios.post(url, formData, config);
+};
+
+export const updateImageListSCYK = (imageIds: string[], suCoId: string) => {
+    const url = `${API_PATH}/api/v1/su-co/file-dinh-kem/${suCoId}`;
+    
+    return axios.delete(url, {
+        data: imageIds
+    });
+}
+
+export const addScykByQrCode = (scykData: any) => {
+    const url = `${API_PATH}/api/v1/storage/tao-su-co`;
+    let formData = new FormData();
+    Object.keys(scykData).forEach((key: any) => {
+        if(key !== "files") {
+            formData.append(key, scykData[key] ? scykData[key] : "");
+        } else {
+            scykData[key].forEach((imageFile: IUploadImage) => {
+                if (imageFile.files[0] instanceof File) {
+                    formData.append("files", imageFile.files[0]);
+                }
+            });
+        }
+    });
+    const config = {
+        headers: { "Content-Type": "multipart/form-data" },
+    };
+    return axios.post(url, formData, config);
 }

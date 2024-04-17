@@ -14,6 +14,7 @@ type TRadioItem = {
     className?: string;
     classLable?: string;
     labelClassName?: string;
+    groupContainerClassName?: string;
     value: string | number | null;
     isRequired?: boolean;
     radioItemList: TRadioItem[];
@@ -35,7 +36,7 @@ function RadioGroup(props: TProps) {
                 </span>
             )}
             <>
-                <Radio.Group onChange={onChange} value={props?.value} size="large" name={props?.name}>
+                <Radio.Group onChange={onChange} value={props?.value} size="large" name={props?.name} className={props?.groupContainerClassName}>
                     {props.radioItemList.map((radioItem) => (
                         <Radio className={props?.labelClassName} key={radioItem?.code} value={radioItem?.code}>
                             <div className='d-flex gap-2'> {radioItem?.name}

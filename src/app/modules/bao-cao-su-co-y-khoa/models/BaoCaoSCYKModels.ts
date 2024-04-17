@@ -66,6 +66,7 @@ export interface MedicalIncidentInfo {
   trangThaiXuLy: number;
   viTriCuThe: string;
   bienBanXacMinhResp?: IBienBanXacMinh;
+  files?: any
 }
 
 export interface IMedicalIncidentDetailInfo {

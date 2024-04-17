@@ -11,6 +11,7 @@ import { PrivateRoutes } from './PrivateRoutes'
 import { ErrorsPage } from '../modules/errors/ErrorsPage'
 import { Logout, AuthPage, useAuth } from '../modules/auth'
 import { App } from '../App'
+import ThemMoiScykPage from '../modules/bao-cao-su-co-y-khoa/components/ThemMoiScykPage'
 
 /**
  * Base URL of the website.
@@ -24,6 +25,10 @@ const AppRoutes: FC = () => {
   return (
     <BrowserRouter basename={PUBLIC_URL}>
       <Routes>
+        <Route
+          path="/bao-cao-su-co-y-khoa"
+          element={<ThemMoiScykPage />}
+        />
         <Route element={<App />}>
           <Route path='error/*' element={<ErrorsPage />} />
           <Route path='logout' element={<Logout />} />
