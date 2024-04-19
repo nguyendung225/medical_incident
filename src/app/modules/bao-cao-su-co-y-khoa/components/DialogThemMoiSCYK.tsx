@@ -19,21 +19,22 @@ import {
     TT_NGUOI_THONG_BAO
 } from "../const/constants";
 import { MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
-import { addSCYK, updateSCYK } from "../services/BaoCaoSCYKServices";
+import { addSCYK, upLoadImageListSCYK, updateImageListSCYK, updateSCYK } from "../services/BaoCaoSCYKServices";
 import LabelRequired from "./../../component/LabelRequired";
 import { checkInvalidDate } from "../../utils/ValidationSchema";
 import useMultiLanguage from "../../../hook/useMultiLanguage";
 import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 import { localStorageItem } from "../../utils/LocalStorage";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AppContext from "../../../AppContext";
 import { usePageData } from "../../../../_metronic/layout/core";
 import { convertLabelByCode } from "../../utils/FormatUtils";
+import UploadImagePopup, { IUploadImage } from "../../component/upload-image/UploadImagePopup";
 
 type Props = {
 	handleClose: () => void;
 	updatePageData: (objectSearch: any) => void;
-    thongTinSCYK:MedicalIncidentInfo
+    thongTinSCYK: MedicalIncidentInfo
 };
 
 export default function DialogThemMoiSCYK({
@@ -44,6 +45,10 @@ export default function DialogThemMoiSCYK({
     const { setUpdateDataTiepNhan } = usePageData()
 	const { lang, intl } = useMultiLanguage();
 	const { setPageLoading } = useContext(AppContext);
+	const [ shouldOpenUploadImageModal, setShouldOpenUploadImageModal] = useState(false);
+	const [ imageList, setImageList ] = useState<IUploadImage[]>([]);
+	const [ imageDeletedList, setImageDeletedList ] = useState<string[]>([]);
+
 	const validationSchema = Yup.object().shape({
 		hinhThuc: Yup.string().required("Bắt buộc chọn"),
 		moTa: Yup.string().required("Bắt buộc nhập"),
@@ -84,24 +89,43 @@ export default function DialogThemMoiSCYK({
         thongTinSCYK.loaiDoiTuong = thongTinSCYK.loaiDoiTuong?.toString();
         thongTinSCYK.benhNhanId = thongTinSCYK.benhNhan?.id;
         thongTinSCYK.thoiGianXayRa = moment(`${thongTinSCYK.ngayXayRa}T${thongTinSCYK.thoiGianXayRa}`).format("HH:mm:ss");
+		thongTinSCYK.files = [];
 
         try {
 			setPageLoading(true);
-            const { data: { code, message } } = thongTinSCYK?.id
+            const { data: { code, data } } = thongTinSCYK?.id
                 ? await updateSCYK(thongTinSCYK, thongTinSCYK.id)
                 : await addSCYK(thongTinSCYK);
             if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
+				await upLoadImageListSCYK(imageList ,data);
+				imageDeletedList.length > 0 && await updateImageListSCYK(imageDeletedList ,data)
                 updatePageData({});
                 setUpdateDataTiepNhan(prev => !prev)
-                handleClose();
-                toast.success(message);
+                handleClose();  
+                toast.success(thongTinSCYK?.id ? "Cập nhật báo cáo SCYK thành công." : "Thêm mới báo cáo SCYK thành công");
             }
-			setPageLoading(false);
         } catch (error) {
+            toast.error("Thêm mới hoặc cập nhật SCYK thất bại.");
+        } finally {
 			setPageLoading(false);
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
-        }
+		}
     };
+
+	const handleRemoveImageFile = (imageFile: any) => {
+		const imageListTemp = imageList.filter(imageItem => imageItem.src !== imageFile.src);
+		setImageList(imageListTemp);
+		setImageDeletedList([...imageDeletedList, imageFile?.id]);
+	}
+
+	useEffect(() => {
+		const imageListTemp = thongTinSCYK.files ? thongTinSCYK.files?.map((file: any) => {
+			return {
+				...file,
+				src: process.env.REACT_APP_API_URL + `/api/v1/storage/image?id=${file?.id}`,
+			}
+		}) : [];
+		setImageList(imageListTemp);
+	}, [])
 
 	return (
 		<Modal
@@ -398,20 +422,6 @@ export default function DialogThemMoiSCYK({
 													handleChange={handleChange}
 												/>
 											</div>
-											<div className="de-xuat-giai-phap spaces pb-4 mt-10">
-												<LabelRequired
-													className="text-primary spaces fw-700 h-24 mb-4"
-													label="Đề xuất giải pháp ban đầu"
-													isRequired
-												/>
-												<TextField
-													className="spaces min-w-242 h-92"
-													name="deXuat"
-													as="textarea"
-													rows={4}
-													handleChange={handleChange}
-												/>
-											</div>
 										</div>
 										<div className="w-50">
 											<div className="mo-ta-su-co spaces pb-4">
@@ -427,6 +437,63 @@ export default function DialogThemMoiSCYK({
 													rows={4}
 												/>
 											</div>
+										</div>
+									</div>
+									<div className="d-flex spaces gap-20 align-items-center">
+										<div className="w-100 ">
+											<div className="d-flex spaces gap-10">
+												<LabelRequired
+													className="text-primary spaces fw-700 h-24 mb-4"
+													label="Hình ảnh sự cố"
+												/>
+												<Button 
+													className="button-primary"
+													onClick={() => setShouldOpenUploadImageModal(true)}
+												> 
+													+ Thêm hình ảnh sự cố
+												</Button>
+											</div>
+											<div className="d-flex spaces gap-12 mt-20">
+												{imageList.length > 0 && imageList.map((image: IUploadImage) => {
+													return (
+														<div className="d-flex align-items-center justify-content-center spaces width-25 border img-box-container">
+															<div
+																className="btn-remove-img btn-close"
+																onClick={() => handleRemoveImageFile(image)}
+															></div>
+															<img src={image.src} className="img w-100" alt="" />
+														</div>
+													)
+												})}
+											</div>
+											<UploadImagePopup 
+												open={shouldOpenUploadImageModal} 
+												handleClose={() => setShouldOpenUploadImageModal(false)} 
+												handleUpdate={(value) => {
+													setImageList([...imageList, value]);
+													setShouldOpenUploadImageModal(false);
+												}}
+											/>
+										</div>
+									</div>
+									<div className="d-flex spaces gap-20 align-items-center">
+										<div className="w-50">
+											<div className="de-xuat-giai-phap spaces pb-4 mt-10">
+												<LabelRequired
+													className="text-primary spaces fw-700 h-24 mb-4"
+													isRequired
+													label="Đề xuất giải pháp ban đầu"
+												/>
+												<TextField
+													className="spaces min-w-242 h-92"
+													name="deXuat"
+													as="textarea"
+													rows={4}
+													handleChange={handleChange}
+												/>
+											</div>
+										</div>
+										<div className="w-50">
 											<div className="dieu-tri-xu-ly spaces pb-4 mt-10">
 												<LabelRequired
 													className="text-primary spaces fw-700 h-24 mb-4"
@@ -628,6 +695,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-242"
 													name="soDienThoaiNbc"
 													type="text "
+													value={thongTinSCYK?.soDienThoaiNbc || ""}
 													handleChange={handleChange}
 												/>
 											</div>
