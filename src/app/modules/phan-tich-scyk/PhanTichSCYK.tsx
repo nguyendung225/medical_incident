@@ -43,13 +43,7 @@ const PhanTichSCYK = (props: Props) => {
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
 
     const handleSearch = () => {
-        updatePageData({
-            ...searchObj,
-            trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
-            hinhThuc: searchObj?.hinhThuc?.code,
-            phanLoai: searchObj?.phanLoai?.code,
-            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.id,
-        });
+        updatePageData({...searchObj});
     }
 
     const updatePageData = async (searchData: any) => {
@@ -63,16 +57,14 @@ const PhanTichSCYK = (props: Props) => {
             data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.suCoId);
             await setPhanTichScykList(data?.data?.data);
             setConfigTable({
-                pageNumber: data.data.pageNumber,
-                pageSize: data.data.pageNumber,
                 totalElement: data.data.total,
                 totalPages: data.data.totalPages,
                 numberOfElements: data.data.numberOfElements,
             })
-            setPageLoading(false);
         } catch (err) {
+            toast.error(String(err));
+        } finally {
             setPageLoading(false);
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
 
@@ -82,10 +74,10 @@ const PhanTichSCYK = (props: Props) => {
                 setPageLoading(true);
                 const res = await getScykInfoDetailById(scykId as string);
                 setThongTinSCYK(res.data.data);
-                setPageLoading(false);
             } catch (error) {
+                toast.error(String(error));
+            } finally {
                 setPageLoading(false);
-                toast.error("Lỗi hệ thống, vui lòng thử lại!");
             }
         }
     }
@@ -150,8 +142,6 @@ const PhanTichSCYK = (props: Props) => {
                         noPagination={false}
                         updatePageData={updatePageData}
                         type={TYPE.SINGLE}
-                        page={configTable?.pageNumber}
-                        pageSize={configTable?.pageSize}
                         totalElements={configTable?.totalElement}
                         totalPages={configTable?.totalPages}
                         numberOfElements={configTable?.numberOfElements}

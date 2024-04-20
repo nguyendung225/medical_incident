@@ -65,7 +65,7 @@ const UploadImagePopup = (props: Props) => {
                         Tải lên
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body className='dialog-body p-4'>
+                <Modal.Body className='dialog-body p-4 spaces max-h-60vh overflow-auto'>
                     <div className="upload-form">
                         <div>
                             {(state?.length > 0)
@@ -110,7 +110,10 @@ const UploadImagePopup = (props: Props) => {
                         Lưu
                     </Button>
                     <Button
-                        onClick={handleClose}
+                        onClick={() => {
+                            handleClose();
+                            setState([]);
+                        }}
                         className='btn-navy-outlined min-w-80px' size="sm"
                     >
                         Đóng

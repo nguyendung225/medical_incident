@@ -1,20 +1,19 @@
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import TiepNhanSCYKDialog from '../../../../app/modules/bao-cao-su-co-y-khoa/components/TiepNhanSCYKDialog';
 import { SearchObject } from '../../../../app/modules/bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels';
 import { getDSTiepNhan } from '../../../../app/modules/bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices';
 import { KTSVG } from '../../../helpers';
 import { usePageData } from '../../../layout/core';
 import './custom.scss';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotificationsBox() {
-    const { updateDataTiepNhan } = usePageData()
+    const navigate = useNavigate()
+    const { updateDataTiepNhan, setUpdateDataTiepNhan } = usePageData()
     const popupRef = useRef<HTMLDivElement>(null);
     const [openPopUp, setOpenPopup] = useState(false)
     const [dsTiepNhan, setDsTiepNhan] = useState<any>([])
-    const [openTiepNhanDialog, setOpenTiepNhanDialog] = useState(false)
-    const [idSuCo, setIdSuCo] = useState<string>("")
 
     const closeIfOutside = (event: MouseEvent) => {
         if (openPopUp && !popupRef.current?.contains(event.target as Node)) {
@@ -24,16 +23,11 @@ export default function NotificationsBox() {
 
     const uploadData = async () => {
         try {
-            const res = await getDSTiepNhan({} as SearchObject)
+            const res = await getDSTiepNhan({pageSize: 100} as SearchObject)
             setDsTiepNhan(res?.data?.data?.data)
         } catch (error) {
             toast.error("Lỗi hệ thống, vui lòng thử lại")
         }
-    }
-
-    const handleOpenDialog = (id: string) => {
-        setOpenTiepNhanDialog(true)
-        setIdSuCo(id)
     }
 
     useEffect(() => {
@@ -42,7 +36,7 @@ export default function NotificationsBox() {
         return () => {
             document.removeEventListener('click', closeIfOutside);
         };
-    }, [openPopUp, updateDataTiepNhan]);
+    }, [updateDataTiepNhan]);
 
 
     return (
@@ -62,11 +56,15 @@ export default function NotificationsBox() {
                         {
                             dsTiepNhan.length > 0 ?
                                 dsTiepNhan.map((item: any) => (<>
-                                    <div className='spaces p-10 border' onClick={() => handleOpenDialog(item.id)}>
+                                    <div className='spaces p-10 border' onClick={() => {
+                                        setOpenPopup(prev => !prev);
+                                        setUpdateDataTiepNhan(item);
+                                        navigate("/ds-bao-cao-scyk");
+                                    }}>
                                         <span className='text-primary fw-700 me-1' >
-                                            {item.tenDonViBaoCao}
+                                            {item.tenDonViBaoCao ? item.tenDonViBaoCao : "Người báo cáo"}
                                         </span>
-                                        Đã gửi một báo cáo
+                                        Đã gửi một báo cáo SCYK đang chờ tiếp nhận
                                         <div>{moment(item.ngayBaoCao).format('DD-MM-YYYY')}</div>
                                     </div>
 
@@ -77,9 +75,6 @@ export default function NotificationsBox() {
 
                     </div>
 
-                }
-                {
-                    openTiepNhanDialog && <TiepNhanSCYKDialog updatePageData={() => { }} suCoId={idSuCo} handleClose={() => setOpenTiepNhanDialog(false)} />
                 }
             </div>
 

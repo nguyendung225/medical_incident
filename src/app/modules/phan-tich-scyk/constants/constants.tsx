@@ -19,13 +19,16 @@ export const phanTichScykTableColumns = [
         headerStyle: {
             minWidth: "140px"
         },
-        render: (row: any) => <span>{convertLabelByCode(OPTION_MUC_DO_AH, row?.suCoResp?.phanLoaiBanDau)}</span>
+        render: (row: any) => <span>{convertLabelByCode(OPTION_MUC_DO_AH, row?.suCoResp?.danhGiaBanDau)}</span>
     },
     {
         name: "Mã sự cố",
         field: "maSuCo",
         headerStyle: {
-            minWidth: "80px"
+            minWidth: "140px"
+        },
+        cellStyle: {
+            textAlign: "left",
         },
         render: (row: any) => <span>{row?.suCoResp?.code}</span>
     },
@@ -49,7 +52,10 @@ export const phanTichScykTableColumns = [
         name: "Đơn vị báo cáo",
         field: "tenDonViBaoCao",
         headerStyle: {
-            minWidth: "125px"
+            minWidth: "200px"
+        },
+        cellStyle: {
+            textAlign: "left",
         },
         render: (row: any) => <span>{row?.suCoResp?.tenDonViBaoCao}</span>
     },
@@ -58,16 +64,15 @@ export const phanTichScykTableColumns = [
         field: "",
         headerStyle: {
             minWidth: "200px",
-            
         },
         cellStyle: {
             textAlign: "left",
         },
         render: (row: any) => (
-            row?.suCoResp?.benhNhan && (
+            row?.suCoResp?.tenBenhNhan && (
                 <div className="d-flex flex-column text-up">
-                    <span className="text-uppercase">{row?.suCoResp?.benhNhan?.name}</span>
-                    <span>{row?.suCoResp?.benhNhan?.code} - {convertGenderToString(row?.suCoResp?.benhNhan?.gioiTinh)} - {formatDateToString(row?.suCoResp?.benhNhan?.ngaySinh)}</span>
+                    <span className="text-uppercase">{row?.suCoResp?.tenBenhNhan}</span>
+                    <span>{row?.suCoResp?.maBenhNhan} - {convertGenderToString(row?.suCoResp?.maBenhNhan)} - {formatDateToString(row?.suCoResp?.maBenhNhan)}</span>
                 </div>
             )
         )
@@ -78,10 +83,11 @@ export const phanTichScykTableColumns = [
         headerStyle: {
             minWidth: "200px"
         },
+        cellStyle: {
+            textAlign: "left",
+        },
         render: (row: any) => (
-            row?.suCoResp?.benhNhan && (
-                <span className="text-uppercase">{row?.suCoResp?.benhNhan?.tenKhoaPhongDieuTri}</span>
-            )
+            <span className="text-uppercase">{row?.suCoResp?.tenKhoaPhongDieuTri}</span>
         )
     },
 ]
@@ -234,7 +240,7 @@ export const MOI_TRUONG_LAM_VIEC_OPTIONS = [
 export const TO_CHUC_DICH_VU_OPTIONS = [
     { name: "Các chính sách, quy trình, hướng dẫn chuyên môn", code: "1" },
     { name: "Tuân thủ quy trình thực hành chuẩn", code: "2" },
-    { name: "Văn hoa tô chức", code: "3" },
+    { name: "Văn hoá tổ chức", code: "3" },
     { name: "Làm việc nhóm", code: "4" },
 ]
 

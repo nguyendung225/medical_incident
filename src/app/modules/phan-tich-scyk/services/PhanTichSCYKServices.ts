@@ -9,34 +9,44 @@ export const paramsConfig = (searchObject: object) => {
 };
 
 export const searchByPage = (searchObject: SearchObject) => {
-    const url = API_PATH + "/api/v1/phan-tich/page";
+    const url = API_PATH + "/phan-tich/page";
     return axios.get(url, paramsConfig(searchObject));
 };
 
 export const exportWord = (id: string) => {
-    const url = API_PATH + `/api/v1/phan-tich/export-word/${id}`;
+    const url = API_PATH + `/phan-tich/export-word/${id}`;
     return axios({
         url: url,
         method: "GET",
         responseType: "blob",
     });
 }
+
+export const exportPdf = (id: string) => {
+    const url = API_PATH + `/phan-tich/export-pdf/${id}`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
+
 export const addPhanTich = (data: any) => {
-    const url = API_PATH + "/api/v1/phan-tich";
+    const url = API_PATH + "/phan-tich";
     return axios.post(url, data);
 };
 
 export const updatePhanTich = (data: any, id: string) => {
-    const url = API_PATH + `/api/v1/phan-tich/${id}`;
+    const url = API_PATH + `/phan-tich/${id}`;
     return axios.put(url, data);
 };
 
 export const deleteFilePhanTich = (id: string, fileId: string) => {
-    const url = API_PATH + `/api/v1/phan-tich/${id}/file-dinh-kem/${fileId}`;
+    const url = API_PATH + `/phan-tich/${id}/file-dinh-kem/${fileId}`;
     return axios.delete(url);
 };
 
 export const getListSuCoChuaPhanTich = () => {
-    const url = API_PATH + "/api/v1/su-co/list-chua-phan-tich";
+    const url = API_PATH + "/su-co/list-chua-phan-tich";
     return axios.get(url);
 };

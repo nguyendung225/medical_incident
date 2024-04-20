@@ -28,8 +28,8 @@ const HINH_THUC_OPTIONS = [
 const PHAN_LOAI_OPTIONS = [
     { name: "Tất cả", code: "0" },
     { name: "Nặng", code: "1" },
-    { name: "Trung bình", code: "3" },
-    { name: "Nhẹ", code: "2" },
+    { name: "Trung bình", code: "2" },
+    { name: "Nhẹ", code: "3" },
 ]
 
 const AdvancedSearchDialog = ({
@@ -136,7 +136,7 @@ const AdvancedSearchDialog = ({
                                                 options={statusOptions}
                                                 value={values?.trangThaiXuLy}
                                                 onChange={(value) => {
-                                                    handleChange("trangThaiXuLy", value)
+                                                    handleChange("trangThaiXuLy", value?.code)
                                                 }}
                                             />
                                         </div>
@@ -153,7 +153,7 @@ const AdvancedSearchDialog = ({
                                                 options={HINH_THUC_OPTIONS}
                                                 value={values?.hinhThuc}
                                                 onChange={(value) => {
-                                                    handleChange("hinhThuc", value)
+                                                    handleChange("hinhThuc", value?.code)
                                                 }}
                                             />
                                         </div>
@@ -172,7 +172,7 @@ const AdvancedSearchDialog = ({
                                                 options={PHAN_LOAI_OPTIONS}
                                                 value={values?.phanLoai}
                                                 onChange={(value) => {
-                                                    handleChange("phanLoai", value)
+                                                    handleChange("phanLoai", value?.code)
                                                 }}
                                             />
                                         </div>
@@ -189,7 +189,7 @@ const AdvancedSearchDialog = ({
                                                 options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
                                                 value={values?.khoaPhongDieuTri}
                                                 onChange={(value) => {
-                                                    handleChange("khoaPhongDieuTri", value)
+                                                    handleChange("khoaPhongDieuTri", value?.id)
                                                 }}
                                             />
                                         </div>

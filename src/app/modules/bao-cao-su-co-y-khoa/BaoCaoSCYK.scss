@@ -74,7 +74,7 @@
 
             .tab-content .tab-pane {
                 height: calc(100vh - 155px);
-                background: $color-white;
+                background: $color-white !important;
             }
         }
 
@@ -206,7 +206,7 @@
         }
 
         .img-box-container {
-            width: 100%;
+            width: 48%;
         }
 
         .hinh-thuc-bao-cao {

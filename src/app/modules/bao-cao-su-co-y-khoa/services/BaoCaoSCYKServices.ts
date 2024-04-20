@@ -10,37 +10,37 @@ export const paramsConfig = (searchObject: object) => {
 };
 
 export const searchByPage = (searchObject: SearchObject) => {
-  const url = API_PATH + "/api/v1/su-co/page";
+  const url = API_PATH + "/su-co/page";
   return axios.get(url, paramsConfig(searchObject));
 };
 
 export const addSCYK = (data: MedicalIncidentInfo) => {
-    const url = API_PATH + "/api/v1/su-co";
+    const url = API_PATH + "/su-co";
     return axios.post(url, data);
 };
 
 export const getSCYKById = (id: string) => {
-    const url = API_PATH + `/api/v1/su-co/${id}`;
+    const url = API_PATH + `/su-co/${id}`;
     return axios.get(url);
 };
 
 export const getScykInfoDetailById = (id: string) => {
-    const url = API_PATH + `/api/v1/su-co/all-data/${id}`;
+    const url = API_PATH + `/su-co/all-data/${id}`;
     return axios.get(url);
 };
 
 export const deleteSCYKById = (id: string) => {
-    const url = API_PATH + `/api/v1/su-co/${id}`;
+    const url = API_PATH + `/su-co/${id}`;
     return axios.delete(url);
 };
 
 export const updateSCYK = (data: MedicalIncidentInfo, id: string) => {
-    const url = API_PATH + `/api/v1/su-co/${id}`;
+    const url = API_PATH + `/su-co/${id}`;
     return axios.put(url, data);
 };
 
 export const exportWordFile = (id: string) => {
-    const url = API_PATH + `/api/v1/su-co/export-word/${id}`;
+    const url = API_PATH + `/su-co/export-word/${id}`;
     return axios({
         url: url,
         method: "GET",
@@ -48,55 +48,59 @@ export const exportWordFile = (id: string) => {
     });
 }
 
-export const exportPdfFile = (id: string) => {
-    const url = API_PATH + `/api/v1/su-co/export-pdf/${id}`;
-    return axios.get(url);
+export const exportPdf = (id: string) => {
+    const url = API_PATH + `/su-co/export-pdf/${id}`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
 }
 
 export const tiepNhanSCYK = (data: ITiepNhan) => {
-    const url = API_PATH + "/api/v1/tiep-nhan-su-co";
+    const url = API_PATH + "/tiep-nhan-su-co";
     return axios.post(url, data);
 };
 
 export const ketLuanSCYK = (data: IKetLuanSCYK) => {
-    const url = API_PATH + "/api/v1/ket-luan";
+    const url = API_PATH + "/ket-luan";
     return axios.post(url, data);
 };
 
 export const getDSChucVu = () => {
-    const url = API_PATH + `/api/v1/storage/chuc-vu`;
+    const url = API_PATH + `/storage/chuc-vu`;
     return axios.get(url);
 }
 
 export const getDSChucDanh = () => {
-    const url = API_PATH + `/api/v1/storage/chuc-danh`;
+    const url = API_PATH + `/storage/chuc-danh`;
     return axios.get(url);
 }
 
 export const getDSBenhNhan = () => {
-    const url = API_PATH + `/api/v1/storage/benh-nhan`;
+    const url = API_PATH + `/storage/benh-nhan`;
     return axios.get(url);
 }
 
 export const getDSPhongBan = () => {
-    const url = API_PATH + `/api/v1/storage/phong-ban`;
+    const url = API_PATH + `/storage/phong-ban`;
     return axios.get(url);
 }
 export const getDSTiepNhan = (searchObject: SearchObject) => {
-    const url = API_PATH + "/api/v1/tiep-nhan-su-co/page";
+    const url = API_PATH + "/tiep-nhan-su-co/page";
     return axios.get(url, paramsConfig(searchObject));
 };
 
 export const getUpdateHistoryList = (suCoid: string) => {
-    const url = API_PATH + `/api/v1/lich-su/${suCoid}`;
+    const url = API_PATH + `/lich-su/${suCoid}`;
     return axios.get(url);
 }
 
-export const upLoadImageListSCYK = (imageList: IUploadImage[], suCoId: string) => {
-    const url = `${API_PATH}/api/v1/su-co/file-dinh-kem/${suCoId}`;
+export const upLoadImageListSCYK = (imageList: any, suCoId: string) => {
+    const url = `${API_PATH}/su-co/file-dinh-kem/${suCoId}`;
     let formData = new FormData();
-    imageList.forEach((imageFile: IUploadImage) => {
-        if (imageFile.files[0] instanceof File) {
+    imageList.forEach((imageFile: any) => {
+        if (imageFile.files?.[0] instanceof File) {
             formData.append("files", imageFile.files[0]);
         }
     });
@@ -107,7 +111,7 @@ export const upLoadImageListSCYK = (imageList: IUploadImage[], suCoId: string) =
 };
 
 export const updateImageListSCYK = (imageIds: string[], suCoId: string) => {
-    const url = `${API_PATH}/api/v1/su-co/file-dinh-kem/${suCoId}`;
+    const url = `${API_PATH}/su-co/file-dinh-kem/${suCoId}`;
     
     return axios.delete(url, {
         data: imageIds
@@ -115,7 +119,7 @@ export const updateImageListSCYK = (imageIds: string[], suCoId: string) => {
 }
 
 export const addScykByQrCode = (scykData: any) => {
-    const url = `${API_PATH}/api/v1/storage/tao-su-co`;
+    const url = `${API_PATH}/storage/tao-su-co`;
     let formData = new FormData();
     Object.keys(scykData).forEach((key: any) => {
         if(key !== "files") {

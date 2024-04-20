@@ -351,13 +351,17 @@ const TableCustom: FC<TableProps> = (props) => {
     }
   }, [props?.page]);
 
+  useEffect(() => {
+    props?.pageSize && setRowsPerPage(props.pageSize);
+  }, [props?.pageSize]);
+
   // useEffect(() => {
   //   updatePageData({ ...objectSearch, ...searchKeywordObj });
   // }, [objectSearch]);
 
   useEffect(() => {
     let newSearchObject = {
-      ...objectSearch,
+      ...props.objectSearch,
       pageNumber: page,
       pageSize: rowsPerPage
     }

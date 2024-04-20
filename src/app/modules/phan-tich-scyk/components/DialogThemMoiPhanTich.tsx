@@ -8,13 +8,12 @@ import { useContext, useEffect, useState } from "react";
 import { IPhanTichScyk } from "../models/PhanTichSCYKModels";
 import TabNhanVienChuyenTrach from "./TabNhanVienChuyenTrach";
 import TabCapQuanLy from "./TabCapQuanLy";
-import { addPhanTich, deleteFilePhanTich, updatePhanTich } from "../services/PhanTichSCYKServices";
+import { addPhanTich, updatePhanTich } from "../services/PhanTichSCYKServices";
 import moment from "moment";
 import { STATUS_PHAN_TICH, TAB_PHAN_TICH_SCYK_DIALOG } from "../constants/constants";
 import { fileUploadPhanTich } from "../../utils/FileServices";
 import { getListDeleteItem } from "../../utils/FunctionUtils";
 import { tab } from "../../models/tabModels";
-import { Assign, ObjectShape } from "yup/lib/object";
 import AppContext from "../../../AppContext";
 
 type Props = {
@@ -113,21 +112,20 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
             case TAB_PHAN_TICH_SCYK_DIALOG.TAB_CAP_QUAN_LY:
                 try {
                     setPageLoading(true);
-                    const { data: { code, message } } = thongTinPhanTich?.id
+                    const { data: { code, data } } = thongTinPhanTich?.id
                         ? await updatePhanTich(formatDataPhanTich(values), thongTinPhanTich.id)
                         : await addPhanTich(formatDataPhanTich(values));
                     if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
-                        values.fileDinhKems && values.fileDinhKems.some((item: any) => item instanceof File) && await fileUploadPhanTich(values.fileDinhKems, thongTinPhanTich?.id)
-                        const listIdDelete = getListDeleteItem(thongTinPhanTich?.fileDinhKems, values.fileDinhKems)
-                        // listIdDelete.length > 0 && await deleteFilePhanTich(thongTinPhanTich?.id, listIdDelete)
+                        values.fileDinhKems && values.fileDinhKems.some((item: any) => item instanceof File) && await fileUploadPhanTich(values.fileDinhKems, data)
+
                         updatePageData({});
-                        setPageLoading(false);
                         handleClose();
-                        toast.success(message)
+                        toast.success(thongTinPhanTich?.id ? "Cập nhật phân tích SCYK thành công" : "Thêm mới phân tích SCYK thành công");
                     }
                 } catch (error) {
+                    toast.error(String(error));
+                } finally {
                     setPageLoading(false);
-                    toast.error("Lỗi hệ thống, vui lòng thử lại!");
                 }
                 break;
             default:
@@ -150,7 +148,6 @@ const DialogThemMoiPhanTich = ({ handleClose, updatePageData, thongTinPhanTich }
                 {({
                     handleSubmit,
                     setFieldValue,
-                    errors,
                 }) => {
                     return (
                         <form onSubmit={handleSubmit}>

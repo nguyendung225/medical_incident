@@ -6,7 +6,7 @@ import TableGrouping from '../../component/table/TableGrouping/TableGrouping';
 import { RESPONSE_STATUS_CODE } from '../../utils/Constant';
 import { formatDateToString } from '../../utils/FormatUtils';
 import { exportToFile } from '../../utils/FunctionUtils';
-import { TKMucDoTonThuongColumns } from '../constants/constants';
+import { TKMucDoTonThuongColumns, convertSumUpData } from '../constants/constants';
 import { ISearchObj, IThongKeTheoMucDoTT } from '../models/BaoCaoThongKeModels';
 import { exportThongKeTheoMucDoTT, getThongKeTheoMucDoTT } from '../services/BaoCaoThongKeServices';
 
@@ -57,7 +57,7 @@ const BaoCaoTheoMucDoTonThuong = ({ searchObj }: TProps) => {
                     <TableGrouping
                         height={"calc(100vh - 240px)"}
                         columns={TKMucDoTonThuongColumns}
-                        sumUpData={reportTableData?.mucDoTonThuongTheoDonVi}
+                        sumUpData={convertSumUpData(reportTableData?.mucDoTonThuongTheoDonVi)}
                         data={reportTableData?.mucDoTonThuongTheoKhoaPhongs || []}
                         buttonExportExcel={true}
                         handleExportExcel={handleExportExcel}

@@ -24,20 +24,16 @@ import {
 	OTHER_FIELD_LOAI_NBC, 
 	TT_NGUOI_THONG_BAO 
 } from "../const/constants";
-import { convertLabelByCode } from "../../utils/FormatUtils";
 import { Button, Col, Row } from "react-bootstrap";
-import { addScykByQrCode, getDSBenhNhan, getDSPhongBan } from "../services/BaoCaoSCYKServices";
-import { useNavigate } from "react-router-dom";
-import { MEDICAL_INCIDENT_REPORT_STATUS } from "../../utils/Constant";
+import { addScykByQrCode, getDSPhongBan } from "../services/BaoCaoSCYKServices";
+import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE } from "../../utils/Constant";
 
 const ThemMoiScykForm = () => {
 	const { lang, intl } = useMultiLanguage();
 	const { setPageLoading } = useContext(AppContext);
-	const navigate = useNavigate()
 	const [shouldOpenUploadImageModal, setShouldOpenUploadImageModal] = useState(false);
 	const [imageList, setImageList] = useState<IUploadImage[]>([]);
 	const [phongBanList, setPhongBanList] = useState([]);
-	const [benhNhanList, setBenhNhanList] = useState([]);
 
 	const validationSchema = Yup.object().shape({
 		hinhThuc: Yup.string().required("Bắt buộc chọn"),
@@ -68,7 +64,8 @@ const ThemMoiScykForm = () => {
 		soDienThoaiNbc: Yup.string().matches(regex.phone, 'Số điện thoại không hợp lệ'),
 		loaiDoiTuong: Yup.array()
 			.of(Yup.string())
-			.min(1, 'Yêu cầu chọn loại dối tượng').nullable()
+			.min(1, 'Yêu cầu chọn loại đối tượng').nullable(),
+		ngaySinh: Yup.date().nullable().max(new Date(), "Ngày sinh không được lớn hơn ngày hiện tại"),
 	});
 
 	const handleSubmit = async (values: MedicalIncidentInfo) => {
@@ -81,13 +78,15 @@ const ThemMoiScykForm = () => {
 
 		try {
 			setPageLoading(true);
-			const { data } = await addScykByQrCode(thongTinSCYK);
-			toast.success("Báo cáo sự cố y khoa thành công");
-            setTimeout(() => {
-				navigate("/");
-			}, 3000)
+			const { data: { code } } = await addScykByQrCode(thongTinSCYK);
+			if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
+				toast.success("Báo cáo sự cố y khoa thành công");
+				setTimeout(() => {
+					window.location.reload();
+				}, 3000)
+			}
 		} catch (error) {
-			toast.error("Lỗi hệ thống, vui lòng thử lại!");
+			toast.error(String(error));
 		} finally {
 			setPageLoading(false);
 		}
@@ -102,11 +101,9 @@ const ThemMoiScykForm = () => {
 		try {
             setPageLoading(true);
             const donViBaoCaoListTemp = await getDSPhongBan();
-			const benhNhanListTemp = await getDSBenhNhan();
             setPhongBanList(donViBaoCaoListTemp?.data?.data);
-            setBenhNhanList(benhNhanListTemp?.data?.data);
         } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+			toast.error(String(error));
         } finally {
 			setPageLoading(false);
 		}
@@ -154,10 +151,12 @@ const ThemMoiScykForm = () => {
 						<form onSubmit={handleSubmit}>
 							<div className="form-container modal-fullscreen">
 								<div className="text-center spaces fs-24 fw-bold">Báo cáo SCYK</div>
+								<div>
+									<i>Chú ý: Các trường có dấu <span className="color-red ms-1">{"*"}</span> bắt buộc nhập</i>
+								</div>
 								<div className="form-child-container">
 									<div className="d-flex spaces gap-32 hinh-thuc-bao-cao">
 										<LabelRequired
-											isRequired
 											className="text-primary spaces min-w-130 fw-700"
 											label="Hình thức báo cáo sự cố"
 										/>
@@ -176,20 +175,6 @@ const ThemMoiScykForm = () => {
 								</div>
 								<div className="form-child-container">
 									<Row className="spaces max-width-1280">
-										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
-											<div className="d-flex">
-												<LabelRequired
-													label="Mã sự cố y khoa"
-													className="spaces min-w-130 fw-500"
-												/>
-												<TextField
-													disabled
-													className="spaces flex-1"
-													name="code"
-													type="text"
-												/>
-											</div>
-										</Col>
 										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
 											<div className="d-flex">
 												<LabelRequired
@@ -273,120 +258,6 @@ const ThemMoiScykForm = () => {
 													name="thoiGianXayRa"
 													type="time"
 													handleChange={handleChange}
-												/>
-											</div>
-										</Col>
-									</Row>
-								</div>
-								<div className="form-child-container">
-									<div className="d-flex spaces gap-32 h-24">
-										<LabelRequired
-											className="text-primary spaces fw-700"
-											label="Thông tin người bệnh"
-										/>
-									</div>
-									<Row className="spaces max-width-1280">
-										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
-											<div className="d-flex">
-												<LabelRequired
-													label="Mã bệnh nhân"
-													className="spaces min-w-130 fw-500"
-												/>
-												<Autocomplete
-													onChange={(
-														selectedOption
-													) =>
-														setFieldValue(
-															"benhNhan",
-															selectedOption,
-														)
-													}
-													getOptionLabel={(option) =>
-														`${option.code}`
-													}
-													className="spaces h-25 flex-1"
-													name="benhNhan"
-													value={values.benhNhan}
-													errors={errors?.benhNhan}
-													touched={touched?.benhNhan}
-													options={benhNhanList}
-												/>
-											</div>
-										</Col>
-										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
-											<div className="d-flex">
-												<LabelRequired
-													label="Họ và tên"
-													className="spaces min-w-130 fw-500"
-												/>
-												<TextField
-													disabled
-													className="spaces flex-1"
-													name="benhNhan.name"
-													value={values.benhNhan?.name || ""}
-													type="text "
-												/>
-											</div>
-										</Col>
-										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
-											<div className="d-flex">
-												<LabelRequired
-													label="Sổ bệnh án"
-													className="spaces min-w-130 fw-500"
-												/>
-												<TextField
-													disabled
-													className="spaces flex-1"
-													name="benhNhan.soBenhAn"
-													value={values.benhNhan?.soBenhAn}
-													type="text "
-													handleChange={handleChange}
-												/>
-											</div>
-										</Col>
-										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
-											<div className="d-flex">
-												<LabelRequired
-													label="Ngày sinh"
-													className="spaces min-w-130 fw-500"
-												/>
-												<TextField
-													disabled
-													className="spaces flex-1"
-													name="benhNhan.ngaySinh"
-													value={(values.benhNhan?.ngaySinh && moment(values.benhNhan?.ngaySinh).format('YYYY-MM-DD')) || ""}
-													type="date"
-													handleChange={handleChange}
-												/>
-											</div>
-										</Col>
-										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
-											<div className="d-flex">
-												<LabelRequired
-													label="Giới tính"
-													className="spaces min-w-130 fw-500"
-												/>
-												<TextField
-													disabled
-													className="spaces flex-1"
-													type="text"
-													name="gioiTinh"
-													value={convertLabelByCode(GENDER_OPTION, values?.benhNhan?.gioiTinh) || ""}
-												/>
-											</div>
-										</Col>
-										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
-											<div className="d-flex">
-												<LabelRequired
-													label="Khoa/Phòng"
-													className="spaces min-w-130 fw-500"
-												/>
-												<TextField
-													disabled
-													className="spaces flex-1"
-													name="khoaphong"
-													type="text"
-													value={convertLabelByCode(phongBanList, values?.benhNhan?.khoaPhongDieuTriId) || ""}
 												/>
 											</div>
 										</Col>
@@ -503,158 +374,6 @@ const ThemMoiScykForm = () => {
 										/>
 									</div>
 								</div>
-								<Row>
-									<Col xs={12} sm={12} md={6} lg={6} className="spaces mt-5">
-										<div className="spaces pb-4 mt-10">
-											<LabelRequired
-												className="text-primary spaces fw-700 h-24 mb-4"
-												label="Đề xuất giải pháp ban đầu"
-											/>
-											<TextField
-												className="spaces flex-1 h-92"
-												name="deXuat"
-												as="textarea"
-												rows={4}
-												handleChange={handleChange}
-											/>
-										</div>
-									</Col>
-									<Col xs={12} sm={12} md={6} lg={6} className="spaces mt-5">
-										<div className="spaces pb-4 mt-10">
-											<LabelRequired
-												className="text-primary spaces fw-700 h-24 mb-4"
-												label="Điều trị/xử lý ban đầu đã thực hiện"
-											/>
-											<TextField
-												className="spaces flex-1 h-92"
-												name="dieuTriBanDau"
-												as="textarea"
-												rows={4}
-												handleChange={handleChange}
-											/>
-										</div>
-									</Col>
-								</Row>
-								<div className="radio-group-container">
-									<div className="radio-group-wrapper">
-										<div>
-											<div className="d-flex spaces gap-32 mb-4">
-												<LabelRequired
-													className="text-primary spaces fw-700"
-													label="Thông báo cho bác sĩ, người có trách nhiệm"
-													isRequired
-												/>
-											</div>
-											<div className="d-flex spaces gap-32">
-												<RadioGroup
-													labelClassName="spaces min-w-100"
-													className="d-flex"
-													name="thongBaoChoBacSi"
-													value={values?.thongBaoChoBacSi}
-													handleChange={handleChange}
-													radioItemList={OPTION_XAC_NHAN}
-												/>
-											</div>
-										</div>
-										<div className="spaces mt-10">
-											<div className="d-flex spaces gap-32 mb-4">
-												<LabelRequired
-													className="text-primary spaces fw-700"
-													label="Thông báo cho người nhà/Người bảo hộ"
-													isRequired
-												/>
-											</div>
-											<div className="d-flex spaces gap-32">
-												<RadioGroup
-													labelClassName="spaces min-w-100"
-													className="d-flex"
-													name="thongBaoNguoiNha"
-													value={values?.thongBaoNguoiNha}
-													handleChange={handleChange}
-													radioItemList={OPTION_XAC_NHAN}
-												/>
-											</div>
-										</div>
-										<div className="spaces mt-10">
-											<div className="d-flex spaces gap-32 mb-4">
-												<LabelRequired
-													className="text-primary spaces fw-700"
-													label="Phân loại ban đầu về sự cố"
-													isRequired
-												/>
-											</div>
-											<div className="d-flex spaces gap-32">
-												<RadioGroup
-													labelClassName="spaces min-w-100"
-													className="d-flex"
-													name="phanLoaiBanDau"
-													value={values?.phanLoaiBanDau}
-													handleChange={handleChange}
-													radioItemList={OPTION_PHAN_LOAI}
-												/>
-											</div>
-										</div>
-									</div>
-									<div className="radio-group-wrapper">
-										<div>
-											<div className="d-flex spaces gap-32 mb-4">
-												<LabelRequired
-													className="text-primary spaces fw-700"
-													label="Thông báo cho người bệnh"
-													isRequired
-												/>
-											</div>
-											<div className="d-flex spaces gap-32">
-												<RadioGroup
-													labelClassName="spaces min-w-100"
-													className="d-flex"
-													name="thongBaoNguoiBenh"
-													value={values?.thongBaoNguoiBenh}
-													handleChange={handleChange}
-													radioItemList={OPTION_XAC_NHAN}
-												/>
-											</div>
-										</div>
-										<div className="spaces mt-10">
-											<div className="d-flex spaces gap-32 mb-4">
-												<LabelRequired
-													className="text-primary spaces fw-700"
-													label="Ghi nhận vào hồ sơ bệnh án/Giấy tờ liên quan"
-													isRequired
-												/>
-											</div>
-											<div className="d-flex spaces gap-32">
-												<RadioGroup
-													labelClassName="spaces min-w-100"
-													className="d-flex"
-													name="ghiNhanHoSo"
-													value={values?.ghiNhanHoSo}
-													handleChange={handleChange}
-													radioItemList={OPTION_XAC_NHAN}
-												/>
-											</div>
-										</div>
-										<div className="spaces mt-10">
-											<div className="d-flex spaces gap-32 mb-4">
-												<LabelRequired
-													className="text-primary spaces fw-700"
-													label="Đánh giá ban đầu về mức độ ảnh hưởng của sự cố"
-													isRequired
-												/>
-											</div>
-											<div className="d-flex spaces gap-32">
-												<RadioGroup
-													labelClassName="spaces min-w-100"
-													className="d-flex"
-													name="danhGiaBanDau"
-													value={values?.danhGiaBanDau}
-													handleChange={handleChange}
-													radioItemList={OPTION_MUC_DO_AH}
-												/>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div className="form-child-container">
 									<div className="d-flex spaces gap-32 h-29">
 										<LabelRequired
@@ -728,7 +447,7 @@ const ThemMoiScykForm = () => {
 										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
 											<div className="d-flex">
 												<LabelRequired
-													label="Người chưng kiến 1"
+													label="Người chứng kiến 1"
 													className="spaces min-w-130 fw-500"
 												/>
 												<TextField
@@ -755,8 +474,255 @@ const ThemMoiScykForm = () => {
 										</Col>
 									</Row>
 								</div>
+								<div className="form-child-container">
+									<div className="d-flex spaces gap-32 h-24">
+										<LabelRequired
+											className="text-primary spaces fw-700"
+											label="Thông tin người bệnh"
+										/>
+									</div>
+									<Row className="spaces max-width-1280">
+										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
+											<div className="d-flex">
+												<LabelRequired
+													label="Mã bệnh nhân"
+													className="spaces min-w-130 fw-500"
+												/>
+												<TextField
+													className="spaces flex-1"
+													name="maBenhNhan"
+													value={values?.maBenhNhan}
+													type="text "
+													handleChange={handleChange}
+												/>
+											</div>
+										</Col>
+										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
+											<div className="d-flex">
+												<LabelRequired
+													label="Họ và tên"
+													className="spaces min-w-130 fw-500"
+												/>
+												<TextField
+													className="spaces flex-1"
+													name="tenBenhNhan"
+													value={values?.tenBenhNhan || ""}
+													type="text "
+												/>
+											</div>
+										</Col>
+										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
+											<div className="d-flex">
+												<LabelRequired
+													label="Sổ bệnh án"
+													className="spaces min-w-130 fw-500"
+												/>
+												<TextField
+													className="spaces flex-1"
+													name="soBenhAn"
+													value={values?.soBenhAn}
+													type="text "
+													handleChange={handleChange}
+												/>
+											</div>
+										</Col>
+										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
+											<div className="d-flex">
+												<LabelRequired
+													label="Ngày sinh"
+													className="spaces min-w-130 fw-500"
+												/>
+												<TextField
+													className="spaces flex-1"
+													name="ngaySinh"
+													value={(values?.ngaySinh && moment(values?.ngaySinh).format('YYYY-MM-DD')) || ""}
+													type="date"
+													handleChange={handleChange}
+												/>
+											</div>
+										</Col>
+										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
+											<div className="d-flex">
+												<LabelRequired
+													label="Giới tính"
+													className="spaces min-w-130 fw-500"
+												/>
+												<Autocomplete
+													onChange={(selectedOption) => setFieldValue("gioiTinh", selectedOption?.code)}
+													getOptionLabel={(option) => `${option.name}`}
+													className="spaces h-25 flex-1"
+													name="gioiTinh"
+													value={values?.gioiTinh}
+													options={GENDER_OPTION}
+												/>
+											</div>
+										</Col>
+										<Col xs={12} sm={12} md={6} lg={6} xl={4} className="spaces mt-5">
+											<div className="d-flex">
+												<LabelRequired
+													label="Khoa/Phòng"
+													className="spaces min-w-130 fw-500"
+												/>
+												<Autocomplete
+													onChange={(selectedOption) => setFieldValue("khoaPhongDieuTri", selectedOption?.id)}
+													getOptionLabel={(option) => `${option.name}`}
+													className="spaces h-25 flex-1"
+													name="khoaPhongDieuTri"
+													value={values?.khoaPhongDieuTri}
+													options={phongBanList}
+												/>
+											</div>
+										</Col>
+									</Row>
+								</div>
+								<Row>
+									<Col xs={12} sm={12} md={6} lg={6} className="spaces mt-5">
+										<div className="spaces pb-4 mt-10">
+											<LabelRequired
+												className="text-primary spaces fw-700 h-24 mb-4"
+												label="Đề xuất giải pháp ban đầu"
+											/>
+											<TextField
+												className="spaces flex-1 h-92"
+												name="deXuat"
+												as="textarea"
+												rows={4}
+												handleChange={handleChange}
+											/>
+										</div>
+									</Col>
+									<Col xs={12} sm={12} md={6} lg={6} className="spaces mt-5">
+										<div className="spaces pb-4 mt-10">
+											<LabelRequired
+												className="text-primary spaces fw-700 h-24 mb-4"
+												label="Điều trị/xử lý ban đầu đã thực hiện"
+											/>
+											<TextField
+												className="spaces flex-1 h-92"
+												name="dieuTriBanDau"
+												as="textarea"
+												rows={4}
+												handleChange={handleChange}
+											/>
+										</div>
+									</Col>
+								</Row>
+								<div className="radio-group-container">
+									<div className="radio-group-wrapper">
+										<div>
+											<div className="d-flex spaces gap-32 mb-4">
+												<LabelRequired
+													className="text-primary spaces fw-700"
+													label="Thông báo cho bác sĩ, người có trách nhiệm"
+												/>
+											</div>
+											<div className="d-flex spaces gap-32">
+												<RadioGroup
+													labelClassName="spaces min-w-100"
+													className="d-flex"
+													name="thongBaoChoBacSi"
+													value={values?.thongBaoChoBacSi}
+													handleChange={handleChange}
+													radioItemList={OPTION_XAC_NHAN}
+												/>
+											</div>
+										</div>
+										<div className="spaces mt-10">
+											<div className="d-flex spaces gap-32 mb-4">
+												<LabelRequired
+													className="text-primary spaces fw-700"
+													label="Thông báo cho người nhà/Người bảo hộ"
+												/>
+											</div>
+											<div className="d-flex spaces gap-32">
+												<RadioGroup
+													labelClassName="spaces min-w-100"
+													className="d-flex"
+													name="thongBaoNguoiNha"
+													value={values?.thongBaoNguoiNha}
+													handleChange={handleChange}
+													radioItemList={OPTION_XAC_NHAN}
+												/>
+											</div>
+										</div>
+										<div className="spaces mt-10">
+											<div className="d-flex spaces gap-32 mb-4">
+												<LabelRequired
+													className="text-primary spaces fw-700"
+													label="Phân loại ban đầu về sự cố"
+												/>
+											</div>
+											<div className="d-flex spaces gap-32">
+												<RadioGroup
+													labelClassName="spaces min-w-100"
+													className="d-flex"
+													name="phanLoaiBanDau"
+													value={values?.phanLoaiBanDau}
+													handleChange={handleChange}
+													radioItemList={OPTION_PHAN_LOAI}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className="radio-group-wrapper">
+										<div>
+											<div className="d-flex spaces gap-32 mb-4">
+												<LabelRequired
+													className="text-primary spaces fw-700"
+													label="Thông báo cho người bệnh"
+												/>
+											</div>
+											<div className="d-flex spaces gap-32">
+												<RadioGroup
+													labelClassName="spaces min-w-100"
+													className="d-flex"
+													name="thongBaoNguoiBenh"
+													value={values?.thongBaoNguoiBenh}
+													handleChange={handleChange}
+													radioItemList={OPTION_XAC_NHAN}
+												/>
+											</div>
+										</div>
+										<div className="spaces mt-10">
+											<div className="d-flex spaces gap-32 mb-4">
+												<LabelRequired
+													className="text-primary spaces fw-700"
+													label="Ghi nhận vào hồ sơ bệnh án/Giấy tờ liên quan"
+												/>
+											</div>
+											<div className="d-flex spaces gap-32">
+												<RadioGroup
+													labelClassName="spaces min-w-100"
+													className="d-flex"
+													name="ghiNhanHoSo"
+													value={values?.ghiNhanHoSo}
+													handleChange={handleChange}
+													radioItemList={OPTION_XAC_NHAN}
+												/>
+											</div>
+										</div>
+										<div className="spaces mt-10">
+											<div className="d-flex spaces gap-32 mb-4">
+												<LabelRequired
+													className="text-primary spaces fw-700"
+													label="Đánh giá ban đầu về mức độ ảnh hưởng của sự cố"
+												/>
+											</div>
+											<div className="d-flex spaces gap-32">
+												<RadioGroup
+													labelClassName="spaces min-w-100"
+													className="d-flex"
+													name="danhGiaBanDau"
+													value={values?.danhGiaBanDau}
+													handleChange={handleChange}
+													radioItemList={OPTION_MUC_DO_AH}
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div className="d-flex align-items-center justify-content-center spaces gap-10">
+							<div className="d-flex align-items-center justify-content-center spaces gap-10 h-60">
 								<Button
 									className="button-primary"
 									type="submit"

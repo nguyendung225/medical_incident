@@ -29,12 +29,12 @@ const HeaderUserMenu: FC = () => {
         </div>
       </div>
       <div className='separator my-2'></div> */}
-      <Languages />
+      {/* <Languages />
       <div className='menu-item px-5 mb-1'>
         <Link to='/crafted/account/settings' className='menu-link px-5 py-2'>
         {intl.formatMessage({ id: 'USER.ACCOUNT.SETTING' })}
         </Link>
-      </div>
+      </div> */}
       <div className='menu-item px-5 mb-1'>
         <a onClick={logout} className='menu-link px-5 py-2'>
         {intl.formatMessage({ id: 'LOGOUT' })}

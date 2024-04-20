@@ -53,6 +53,7 @@ export function MenuInner() {
       });
       tabList?.addEventListener('scroll', handleShowIcon);
     }
+    setSubMenu();
   }, []);
 
   return (

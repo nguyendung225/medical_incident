@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState} from 'react'
 import {WithChildren} from '../../helpers'
+import { MedicalIncidentInfo } from '../../../app/modules/bao-cao-su-co-y-khoa/models/BaoCaoSCYKModels'
+import { InitThongTinSCYK } from '../../../app/modules/bao-cao-su-co-y-khoa/const/constants'
 
 export interface PageLink {
   title: string
@@ -16,8 +18,8 @@ export interface PageDataContextModel {
   setPageDescription: (_description: string) => void
   pageBreadcrumbs?: Array<PageLink>
   setPageBreadcrumbs: (_breadcrumbs: Array<PageLink>) => void
-  updateDataTiepNhan?: boolean
-  setUpdateDataTiepNhan: Dispatch<SetStateAction<boolean>>
+  updateDataTiepNhan?: MedicalIncidentInfo
+  setUpdateDataTiepNhan: Dispatch<SetStateAction<MedicalIncidentInfo>>
 }
 
 const PageDataContext = createContext<PageDataContextModel>({
@@ -31,7 +33,7 @@ const PageDataProvider: FC<WithChildren> = ({children}) => {
   const [pageTitle, setPageTitle] = useState<string>('')
   const [pageDescription, setPageDescription] = useState<string>('')
   const [pageBreadcrumbs, setPageBreadcrumbs] = useState<Array<PageLink>>([])
-  const [updateDataTiepNhan, setUpdateDataTiepNhan] = useState(false)
+  const [updateDataTiepNhan, setUpdateDataTiepNhan] = useState<MedicalIncidentInfo>(InitThongTinSCYK)
 
   const value: PageDataContextModel = {
     pageTitle,

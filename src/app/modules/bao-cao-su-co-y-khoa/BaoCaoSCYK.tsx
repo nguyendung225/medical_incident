@@ -3,12 +3,12 @@
 import { useContext, useEffect } from "react"
 import { Button } from "react-bootstrap";
 import "./BaoCaoSCYK.scss";
-import { SCYK_DETAIL_INFO_INIT, TRANG_THAI_OPTIONS, getExportedFileList, getPhieuInList, getTabList, tableDSSuCoYKhoaColumns } from "./const/constants";
+import { InitThongTinSCYK, SCYK_DETAIL_INFO_INIT, TRANG_THAI_OPTIONS, getExportedFileList, getPhieuInList, getTabList, tableDSSuCoYKhoaColumns } from "./const/constants";
 import { useState } from "react";
 import DialogThemMoiSCYK from "./components/DialogThemMoiSCYK";
 import { KTSVG } from "../../../_metronic/helpers";
 import TableCustom from "../component/table/table-custom/TableCustom";
-import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
+import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE, TYPE } from "../utils/Constant";
 import TabMenu from "../component/tabs/TabMenu";
 import { deleteSCYKById, searchByPage, getScykInfoDetailById } from "./services/BaoCaoSCYKServices";
 import { IDropdownButton, IMedicalIncidentDetailInfo, MedicalIncidentInfo, SearchObject } from "./models/BaoCaoSCYKModels";
@@ -29,7 +29,7 @@ type Props = {};
 
 const BaoCaoSCYK = (props: Props) => {
     const { setPageLoading } = useContext(AppContext);
-    const { updateDataTiepNhan } = usePageData()
+    const { updateDataTiepNhan, setUpdateDataTiepNhan } = usePageData()
     const [openDialogThemMoiSCYK, setOpenDialogThemMoiSCYK] = useState(false);
     const [searchObj, setSearchObj] = useState<SearchObject>({
         pageNumber: 1,
@@ -45,16 +45,11 @@ const BaoCaoSCYK = (props: Props) => {
     const [defaultActiveKey, setDefaultActiveKey] = useState<string>("1")
     const [phieuInList, setPhieuInList] = useState<IDropdownButton[]>([])
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
-    const [openDialogKetLuan, setOpenDialogKetLuan] = useState(false)
+    const [openDialogKetLuan, setOpenDialogKetLuan] = useState(false);
+    const [dataChecked, setDataChecked] = useState<MedicalIncidentInfo>();
 
     const handleSearch = () => {
-        updatePageData({
-            ...searchObj,
-            trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
-            hinhThuc: searchObj?.hinhThuc?.code,
-            phanLoai: searchObj?.phanLoai?.code,
-            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.id,
-        });
+        updatePageData({ ...searchObj });
     }
 
     const updatePageData = async (searchData: any) => {
@@ -65,34 +60,32 @@ const BaoCaoSCYK = (props: Props) => {
         try {
             setPageLoading(true);
             const { data } = await searchByPage(searchData);
-            data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.id);
-            await setDsBaoCaoSCYK(data?.data?.data);
             setConfigTable({
-                pageNumber: data.data.pageNumber,
-                pageSize: data.data.pageNumber,
                 totalElement: data.data.total,
                 totalPages: data.data.totalPages,
                 numberOfElements: data.data.numberOfElements,
+                pageSize: data.data.pageSize,
+                pageIndex: data.data.pageNumber,
             })
-            setPageLoading(false);
+            data?.data?.data?.length > 0 && !updateDataTiepNhan?.id && setDataChecked(data?.data?.data?.[0]);
+            await setDsBaoCaoSCYK(data?.data?.data);
         } catch (err) {
+            toast.error(String(err));
+        } finally {
             setPageLoading(false);
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
 
     const getThongTinSCYK = async (scykId: any) => {
-        if (scykId) {
-            try {
-                setPageLoading(true);
-                const res = await getScykInfoDetailById(scykId as string);
-                setThongTinSCYK(res.data.data);
-                setDefaultActiveKey("0");
-                setPageLoading(false);
-            } catch (error) {
-                setPageLoading(false);
-                toast.error("Lỗi hệ thống, vui lòng thử lại!");
-            }
+        try {
+            setPageLoading(true);
+            const res = await getScykInfoDetailById(scykId as string);
+            setThongTinSCYK(res.data.data);
+            setDefaultActiveKey("0");
+        } catch (error) {
+            toast.error(String(error));
+        } finally {
+            setPageLoading(false);
         }
     }
 
@@ -101,14 +94,14 @@ const BaoCaoSCYK = (props: Props) => {
             if (thongTinSCYK?.suCoResp?.id) {
                 const res = await deleteSCYKById(thongTinSCYK?.suCoResp?.id)
                 if (res?.data?.code === RESPONSE_STATUS_CODE.SUCCESS) {
-                    toast.success(res.data?.message)
+                    toast.success("Xoá báo cáo SCYK thành công.")
                     setShouldOpenConfirmDeleteDialog(false)
                     setThongTinSCYK(SCYK_DETAIL_INFO_INIT)
                     updatePageData({});
                 }
             }
         } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            toast.error(String(error));
         }
     };
 
@@ -144,12 +137,34 @@ const BaoCaoSCYK = (props: Props) => {
     }, [thongTinSCYK])
 
     useEffect(() => {
-        !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected || 0]?.id);
+        !isNaN(indexRowSelected) && getThongTinSCYK(dsBaoCaoSCYK[indexRowSelected]?.id);
     }, [indexRowSelected])
+    
+    useEffect(() => {
+        dataChecked?.id && getThongTinSCYK(dataChecked.id);
+    }, [dataChecked])
+    
+    const handleNotifyTiepNhanSCYK = async () => {
+        setSearchObj({
+            ...searchObj,
+            trangThaiXuLy: `${updateDataTiepNhan?.trangThaiXuLy}`
+        })
+        setDataChecked(updateDataTiepNhan);
+        getMedicalIncidentReportList({
+            ...searchObj,
+            pageIndex: DEFAULT_PAGE_INDEX,
+            pageSize: 100,
+            trangThaiXuLy: `${updateDataTiepNhan?.trangThaiXuLy}`
+        })
+    }
 
     useEffect(() => {
-        handleSearch();
+        updateDataTiepNhan?.id && handleNotifyTiepNhanSCYK();
     }, [updateDataTiepNhan]);
+
+    useEffect(() => {
+        updateDataTiepNhan?.id && dataChecked?.id && setUpdateDataTiepNhan(InitThongTinSCYK);
+    }, [dsBaoCaoSCYK])
 
     return (
         <div className="page-container">
@@ -173,7 +188,7 @@ const BaoCaoSCYK = (props: Props) => {
                         id="profile2"
                         columns={tableDSSuCoYKhoaColumns}
                         data={dsBaoCaoSCYK}
-                        dataChecked={[thongTinSCYK.suCoResp]}
+                        dataChecked={[dataChecked]}
                         buttonAdd={false}
                         setCurIndexSelectSingle={setIndexRowSelected}
                         buttonExportExcel={false}
@@ -182,9 +197,10 @@ const BaoCaoSCYK = (props: Props) => {
                         justFilter={true}
                         fixedColumnsCount={0}
                         noPagination={false}
+                        objectSearch={searchObj}
                         updatePageData={updatePageData}
                         type={TYPE.SINGLE}
-                        page={configTable?.pageNumber}
+                        page={configTable?.pageIndex}
                         pageSize={configTable?.pageSize}
                         totalElements={configTable?.totalElement}
                         totalPages={configTable?.totalPages}
@@ -239,7 +255,10 @@ const BaoCaoSCYK = (props: Props) => {
                         <span className="title">Thông tin sự cố y khoa</span>
                     </div>
                     <div className="d-flex spaces gap-10"> 
-                        {(!(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_KET_LUAN) && (thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN || thongTinSCYK.bienBanHopResp)) &&
+                        {(!(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_KET_LUAN) 
+                        && (thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.DA_TIEP_NHAN || thongTinSCYK.bienBanHopResp)) 
+                        && hasAuthority(PERMISSIONS.KET_LUAN, PERMISSION_ABILITY.CREATE)
+                        &&
                             <Button
                                 className="button-primary"
                                 onClick={() => setOpenDialogKetLuan(true)}
@@ -247,7 +266,9 @@ const BaoCaoSCYK = (props: Props) => {
                                 Kết luận
                             </Button>
                         }
-                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN) &&
+                        {(thongTinSCYK?.suCoResp?.trangThaiXuLy === MEDICAL_INCIDENT_REPORT_STATUS.CHO_TIEP_NHAN) 
+                        && hasAuthority(PERMISSIONS.TIEP_NHAN, PERMISSION_ABILITY.CREATE)
+                        &&
                             <Button
                                 className="button-primary"
                                 onClick={() => setOpenDialogTiepNhan(true)}

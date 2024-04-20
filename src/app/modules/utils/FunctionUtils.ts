@@ -8,7 +8,7 @@ import { NUMBER_EXCEPT_THIS_SYMBOLS, TYPE, VARIABLE_STRING, EXTENSIONS } from ".
 import { TMenu, allMenu } from "../../pages/Homepage/listMenu";
 import { RESPONSE_STATUS_CODE } from "./Constant";
 import generatePDF, { Options } from "react-to-pdf";
-import { getDSBenhNhan, getDSChucDanh, getDSChucVu, getDSPhongBan } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
+import { getDSChucDanh, getDSChucVu, getDSPhongBan } from "../bao-cao-su-co-y-khoa/services/BaoCaoSCYKServices";
 import { KEY_LOCALSTORAGE } from "../auth/core/_consts";
 import { getListNhanVien } from "../bien-ban-hop/services/BienBanHopServices";
 import debounce from 'lodash/debounce';
@@ -291,19 +291,12 @@ export const getListCategory = async () => {
     } catch (error) {
         toast.error('Lỗi khi lấy danh sách chức danh');
     }
-
-    try {
-        const res = await getDSBenhNhan();
-        localStorageItem.set(KEY_LOCALSTORAGE.LIST_BENH_NHAN, res.data.data);
-    } catch (error) {
-        toast.error('Lỗi khi lấy danh sách chức danh');
-    }
     
     try {
         const res = await getListNhanVien();
         localStorageItem.set(KEY_LOCALSTORAGE.LIST_NHAN_VIEN, res.data.data);
     } catch (error) {
-        toast.error('Lỗi khi lấy danh sách chức danh');
+        toast.error('Lỗi khi lấy danh sách nhân viên');
     }
 };
 

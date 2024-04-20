@@ -10,17 +10,17 @@ import { exportToFile, handleExportPdf, handlePrint } from "../../utils/Function
 import BaoCaoSCYKDetail from "../components/BaoCaoSCYKDetail";
 import { IKetLuanSCYK, IMedicalIncidentDetailInfo, MedicalIncidentInfo } from "../models/BaoCaoSCYKModels";
 import { ITiepNhan } from '../models/BaoCaoSCYKModels';
-import { exportWordFile as exportWordBaoCaoSCYK} from "../services/BaoCaoSCYKServices";
-import { exportWord as exportWordBienBanXacMinh} from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
-import { exportWord as exportWordPhanTichSCYK } from "../../phan-tich-scyk/services/PhanTichSCYKServices";
-import { exportWord as exportWordBienBanHop} from "../../bien-ban-hop/services/BienBanHopServices";
+import { exportWordFile as exportWordBaoCaoSCYK, exportPdf as exportPdfBaoCaoSCYK} from "../services/BaoCaoSCYKServices";
+import { exportWord as exportWordBienBanXacMinh, exportPdf as exportPdfBienBanXacMinh} from "../../bien-ban-xac-minh/services/BienBanXacMinhServices";
+import { exportWord as exportWordPhanTichSCYK, exportPdf as exportPdfPhanTichSCYK } from "../../phan-tich-scyk/services/PhanTichSCYKServices";
+import { exportWord as exportWordBienBanHop, exportPdf as exportPdfBienBanHop} from "../../bien-ban-hop/services/BienBanHopServices";
 import { handleDownLoadFile } from "../../utils/FileServices";
 import moment from "moment";
 
 export const OPTION_MUC_DO_AH = [
     { name: "Nặng", code: 1 },
-    { name: "Nhẹ ", code: 2 },
-    { name: "Trung Bình", code: 3 },
+    { name: "Trung Bình", code: 2 },
+    { name: "Nhẹ ", code: 3 },
 ];
 
 export const OPTION_HINH_THUC_BC = [
@@ -107,7 +107,7 @@ export const tableDSSuCoYKhoaColumns = [
         name: "Mã sự cố",
         field: "code",
         headerStyle: {
-            minWidth: "100px"
+            minWidth: "140px"
         },
         render: (row: any) => <span>{row?.code}</span>
     },
@@ -116,6 +116,9 @@ export const tableDSSuCoYKhoaColumns = [
         field: "name",
         headerStyle: {
             minWidth: "180px"
+        },
+        cellStyle: {
+            textAlign: "left"
         },
         render: (row: any) => <span>{row?.name}</span>
     },
@@ -141,6 +144,9 @@ export const tableDSSuCoYKhoaColumns = [
         headerStyle: {
             minWidth: "200px"
         },
+        cellStyle: {
+            textAlign: "left"
+        },
         render: (row: any) => <span>{renderLoaiDoiTuong(row?.loaiDoiTuong)}</span>
     },
     {
@@ -153,10 +159,10 @@ export const tableDSSuCoYKhoaColumns = [
             textAlign: "left"
         },
         render: (row: any) => (
-            row?.benhNhan && (
+            row?.tenBenhNhan && (
                 <div className="d-flex flex-column text-up">
-                    <span className="text-uppercase">{row?.benhNhan?.name}</span>
-                    <span>{row?.benhNhan?.code} - {convertGenderToString(row?.benhNhan?.gioiTinh)} - {formatDateToString(row?.benhNhan?.ngaySinh)}</span>
+                    <span className="text-uppercase">{row?.tenBenhNhan}</span>
+                    <span>{row?.maBenhNhan} - {convertGenderToString(row?.gioiTinh)} - {formatDateToString(row?.ngaySinh)}</span>
                 </div>
             )
         )
@@ -165,11 +171,12 @@ export const tableDSSuCoYKhoaColumns = [
         name: "Khoa Phòng",
         field: "",
         headerStyle: {
-            minWidth: "120px"
+            minWidth: "200px"
         },
-        render: (row: any) => (
-            row?.benhNhan && (<span>{row?.benhNhan?.tenKhoaPhongDieuTri}</span>)
-        )
+        cellStyle: {
+            textAlign: "left"
+        },
+        render: (row: any) => (<span>{row?.tenKhoaPhongDieuTri}</span>)
     }
 ]
 
@@ -317,12 +324,12 @@ export const benhNhanInitInfo = {
 
 export const InitThongTinSCYK: MedicalIncidentInfo = {
     name: "",
-    phanLoai: 1,
+    phanLoai: 3,
     hinhThuc: 1,
     donViBaoCao: "",
-    ngayXayRa: "",
-    thoiGianXayRa: "",
-    ngayBaoCao: "",
+    ngayXayRa: moment(new Date()).format("YYYY-MM-DD"),
+    thoiGianXayRa: moment(new Date()).format("HH:mm"),
+    ngayBaoCao: moment(new Date()).format("YYYY-MM-DD"),
     benhNhanId: null,
     loaiDoiTuong: [],
     noiXayRa: "",
@@ -330,29 +337,34 @@ export const InitThongTinSCYK: MedicalIncidentInfo = {
     moTa: "",
     deXuat: "",
     dieuTriBanDau: "",
-    thongBaoChoBacSi: 1,
-    ghiNhanHoSo: 1,
-    thongBaoNguoiNha: 1,
-    thongBaoNguoiBenh: 1,
-    phanLoaiBanDau: 1,
-    danhGiaBanDau: 1,
+    thongBaoChoBacSi: 3,
+    ghiNhanHoSo: 3,
+    thongBaoNguoiNha: 3,
+    thongBaoNguoiBenh: 3,
+    phanLoaiBanDau: 2,
+    danhGiaBanDau: 2,
     tenNbc: "",
     soDienThoaiNbc: "",
     emailNbc: "",
-    loaiNbc: 1,
+    loaiNbc: null,
     loaiNbcKhac: "",
     tenKhoaPhong: "",
     tenDonViBaoCao: "",
     tenNck1: "",
     tenNck2: "",
-    trangThaiXuLy: 1,
+    trangThaiXuLy: 0,
     benhNhan: null,
     code: "",
     isActive: true,
     khoaPhongDieuTri: null,
     maBenhNhan: "",
     orgId: "",
-    tenBenhNhan: ""
+    tenBenhNhan: null,
+    ngaySinh: null,
+    soBenhAn: null,
+    gioiTinh: null,
+    tenKhoaPhongDieuTri: "",
+    khoaPhongDieuTriId: "",
 };
 
 export const initTiepNhan: ITiepNhan = {
@@ -468,13 +480,12 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
         },
         {
             title: "Báo cáo scyk.pdf",
-            handleClick: () => {
-                handleExportPdf({
-                    elementId: "in-phieu-bao-cao-scyk",
-                    fileName: "Báo cáo scyk",
-                    setPageLoading
-                })
-            }
+            handleClick: () => exportToFile({
+                exportAPI: () => thongTinSCYK?.suCoResp?.id && exportPdfBaoCaoSCYK(thongTinSCYK?.suCoResp?.id), 
+                fileName: "Báo cáo scyk",
+                type: TYPE.PDF,
+                setPageLoading
+            }),
         },
         
     ]
@@ -492,13 +503,12 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
             },
             {
                 title: "Biên bản xác minh.pdf",
-                handleClick: () => {
-                    handleExportPdf({
-                        elementId: "in-phieu-bien-ban-xac-minh",
-                        fileName: "Biên bản xác minh",
-                        setPageLoading
-                    })
-                }
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinSCYK?.bienBanXacMinhResp?.id && exportPdfBienBanXacMinh(thongTinSCYK?.bienBanXacMinhResp?.id),
+                    fileName: "Biên bản xác minh",
+                    type: TYPE.PDF,
+                    setPageLoading
+                }),
             }
         )
     }
@@ -516,13 +526,12 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
             },
             {
                 title: "Phân tích Scyk.pdf",
-                handleClick: () => {
-                    handleExportPdf({
-                        elementId: "in-phieu-phan-tich-scyk",
-                        fileName: "Phân tích Scyk",
-                        setPageLoading
-                    })
-                }
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinSCYK?.phanTichResp?.id && exportPdfPhanTichSCYK(thongTinSCYK?.phanTichResp?.id),
+                    fileName: "Phân tích Scyk",
+                    type: TYPE.PDF,
+                    setPageLoading
+                }),
             },
         )
     }
@@ -540,13 +549,12 @@ export const getExportedFileList = (thongTinSCYK: IMedicalIncidentDetailInfo, se
             },
             {
                 title: "Biên bản họp.pdf",
-                handleClick: () => {
-                    handleExportPdf({
-                        elementId: "in-phieu-bien-ban-hop",
-                        fileName: "Biên bản họp",
-                        setPageLoading
-                    })
-                }
+                handleClick: () => exportToFile({
+                    exportAPI: () => thongTinSCYK?.bienBanHopResp?.id && exportPdfBienBanHop(thongTinSCYK?.bienBanHopResp?.id),
+                    fileName: "Biên bản họp",
+                    type: TYPE.PDF,
+                    setPageLoading
+                }),
             }
         )
     }

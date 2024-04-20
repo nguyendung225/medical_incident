@@ -18,10 +18,10 @@ export interface SearchObject {
   hoVaTen?: string;
   ngayBaoCaoStart?: string;
   ngayBaoCaoEnd?: string;
-  trangThaiXuLy?: autocompleteOption;
-  hinhThuc?: autocompleteOption;
-  phanLoai?: autocompleteOption;
-  khoaPhongDieuTri?: autocompleteOption;
+  trangThaiXuLy?: number | string;
+  hinhThuc?: number | string;
+  phanLoai?: number | string;
+  khoaPhongDieuTri?: number | string;
   tuNgay?: string;
   denNgay?: string;
 }
@@ -39,11 +39,9 @@ export interface MedicalIncidentInfo {
   ghiNhanHoSo: number;
   hinhThuc: number;
   isActive: true;
-  khoaPhongDieuTri: null | string;
   loaiDoiTuong: string[] | string;
   loaiNbc: null | string | number;
   loaiNbcKhac: string;
-  maBenhNhan: string;
   moTa: string;
   name: string;
   ngayBaoCao: string;
@@ -54,7 +52,6 @@ export interface MedicalIncidentInfo {
   phanLoaiBanDau: number;
   soDienThoaiNbc: string;
   tenDonViBaoCao: string;
-  tenBenhNhan: string;
   tenKhoaPhong: string;
   tenNbc: string;
   tenNck1: string;
@@ -66,6 +63,14 @@ export interface MedicalIncidentInfo {
   trangThaiXuLy: number;
   viTriCuThe: string;
   bienBanXacMinhResp?: IBienBanXacMinh;
+  maBenhNhan: string;
+  tenBenhNhan: string | null;
+  ngaySinh: string | null;
+  soBenhAn: string | null;
+  gioiTinh: string | null;
+  khoaPhongDieuTri: null | string;
+  khoaPhongDieuTriId: string | null;
+  tenKhoaPhongDieuTri: string;
   files?: any
 }
 
