@@ -35,12 +35,12 @@ const BaoCaoSCYKDetail = ({ thongTinSCYK, thongTinBenhNhan }: TProps) => {
                         )
                     })}
                     <div style={printStyles.contentTitle}>Thông tin người bệnh</div>
-                    <div><span style={printStyles.lable}>Họ và tên: </span>{thongTinBenhNhan?.name}</div>
-                    <div><span style={printStyles.lable}>Sổ bệnh án: </span> {thongTinBenhNhan?.soBenhAn}</div>
-                    <div><span style={printStyles.lable}>Ngày sinh: </span> {thongTinBenhNhan?.ngaySinh && moment(thongTinBenhNhan?.ngaySinh).format("DD/MM/YYYY")}</div>
+                    <div><span style={printStyles.lable}>Họ và tên: </span>{thongTinSCYK?.tenBenhNhan}</div>
+                    <div><span style={printStyles.lable}>Sổ bệnh án: </span> {thongTinSCYK?.soBenhAn}</div>
+                    <div><span style={printStyles.lable}>Ngày sinh: </span> {thongTinSCYK?.ngaySinh && moment(thongTinSCYK?.ngaySinh).format("DD/MM/YYYY")}</div>
                     <div>
-                        <span style={printStyles.lable}>Giới tính: </span> {thongTinBenhNhan?.gioiTinh && convertGenderToString(thongTinBenhNhan?.gioiTinh)}      
-                        <span style={{...printStyles.lable, ...printStyles.marginLeft._10px}}> Khoa phòng: </span> {thongTinBenhNhan?.tenKhoaPhongDieuTri}
+                        <span style={printStyles.lable}>Giới tính: </span> {thongTinSCYK?.gioiTinh && convertGenderToString(thongTinSCYK?.gioiTinh)}      
+                        <span style={{...printStyles.lable, ...printStyles.marginLeft._10px}}> Khoa phòng: </span> {thongTinSCYK?.tenKhoaPhongDieuTri}
                     </div>
                 </div>
                 <div style={printStyles.width._48persent}>
@@ -80,7 +80,7 @@ const BaoCaoSCYKDetail = ({ thongTinSCYK, thongTinBenhNhan }: TProps) => {
                 <div style={printStyles.imageContainer}>
                     {thongTinSCYK.files && thongTinSCYK.files.length > 0 && thongTinSCYK.files?.map((file: any) => (
                         <div style={printStyles.width._48persent}>
-                            <img style={printStyles.width._100persent} src={process.env.REACT_APP_API_URL + `/api/v1/storage/image?id=${file?.id}`} alt=""/>
+                            <img style={printStyles.width._100persent} src={process.env.REACT_APP_API_URL + `/storage/image?id=${file?.id}`} alt=""/>
                         </div>
                     ))}
                 </div>

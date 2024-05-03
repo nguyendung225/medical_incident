@@ -1,4 +1,5 @@
-import { OPTION_HINH_THUC_BC } from "../../bao-cao-su-co-y-khoa/const/constants";
+import moment from "moment";
+import { OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { convertGenderToString, convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 import { IBienBanHop } from "../model/BienBanHopModel";
 
@@ -36,7 +37,7 @@ export const initBienBanHop: IBienBanHop = {
     yKien: '',
     bieuQuyet: '',
     ngayGioKetThuc: '',
-    ngayKetThuc: '',
+    ngayKetThuc: moment(new Date()).format("YYYY-MM-DD"),
     gioKetThuc: '',
     noiNhan: [],
     isChuTriKy: null,
@@ -64,13 +65,13 @@ export const tableDSBienBanHopColumns = [
         headerStyle: {
             minWidth: "140px"
         },
-        render: (row: any) => <span>{convertLabelByCode(OPTION_HINH_THUC_BC, row?.suCoResp?.hinhThuc)}</span>
+        render: (row: any) => <span>{convertLabelByCode(OPTION_MUC_DO_AH, row?.suCoResp?.danhGiaBanDau)}</span>
     },
     {
         name: "Mã sự cố",
         field: "maSuCo",
         headerStyle: {
-            minWidth: "80px"
+            minWidth: "140px"
         },
         render: (row: any) => <span>{row?.suCoResp?.code}</span>
     },
@@ -100,10 +101,10 @@ export const tableDSBienBanHopColumns = [
             textAlign: "left",
         },
         render: (row: any) => (
-            row?.benhNhanResp && (
+            row?.suCoResp?.tenBenhNhan && (
                 <div className="d-flex flex-column text-up">
-                    <span className="text-uppercase">{row?.benhNhanResp.name}</span>
-                    <span>{row?.benhNhanResp.code} - {convertGenderToString(row?.benhNhanResp.gioiTinh)} - {formatDateToString(row?.benhNhanResp.ngaySinh)}</span>
+                    <span className="text-uppercase">{row?.suCoResp?.tenBenhNhan}</span>
+                    <span>{row?.suCoResp?.maBenhNhan} - {convertGenderToString(row?.suCoResp?.maBenhNhan)} - {formatDateToString(row?.suCoResp?.maBenhNhan)}</span>
                 </div>
             )
         )
@@ -114,10 +115,11 @@ export const tableDSBienBanHopColumns = [
         headerStyle: {
             minWidth: "200px"
         },
+        cellStyle: {
+            textAlign: "left",
+        },
         render: (row: any) => (
-            row?.benhNhanResp && (
-                <span>{row?.benhNhanResp?.tenKhoaPhongDieuTri}</span>
-            )
+            <span>{row?.suCoResp?.tenKhoaPhongDieuTri}</span>
         )
     },
 ]

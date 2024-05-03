@@ -42,6 +42,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 						<Col xs={4}>
 							<div className="d-flex">
 								<LabelRequired
+									isRequired
 									label="Mã sự cố y khoa"
 									className="spaces min-w-140 fw-500"
 								/>
@@ -80,7 +81,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 									className="spaces h-25 width-100"
 									type="text"
 									name="tenSuCo"
-                                    value={values.suCoId ? values?.tenSuCo : ""}
+                                    value={values?.tenSuCo || values?.suCoResp?.name}
 								/>
 							</div>
 						</Col>
@@ -88,6 +89,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 				</Col>
 				<Col xs={12}>
 					<LabelRequired
+						isRequired
 						label="Mô tả chi tiết sự cố"
 						className="spaces min-w-140 fw-600 mb-5 text-cyan"
 					/>
@@ -269,8 +271,9 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 				</Col>
 				<Col xs={12}>
 					<LabelRequired
+						isRequired
 						label="Điều trị y lệnh được thực hiện"
-						className="spaces min-w-140 fw-500 mb-5 text-cyan"
+						className="spaces min-w-140 fw-600 mb-5 text-cyan"
 					/>
 					<TextField
 						className="spaces min-w-242"
@@ -284,7 +287,7 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 						<Col xs={12}>
 							<LabelRequired
 								label="Phân loại sự cố theo nhóm nguyên nhân gây ra"
-								className="spaces min-w-140 fw-500 mb-5 text-cyan"
+								className="spaces min-w-140 fw-600 mb-5 text-cyan"
 							/>
 						</Col>
 						<Col xs={6}>
@@ -361,8 +364,9 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 				</Col>
 				<Col xs={12}>
 					<LabelRequired
+						isRequired
 						label="Hành động khắc phục sự cố"
-						className="spaces min-w-140 fw-500 mb-5 text-cyan"
+						className="spaces min-w-140 fw-600 mb-5 text-cyan"
 					/>
 					<TextField
 						className="spaces min-w-242"
@@ -373,8 +377,9 @@ const TabNhanVienChuyenTrach = ({ thongTinPhanTich }: Props) => {
 				</Col>
 				<Col xs={12}>
 					<LabelRequired
+						isRequired
 						label="Đề xuất khuyến cáo phòng ngừa sự cố"
-						className="spaces min-w-140 fw-500 mb-5 text-cyan"
+						className="spaces min-w-140 fw-600 mb-5 text-cyan"
 					/>
 					<TextField
 						className="spaces min-w-242"

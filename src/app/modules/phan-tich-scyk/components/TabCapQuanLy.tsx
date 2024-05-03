@@ -16,6 +16,8 @@ import { KEY_LOCALSTORAGE } from "../../auth/core/_consts";
 
 const TabCapQuanLy = () => {
 	const {
+		errors,
+		touched,
 		values,
 		setFieldValue,
 		handleChange,
@@ -36,6 +38,7 @@ const TabCapQuanLy = () => {
 					<Row className="spaces align-items-center pl-10">
 						<Col xs={12}>
 							<LabelRequired
+								isRequired
 								label="Mô tả kết quả phát hiện được"
 								className="spaces min-w-140 fw-500 mb-5"
 							/>
@@ -186,6 +189,7 @@ const TabCapQuanLy = () => {
 						<Col xs={4}>
 							<div className="d-flex">
 								<LabelRequired
+									isRequired
 									label="Họ tên"
 									className="spaces min-w-100 fw-500"
 								/>
@@ -199,6 +203,7 @@ const TabCapQuanLy = () => {
 						<Col xs={4}>
 							<div className="d-flex">
 								<LabelRequired
+									isRequired
 									label="Chức danh"
 									className="spaces min-w-100 fw-500"
 								/>
@@ -208,6 +213,8 @@ const TabCapQuanLy = () => {
                                     name="chucDanhNguoiPhanTich"
                                     options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_CHUC_DANH)}
                                     value={values?.chucDanhNguoiPhanTich}
+									errors={errors?.chucDanhNguoiPhanTich}
+									touched={touched?.chucDanhNguoiPhanTich}
                                     onChange={(option) => {
 										setFieldValue("chucDanhNguoiPhanTich", option?.id);
 									}}
@@ -217,6 +224,7 @@ const TabCapQuanLy = () => {
 						<Col xs={4}>
 							<div className="d-flex">
 								<LabelRequired
+									isRequired
 									label="Ngày / giờ"
 									className="spaces min-w-100 fw-500"
 								/>

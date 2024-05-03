@@ -104,6 +104,7 @@ textarea.customs-input {
     font-size: $default-font-size;
     border-color: $color-border-gray !important;
     border-radius: 3px;
+    padding: 0 4px;
 
     &:disabled {
         border-color: $color-border-gray !important;

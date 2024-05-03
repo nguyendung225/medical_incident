@@ -54,7 +54,7 @@ const ThongKeSCYK = () => {
                 mucDoTonThuong: mucDoTonThuong?.data?.data || INIT_DASHBOARD_DATA.mucDoTonThuong,
             })
         } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            toast.error(String(error));
         } finally {
             setPageLoading(false);
         }

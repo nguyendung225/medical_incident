@@ -13,12 +13,12 @@ export const paramsConfig = (searchObject: ISearchObj) => {
 };
 
 export const getTheoDoiTuongXayRaList = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/thong-ke-doi-tuong";
+    const url = API_PATH + "/bao-cao/thong-ke-doi-tuong";
     return axios.get(url, paramsConfig(searchObject));
 };
 
 export const exportThongKeDoiTuong = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/export-thong-ke-doi-tuong";
+    const url = API_PATH + "/bao-cao/export-thong-ke-doi-tuong";
     return axios({
         url: url,
         method: "GET",
@@ -28,12 +28,12 @@ export const exportThongKeDoiTuong = (searchObject: ISearchObj) => {
 };
 
 export const getSoTheoDoiScykList = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/so-theo-doi-su-co";
+    const url = API_PATH + "/bao-cao/so-theo-doi-su-co";
     return axios.get(url, paramsConfig(searchObject));
 };
 
 export const exportSoTheoDoi = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/export-so-theo-doi-su-co";
+    const url = API_PATH + "/bao-cao/export-so-theo-doi-su-co";
     return axios({
         url: url,
         method: "GET",
@@ -43,12 +43,12 @@ export const exportSoTheoDoi = (searchObject: ISearchObj) => {
 };
 
 export const getThongKeTheoMucDoTT = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/muc-do-ton-thuong";
+    const url = API_PATH + "/bao-cao/muc-do-ton-thuong";
     return axios.get(url, paramsConfig(searchObject));
 };
 
 export const exportThongKeTheoMucDoTT = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/export-bao-cao-muc-do-ton-thuong";
+    const url = API_PATH + "/bao-cao/export-bao-cao-muc-do-ton-thuong";
     return axios({
         url: url,
         method: "GET",
@@ -58,12 +58,12 @@ export const exportThongKeTheoMucDoTT = (searchObject: ISearchObj) => {
 };
 
 export const getThongKeTheoThang = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/thong-ke-thang";
+    const url = API_PATH + "/bao-cao/thong-ke-thang";
     return axios.get(url, paramsConfig(searchObject));
 };
 
 export const exportThongKeTheoThang = (searchObject: ISearchObj) => {
-    const url = API_PATH + "/api/v1/bao-cao/export-thong-ke-thang";
+    const url = API_PATH + "/bao-cao/export-thong-ke-thang";
     return axios({
         url: url,
         method: "GET",

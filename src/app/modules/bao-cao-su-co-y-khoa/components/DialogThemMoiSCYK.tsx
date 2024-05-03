@@ -11,6 +11,7 @@ import { MEDICAL_INCIDENT_REPORT_STATUS, RESPONSE_STATUS_CODE } from "../../util
 import {
     DOI_TUONG_XAY_RA_SC,
     GENDER_OPTION,
+    InitThongTinSCYK,
     OPTION_HINH_THUC_BC,
     OPTION_MUC_DO_AH,
     OPTION_PHAN_LOAI,
@@ -28,7 +29,6 @@ import { localStorageItem } from "../../utils/LocalStorage";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../../../AppContext";
 import { usePageData } from "../../../../_metronic/layout/core";
-import { convertLabelByCode } from "../../utils/FormatUtils";
 import UploadImagePopup, { IUploadImage } from "../../component/upload-image/UploadImagePopup";
 
 type Props = {
@@ -81,7 +81,12 @@ export default function DialogThemMoiSCYK({
         soDienThoaiNbc: Yup.string().matches(regex.phone, 'Số điện thoại không hợp lệ'),
         loaiDoiTuong: Yup.array()
             .of(Yup.string())
-            .min(1, 'Yêu cầu chọn loại dối tượng').nullable()
+            .min(1, 'Yêu cầu chọn loại đối tượng').nullable(),
+		ngaySinh: Yup.date().nullable().max(new Date(), "Ngày sinh không được lớn hơn ngày hiện tại"),
+		loaiNbcKhac: Yup.object().when("loaiNbc", {
+            is: (loaiNbc: number) => { return loaiNbc === OTHER_FIELD_LOAI_NBC },
+            then: Yup.object().required(lang("VALIDATION.REQUIRE")).nullable(),
+        }),
     });
   
     const handleSubmit = async (values: MedicalIncidentInfo) => {
@@ -98,9 +103,9 @@ export default function DialogThemMoiSCYK({
                 : await addSCYK(thongTinSCYK);
             if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
 				await upLoadImageListSCYK(imageList ,data);
-				imageDeletedList.length > 0 && await updateImageListSCYK(imageDeletedList ,data)
+				imageDeletedList && imageDeletedList.length > 0 && await updateImageListSCYK(imageDeletedList ,data);
                 updatePageData({});
-                setUpdateDataTiepNhan(prev => !prev)
+                setUpdateDataTiepNhan({...InitThongTinSCYK, name: "Dialog thêm mới"});
                 handleClose();  
                 toast.success(thongTinSCYK?.id ? "Cập nhật báo cáo SCYK thành công." : "Thêm mới báo cáo SCYK thành công");
             }
@@ -114,14 +119,14 @@ export default function DialogThemMoiSCYK({
 	const handleRemoveImageFile = (imageFile: any) => {
 		const imageListTemp = imageList.filter(imageItem => imageItem.src !== imageFile.src);
 		setImageList(imageListTemp);
-		setImageDeletedList([...imageDeletedList, imageFile?.id]);
+		imageFile?.id && setImageDeletedList([...imageDeletedList, imageFile?.id]);
 	}
 
 	useEffect(() => {
 		const imageListTemp = thongTinSCYK.files ? thongTinSCYK.files?.map((file: any) => {
 			return {
 				...file,
-				src: process.env.REACT_APP_API_URL + `/api/v1/storage/image?id=${file?.id}`,
+				src: process.env.REACT_APP_API_URL + `/storage/image?id=${file?.id}`,
 			}
 		}) : [];
 		setImageList(imageListTemp);
@@ -282,24 +287,12 @@ export default function DialogThemMoiSCYK({
 													label="Mã bệnh nhân"
 													className="spaces min-w-140 fw-500"
 												/>
-                                                <Autocomplete
-                                                    onChange={(
-                                                        selectedOption
-                                                    ) =>
-                                                        setFieldValue(
-                                                            "benhNhan",
-                                                            selectedOption,
-                                                        )
-                                                    }
-                                                    getOptionLabel={(option) =>
-                                                        `${option.code}`
-                                                    }
-													className="spaces h-25 min-w-242"
-													name="benhNhan"
-													value={values.benhNhan}
-													errors={errors?.benhNhan}
-													touched={touched?.benhNhan}
-                                                    options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_BENH_NHAN)}
+												<TextField
+													className="spaces min-w-242"
+													name="maBenhNhan"
+													value={values?.maBenhNhan}
+													type="text "
+													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
@@ -308,10 +301,9 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
-													disabled
 													className="spaces min-w-242"
-                                                    name="benhNhan.name"
-                                                    value={values.benhNhan?.name || ""}
+													name="tenBenhNhan"
+													value={values?.tenBenhNhan || ""}
 													type="text "
 												/>
 											</div>
@@ -321,10 +313,9 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
-													disabled
 													className="spaces min-w-242"
-                                                    name="benhNhan.soBenhAn"
-                                                    value={values.benhNhan?.soBenhAn}
+													name="soBenhAn"
+													value={values?.soBenhAn}
 													type="text "
 													handleChange={handleChange}
 												/>
@@ -337,40 +328,41 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField
-													disabled
 													className="spaces min-w-242"
-                                                    name="benhNhan.ngaySinh"
-                                                    value={(values.benhNhan?.ngaySinh && moment(values.benhNhan?.ngaySinh).format('YYYY-MM-DD')) || ""}
+													name="ngaySinh"
+													value={(values?.ngaySinh && moment(values?.ngaySinh).format('YYYY-MM-DD')) || ""}
 													type="date"
 													handleChange={handleChange}
 												/>
 											</div>
 											<div className="d-flex">
-                                                <LabelRequired
-                                                    label="Giới tính"
-                                                    className="spaces min-w-140 fw-500"
-                                                />
-                                                <TextField
-                                                    disabled
-                                                    className="spaces min-w-242"
-                                                    type="text"
-                                                    name="gioiTinh"
-                                                    value={convertLabelByCode(GENDER_OPTION, values?.benhNhan?.gioiTinh) || ""}
-                                                />
+												<LabelRequired
+													label="Giới tính"
+													className="spaces min-w-140 fw-500"
+												/>
+												<Autocomplete
+													onChange={(selectedOption) => setFieldValue("gioiTinh", selectedOption?.code)}
+													getOptionLabel={(option) => `${option.name}`}
+													className="spaces min-w-242 h-25"
+													name="gioiTinh"
+													value={values?.gioiTinh}
+													options={GENDER_OPTION}
+												/>
 											</div>
-                                            <div className="d-flex">
-                                                <LabelRequired
-                                                    label="Khoa/Phòng"
-                                                    className="spaces min-w-140 fw-500"
-                                                />
-                                                <TextField
-                                                    disabled
-                                                    className="spaces min-w-242"
-                                                    name="khoaphong"
-                                                    type="text"
-                                                    value={convertLabelByCode(localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN), values?.benhNhan?.khoaPhongDieuTriId) || ""}
-                                                />
-                                            </div>
+											<div className="d-flex">
+												<LabelRequired
+													label="Khoa/Phòng"
+													className="spaces min-w-140 fw-500"
+												/>
+												<Autocomplete
+													onChange={(selectedOption) => setFieldValue("khoaPhongDieuTri", selectedOption?.id)}
+													getOptionLabel={(option) => `${option.name}`}
+													className="spaces min-w-242 h-25"
+													name="khoaPhongDieuTri"
+													value={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN).find((item: any) => item.id === values?.khoaPhongDieuTriId)?.code}
+													options={localStorageItem.get(KEY_LOCALSTORAGE.LIST_PHONG_BAN)}
+												/>
+											</div>
 										</div>
 									</div>
 									<div className="doi-tuong-xay-ra-su-co">
@@ -470,7 +462,7 @@ export default function DialogThemMoiSCYK({
 												open={shouldOpenUploadImageModal} 
 												handleClose={() => setShouldOpenUploadImageModal(false)} 
 												handleUpdate={(value) => {
-													setImageList([...imageList, value]);
+													setImageList([...imageList, ...value]);
 													setShouldOpenUploadImageModal(false);
 												}}
 											/>
@@ -695,7 +687,7 @@ export default function DialogThemMoiSCYK({
 													className="spaces min-w-242"
 													name="soDienThoaiNbc"
 													type="text "
-													value={thongTinSCYK?.soDienThoaiNbc || ""}
+													value={values?.soDienThoaiNbc || ""}
 													handleChange={handleChange}
 												/>
 											</div>
@@ -735,7 +727,7 @@ export default function DialogThemMoiSCYK({
 										<div className="d-flex spaces gap-20 h-29">
 											<div className="d-flex">
 												<LabelRequired
-													label="Người chưng kiến 1"
+													label="Người chứng kiến 1"
 													className="spaces min-w-140 fw-500"
 												/>
 												<TextField

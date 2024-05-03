@@ -25,7 +25,7 @@ const FilterSearchContainer = ({
     handleChangeSearchObj,
     statusOptions,
     timeReportLable,
-    hasAddNew = true,
+    hasAddNew = false,
 }: TProps) => {
     const [shouldOpenAdvancedSearchDialog, setShouldOpenAdvancedSearchDialog] = useState(false);
 

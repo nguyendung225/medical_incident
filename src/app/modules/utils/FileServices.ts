@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 const API_PATH = process.env.REACT_APP_API_URL;
 export const fileUpload = (files: any, idFile?: any) => {
-  let url = `${API_PATH}/api/v1/file-dinh-kem?id=${idFile}`;
+  let url = `${API_PATH}/file-dinh-kem?id=${idFile}`;
   let formData = new FormData();
   files.forEach((file: File, index: number) => {
     if (file instanceof File) {
@@ -18,7 +18,7 @@ export const fileUpload = (files: any, idFile?: any) => {
 };
 
 export const fileUploadPhanTich = (files: any, idFile?: any) => {
-    let url = `${API_PATH}/api/v1/phan-tich/${idFile}/file-dinh-kem`;
+    let url = `${API_PATH}/phan-tich/${idFile}/file-dinh-kem`;
     let formData = new FormData();
     files.forEach((file: File, index: number) => {
       if (file instanceof File) {
@@ -45,7 +45,7 @@ export const imageUpload = (file: any) => {
   return axios.post(url, formData, config);
 };
 export const downLoadFile = (fileName: string) => {
-  let url = `${API_PATH}/api/v1/file-dinh-kem/${fileName}`;
+  let url = `${API_PATH}/file-dinh-kem/${fileName}`;
   return axios({
     url: url,
     method: "GET",
@@ -54,7 +54,7 @@ export const downLoadFile = (fileName: string) => {
 };
 
 export const downLoadFileById = (fileId: string) => {
-  let url = `${API_PATH}/api/v1/file-dinh-kem/${fileId}`;
+  let url = `${API_PATH}/file-dinh-kem/${fileId}`;
   return axios({
     url: url,
     method: "GET",

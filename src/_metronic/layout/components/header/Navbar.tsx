@@ -1,15 +1,25 @@
 import clsx from 'clsx'
 import {KTSVG, toAbsoluteUrl} from '../../../helpers'
-import {HeaderNotificationsMenu, HeaderUserMenu, Search, ThemeModeSwitcher} from '../../../partials'
+import { HeaderUserMenu } from '../../../partials'
 import {useLayout} from '../../core'
 import NotificationsBox from '../../../partials/layout/header-menus/NotificationsBox'
+import { KEY_LOCALSTORAGE } from '../../../../app/modules/auth/core/_consts'
+import { hasAuthority } from '../../../../app/modules/utils/FunctionUtils'
+import { PERMISSIONS, PERMISSION_ABILITY } from '../../../../app/Constant'
+import { useEffect, useState } from 'react'
 
-const btnClass =
-  'btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px'
 const btnIconClass = 'svg-icon-1'
 
 const Navbar = () => {
-  const {config} = useLayout()
+  const {config} = useLayout();
+  const accessTokenDecode = localStorage.getItem(KEY_LOCALSTORAGE?.ACCESS_TOKEN_DECODE);
+  const [accessTokenInfo, setAccessTokenInfo] = useState<any>();
+
+  useEffect(() => {
+    if (!accessTokenDecode) return;
+    setAccessTokenInfo(JSON.parse(accessTokenDecode));
+  },[accessTokenDecode, accessTokenInfo])
+
   return (
     <div className='app-navbar flex-shrink-0'>
       {/* <div className={clsx('app-navbar-item', itemClass)}>
@@ -20,9 +30,11 @@ const Navbar = () => {
         {/* <div className="notification cursor-pointer p-4">
           <KTSVG path={'/media/icons/notification.svg'} className={`svg-icon-2`} />
         </div> */}
-        <div className="notification cursor-pointer p-4 mx-3">
-          <NotificationsBox />
-        </div>
+        {hasAuthority(PERMISSIONS.TIEP_NHAN, PERMISSION_ABILITY.VIEW) && (
+          <div className="notification cursor-pointer p-4 mx-3">
+            <NotificationsBox />
+          </div>
+        )}
         <div
           className={clsx('cursor-pointer')}
           data-kt-menu-trigger="{default: 'click'}"
@@ -32,8 +44,7 @@ const Navbar = () => {
           <img src={toAbsoluteUrl('/media/avatars/blank.png')} alt='' width={24} height={24} className='avatar rounded-circle'/>
         </div>
         <div className='header-user-info color-white'>
-          <div className="name">Nguyễn Xuân Bách</div>
-          <div className="department">Khoa chuẩn đoán hình ảnh</div>
+          <div className="name">{accessTokenInfo?.sub}</div>
         </div>
         <HeaderUserMenu />
       </div>

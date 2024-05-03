@@ -38,8 +38,11 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
         isNguoiChungKienKy: Yup.number().required("Bắt buộc chọn").nullable(),
         isNguoiThamDuKy: Yup.number().required("Bắt buộc chọn").nullable(),
         hoiXacMinh: Yup.string().required("Bắt buộc nhập"),
-        ngayXacMinh: Yup.date().required("Bắt buộc nhập").max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại'),
-        ngayKetThuc: Yup.date().required("Bắt buộc nhập").max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại'),
+        ngayXacMinh: Yup.date().required("Bắt buộc nhập")
+            .max(Yup.ref("ngayKetThuc"), "Ngày xác minh không được lớn hơn ngày kết thúc"),
+        ngayKetThuc: Yup.date().required("Bắt buộc nhập")
+            .min(Yup.ref("ngayXacMinh"), "Ngày kết thúc không được nhỏ hơn ngày xác minh")
+            .max(new Date(), 'Ngày không thể lớn hơn ngày hiện tại'),
         noiXacMinh: Yup.string().required("Bắt buộc nhập"),
         soTrang: Yup.string().required("Bắt buộc nhập").nullable().test('is-integer', 'Vui lòng nhập một số nguyên', (value) => /^\d+$/.test(value || "")
         ),
@@ -85,17 +88,17 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
 
     const handleSubmit = async (values: IBienBanXacMinh) => {
         try {
-            const { data: { code, message } } = thongTinBienBan?.id
+            const { data: { code } } = thongTinBienBan?.id
                 ? await updateBienBan(formatDataBienBan(values), thongTinBienBan.id)
                 : await addBienBan(formatDataBienBan(values));
             if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
                 updatePageData({});
                 handleClose();
-                toast.success(message)
+                toast.success(thongTinBienBan?.id ? "Cập nhật biên bản xác minh thành công" : "Thêm mới biên bản xác minh thành công");
             }
 
         } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            toast.error(String(error));
         }
     }
 
@@ -147,6 +150,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                 <Col xs={3}>
                                                     <div className="d-flex">
                                                         <LabelRequired
+                                                            isRequired
                                                             label="Mã sự cố"
                                                             className="spaces min-w-80 fw-500"
                                                         />
@@ -492,6 +496,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             <Col xs={4}>
                                                                 <div className="d-flex">
                                                                     <LabelRequired
+                                                                        isRequired
                                                                         label="Ông bà"
                                                                         className="spaces min-w-60 fw-500"
                                                                     />
@@ -505,6 +510,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             <Col xs={4}>
                                                                 <div className="d-flex">
                                                                     <LabelRequired
+                                                                        isRequired
                                                                         label="Chức vụ"
                                                                         className="spaces min-w-60 fw-500"
                                                                     />
@@ -529,6 +535,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                                             <Col xs={4}>
                                                                 <div className="d-flex align-items-center">
                                                                     <LabelRequired
+                                                                        isRequired
                                                                         label="Đơn vị"
                                                                         className="spaces min-w-60 fw-500"
                                                                     />
@@ -656,6 +663,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                         <Col xs={3}>
                                             <div className="d-flex spaces">
                                                 <LabelRequired
+                                                    isRequired
                                                     label="Biên bản gồm"
                                                     className="spaces min-w-100 fw-500"
                                                 />
@@ -670,6 +678,7 @@ const DialogThemMoiBienBan = ({ handleClose, updatePageData, thongTinBienBan }: 
                                         <Col xs={3}>
                                             <div className="d-flex spaces">
                                                 <LabelRequired
+                                                    isRequired
                                                     label="Lập thành"
                                                     className="spaces min-w-100 fw-500"
                                                 />

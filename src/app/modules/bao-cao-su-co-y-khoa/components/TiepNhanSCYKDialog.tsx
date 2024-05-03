@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import LabelRequired from '../../component/LabelRequired';
 import TextField from '../../component/TextField';
 import Autocomplete from '../../component/input-field/Autocomplete';
-import { initTiepNhan } from '../const/constants';
+import { InitThongTinSCYK, initTiepNhan } from '../const/constants';
 import * as Yup  from 'yup';
 import { ITiepNhan } from '../models/BaoCaoSCYKModels';
 import { tiepNhanSCYK } from '../services/BaoCaoSCYKServices';
@@ -29,16 +29,16 @@ const TiepNhanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
     const handleSubmit = async (values: ITiepNhan) => {
         values.suCoId = suCoId
         try {
-            const { data: { code, message } } = await tiepNhanSCYK(values)
+            const { data: { code } } = await tiepNhanSCYK(values)
             if (code === RESPONSE_STATUS_CODE.CREATED) {
-                toast.success(message)
+                toast.success("Tiếp nhận báo cáo SCYK thành công.");
                 updatePageData({})
-                setUpdateDataTiepNhan(prev => !prev)
+                setUpdateDataTiepNhan({...InitThongTinSCYK, name: "Dialog tiếp nhận"})
                 handleClose()
             }
 
         } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            toast.error(String(error));
         }
     }
 

@@ -9,37 +9,46 @@ export const paramsConfig = (searchObject: object) => {
 };
 
 export const searchByPage = (searchObject: SearchObject) => {
-    const url = API_PATH + "/api/v1/bien-ban-hop/page";
+    const url = API_PATH + "/bien-ban-hop/page";
     return axios.get(url, paramsConfig(searchObject));
 };
 
 export const addBienBan = (data: IBienBanHop) => {
-    const url = API_PATH + "/api/v1/bien-ban-hop";
+    const url = API_PATH + "/bien-ban-hop";
     return axios.post(url, data);
 };
 
 export const updateBienBan = (data: IBienBanHop, id: string) => {
-    const url = API_PATH + `/api/v1/bien-ban-hop/${id}`;
+    const url = API_PATH + `/bien-ban-hop/${id}`;
     return axios.put(url, data);
 };
 
 export const getListNhanVien = () => {
-    const url = API_PATH + "/api/v1/storage/nhan-vien";
+    const url = API_PATH + "/storage/nhan-vien";
     return axios.get(url);
 };
 
 export const getListSuCoChuaHop = () => {
-    const url = API_PATH + "/api/v1/su-co/list-chua-hop";
+    const url = API_PATH + "/su-co/list-chua-hop";
     return axios.get(url);
 };
 
 export const getBienBanHopById = (id: string) => {
-    const url = API_PATH + `/api/v1/bien-ban-hop/${id}`;
+    const url = API_PATH + `/bien-ban-hop/${id}`;
     return axios.get(url);
 };
 
 export const exportWord = (id: string) => {
-    const url = API_PATH + `/api/v1/bien-ban-hop/export-word/${id}`;
+    const url = API_PATH + `/bien-ban-hop/export-word/${id}`;
+    return axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+    });
+}
+
+export const exportPdf = (id: string) => {
+    const url = API_PATH + `/bien-ban-hop/export-pdf/${id}`;
     return axios({
         url: url,
         method: "GET",

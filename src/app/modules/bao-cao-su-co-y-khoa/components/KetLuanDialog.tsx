@@ -28,15 +28,15 @@ const KetLuanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
     const handleSubmit = async (values: IKetLuanSCYK) => {
         values.suCoId = suCoId
         try {
-            const { data: { code, message } } = await ketLuanSCYK(values)
+            const { data: { code } } = await ketLuanSCYK(values)
             if (code === RESPONSE_STATUS_CODE.CREATED) {
-                toast.success(message)
+                toast.success("Kết luận báo cáo SCYK thành công.");
                 updatePageData({})
                 handleClose()
             }
 
         } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            toast.error(String(error));
         }
     }
 
@@ -149,7 +149,7 @@ const KetLuanSCYKDialog = ({ handleClose, suCoId, updatePageData }: Props) => {
                                             <TextField
                                                 className="spaces"
                                                 name="ghiChu"
-                                                as="textArea"
+                                                as="textarea"
                                             />
                                         </div>
                                     </Col>

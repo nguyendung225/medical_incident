@@ -83,25 +83,23 @@ const DialogThemMoiBienBanHop = ({
 
     const handleSubmit = async (values: IBienBanHop) => {
         try {
-            const { data: { code, message } } = thongTinBienBan?.id
-                    ? await updateBienBan(
-                        formatDataBienBan(values),
-                        thongTinBienBan.id
-                    )
-                    : await addBienBan(formatDataBienBan(values));
-            if (
-                code === RESPONSE_STATUS_CODE.CREATED ||
-                code === RESPONSE_STATUS_CODE.SUCCESS
-            ) {
-                values.fileDinhKems.some((item: any) => item instanceof File) && await fileUpload(values.fileDinhKems, thongTinBienBan?.id)
-                const listIdDelete = getListDeleteItem(thongTinBienBan?.fileDinhKems, values.fileDinhKems)
-                listIdDelete.length > 0 && await deleteFileBienBanHop(listIdDelete)
+            const { data: { code, data } } = thongTinBienBan?.id
+                ? await updateBienBan(
+                    formatDataBienBan(values),
+                    thongTinBienBan.id
+                )
+                : await addBienBan(formatDataBienBan(values));
+                
+            if (code === RESPONSE_STATUS_CODE.CREATED || code === RESPONSE_STATUS_CODE.SUCCESS) {
+                values?.fileDinhKems?.some((item: any) => item instanceof File) && await fileUpload(values?.fileDinhKems, data);
+                const listIdDelete = getListDeleteItem(thongTinBienBan?.fileDinhKems, values?.fileDinhKems) || [];
+                listIdDelete?.length > 0 && await deleteFileBienBanHop(listIdDelete);
                 updatePageData({});
                 handleClose();
-                toast.success(message);
+                toast.success(thongTinBienBan?.id ? "Cập nhật biên bản họp thành công" : "Thêm mới biên bản họp thành công");
             }
         } catch (error) {
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
+            toast.error(String(error));
         }
     };
 
@@ -400,13 +398,13 @@ const DialogThemMoiBienBanHop = ({
                                             <TextField
                                                 className="spaces width-100"
                                                 name="soThanhVienCoMat"
-                                                type="text"
+                                                type="number"
                                             />
                                         </div>
                                         <div className="d-flex spaces width-24">
                                             <LabelRequired
                                                 isRequired
-                                                label="Tổng số"
+                                                label="Trên tổng số"
                                                 className="spaces min-w-80 fw-500"
                                             />
                                             <TextField

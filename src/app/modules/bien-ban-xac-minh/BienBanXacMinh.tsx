@@ -43,13 +43,7 @@ const BienBanXacMinh = (props: Props) => {
     const [exportedFileList, setExportedFileList] = useState<IDropdownButton[]>([]);
 
     const handleSearch = () => {
-        updatePageData({
-            ...searchObj,
-            trangThaiXuLy: searchObj?.trangThaiXuLy?.code,
-            hinhThuc: searchObj?.hinhThuc?.code,
-            phanLoai: searchObj?.phanLoai?.code,
-            khoaPhongDieuTri: searchObj?.khoaPhongDieuTri?.id,
-        });
+        updatePageData({...searchObj});
     }
 
     const updatePageData = (searchData: any) => {
@@ -63,16 +57,14 @@ const BienBanXacMinh = (props: Props) => {
             data?.data?.data?.length > 0 && await getThongTinSCYK(data?.data?.data[indexRowSelected || 0]?.suCoResp?.id);
             await setDsBienBan(data?.data?.data);
             setConfigTable({
-                pageNumber: data.data.pageNumber,
-                pageSize: data.data.pageNumber,
                 totalElement: data.data.total,
                 totalPages: data.data.totalPages,
                 numberOfElements: data.data.numberOfElements,
             })
-            setPageLoading(false);
         } catch (err) {
+            toast.error(String(err));
+        } finally {
             setPageLoading(false);
-            toast.error("Lỗi hệ thống, vui lòng thử lại!");
         }
     };
 
@@ -97,13 +89,16 @@ const BienBanXacMinh = (props: Props) => {
     const getThongTinSCYK = async (scykId: string) => {
         if (scykId) {
             try {
+                setPageLoading(true);
                 const { data: { data } } = await getScykInfoDetailById(scykId as string);
                 setThongTinSCYK({
                     ...data,
                     bienBanXacMinhResp: formatDataBienBan(data?.bienBanXacMinhResp)
                 });
             } catch (error) {
-                toast.error("Lỗi hệ thống, vui lòng thử lại!");
+                toast.error(String(error));
+            } finally {
+                setPageLoading(false);
             }
         }
     }

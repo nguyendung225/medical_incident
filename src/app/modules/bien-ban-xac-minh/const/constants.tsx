@@ -1,3 +1,4 @@
+import moment from "moment";
 import { OPTION_HINH_THUC_BC, OPTION_MUC_DO_AH } from "../../bao-cao-su-co-y-khoa/const/constants";
 import { convertGenderToString, convertLabelByCode, formatDateToString, renderMedicalIncidentReportStatus } from "../../utils/FormatUtils";
 import { IBienBanXacMinh, NguoiThamDuXacMinh } from "../models/BienBanXacMinhModel";
@@ -25,7 +26,7 @@ export const tableDSBienBanColumns = [
         name: "Mã sự cố",
         field: "maSuCo",
         headerStyle: {
-            minWidth: "80px"
+            minWidth: "140px"
         },
         render: (row: any) => <span>{row?.suCoResp?.code}</span>
     },
@@ -49,7 +50,10 @@ export const tableDSBienBanColumns = [
         name: "Đơn vị báo cáo",
         field: "tenDonViBaoCao",
         headerStyle: {
-            minWidth: "125px"
+            minWidth: "200px"
+        },
+        cellStyle: {
+            textAlign: "left",
         },
         render: (row: any) => <span>{row?.suCoResp?.tenDonViBaoCao}</span>
     },
@@ -63,10 +67,10 @@ export const tableDSBienBanColumns = [
             textAlign: "left",
         },
         render: (row: any) => (
-            row?.suCoResp?.benhNhan && (
+            row?.suCoResp?.tenBenhNhan && (
                 <div className="d-flex flex-column text-up">
-                    <span className="text-uppercase">{row?.suCoResp?.benhNhan?.name}</span>
-                    <span>{row?.suCoResp?.benhNhan?.code} - {convertGenderToString(row?.suCoResp?.benhNhan?.gioiTinh)} - {formatDateToString(row?.suCoResp?.benhNhan?.ngaySinh)}</span>
+                    <span className="text-uppercase">{row?.suCoResp?.tenBenhNhan}</span>
+                    <span>{row?.suCoResp?.maBenhNhan} - {convertGenderToString(row?.suCoResp?.gioiTinh)} - {formatDateToString(row?.suCoResp?.ngaySinh)}</span>
                 </div>
             )
         )
@@ -77,7 +81,10 @@ export const tableDSBienBanColumns = [
         headerStyle: {
             minWidth: "200px"
         },
-        render: (row: any) => <span>{row?.tenKhoaPhongDieuTri}</span>
+        cellStyle: {
+            textAlign: "left",
+        },
+        render: (row: any) => <span>{row?.suCoResp?.tenKhoaPhongDieuTri}</span>
     },
 ]
 
@@ -134,7 +141,7 @@ export const initBienBanXacMinh: IBienBanXacMinh = {
     hoiXacMinh: "",
     ngayXacMinh: "",
     namKetThuc: "",
-    ngayKetThuc: "",
+    ngayKetThuc: moment(new Date()).format("YYYY-MM-DD"),
     thangKetThuc: "",
     // suCoResp: InitThongTinSCYK,
 };
